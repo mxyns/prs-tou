@@ -1,0 +1,6 @@
+*/build/
+*.zip
+*/.git*/
+*/.idea/
+*/.vscode/
+*/autom4te.cache/

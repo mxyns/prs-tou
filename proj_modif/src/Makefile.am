@@ -13,7 +13,7 @@ noinst_PROGRAMS=cserver \
                 xclient \
                 #end 
 
-AM_CPPFLAGS = -I$(srcdir)
+AM_CPPFLAGS = -I$(srcdir) -Wall
 LDADD = -lm
 
 TOU_CORE = tou.c \

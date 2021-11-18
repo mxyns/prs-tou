@@ -38,7 +38,7 @@ int tou_parse_dtp(
 
     // not enough to parse header
     if (conn->recv_work_buffer->cnt < TOU_LEN_DTP) {
-        printf("[tou][tou_parse_dtp] not enough data to parse header yet, have %d < %ld bytes\n", conn->recv_work_buffer->cnt, TOU_LEN_DTP);
+        printf("[tou][tou_parse_dtp] not enough data to parse header yet, have %d < %ld bytes\n", conn->recv_work_buffer->cnt, (long)(TOU_LEN_DTP));
         return 0;
     }
 
@@ -81,7 +81,7 @@ int tou_parse_dtp(
     packet->data_packet_size = total_pop - TOU_LEN_DTP; // we must get at least TOU_LEN_DTP bytes but they dont count as data bc they're part of the header
 
     if (total_pop != pkt_size + TOU_LEN_DTP) {
-        printf("[tou][tou_parse_dtp] GOT %d INSTEAD OF %ld MISSING %ld BYTES\n", packet->data_packet_size, pkt_size+TOU_LEN_DTP, pkt_size+TOU_LEN_DTP-packet->data_packet_size);
+        printf("[tou][tou_parse_dtp] GOT %d INSTEAD OF %ld MISSING %ld BYTES\n", packet->data_packet_size, (long)(pkt_size+TOU_LEN_DTP), (long)(pkt_size+TOU_LEN_DTP-packet->data_packet_size));
         exit(1);
         return 0;
     }

@@ -34,7 +34,10 @@ int tou_send_handshake_syn(
     if (sendto(sock->fd, syn_msg, TOU_LEN_SYN, 0, sock->peer_addr, sock->peer_addr_len) < 0) {
         printf("[tou][tou_send_handshake_syn] send SYN failed\n");
         perror("SYN\n");
+        return -1;
     }
+
+    return 0;
 }
 
 // synack : server => client
@@ -118,7 +121,10 @@ int tou_send_handshake_ack(
 
     if (sendto(sock->fd, ack_msg, TOU_LEN_HANDSHAKE_ACK, 0, sock->peer_addr, sock->peer_addr_len) < 0) {
         printf("[tou][tou_send_handshake_ack] send ACK failed\n");
+        return -1;
     }
+
+    return 0;
 }
 
 // ack : client => server

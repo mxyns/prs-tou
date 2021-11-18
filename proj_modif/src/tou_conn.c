@@ -47,7 +47,6 @@ tou_conn* tou_make_conn(
     
     conn->recv_window = tou_make_window(TOU_DEFAULT_RECVWINDOW_SIZE, TOU_DEFAULT_MSS, TOU_DEFAULT_EXPECTED_ID);    
     conn->send_window = tou_make_window(TOU_DEFAULT_SENDWINDOW_SIZE, TOU_DEFAULT_MSS, TOU_DEFAULT_EXPECTED_ID);
-    conn->send_window->expected = 1;
 
     return conn;
 }

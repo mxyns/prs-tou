@@ -19,17 +19,18 @@ void tou_write_packet(
     static char fullpacket[TOU_DEFAULT_MSS];
     memset(fullpacket, 0, TOU_DEFAULT_MSS);
 
-    printf("ASSERT %d + %d <= %ld\n", header_size, size, TOU_DEFAULT_MSS);
+    // printf("ASSERT %d + %d <= %ld\n", header_size, size, TOU_DEFAULT_MSS);
     printf(TOU_DEFAULT_MSS >= header_size + size ? "true\n" : "false\n");
 
     memcpy(fullpacket, header, header_size);
     memcpy(fullpacket + header_size, buffer, size);
-    compact_print_buffer(fullpacket, TOU_DEFAULT_MSS);
+    // compact_print_buffer(fullpacket, TOU_DEFAULT_MSS);
 
     if (sendto(socket->fd, fullpacket, header_size + size, 0, 
             socket->peer_addr, socket->peer_addr_len) < 0) {
-        printf("[tou][send_packet] can't send packet\n");
-        return;
+        printf("[tou][tou_write_packet] can't write packet\n");
+    } else {
+        printf("[tou][tou_write_packet] %d bytes packet wrote\n", header_size + size);
     }
 }
 
@@ -135,7 +136,7 @@ void tou_send_2(
     while (size - written > 0) {
 
         // write maximum to out buffer
-        int new_write = tou_cbuffer_insert(conn->out, buffer, size);
+        int new_write = tou_cbuffer_insert(conn->out, buffer + written, size - written);
         written += new_write;
 
         // process out buffer into packets => send window
@@ -209,6 +210,9 @@ int tou_send(
 
 
         tou_write_packet(conn->socket, header, 6, payload, popped);
+
+        pkt->ack_expire = tou_time_ms() + TOU_DEFAULT_ACK_TIMEOUT_MS;
+
         new_packets++;
     }
 

@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 // TODO add alloc checks
 
@@ -114,6 +116,22 @@ tou_conn* tou_connect(
     printf("6ix9ine on the block on the regular, rtt=%ld\n", rtt);
 
     return conn;
+}
+
+void tou_set_nonblocking(
+    tou_conn* conn,
+    char flags
+) {
+
+    if (flags & TOU_FLAG_NONBLOCKING_DATA) {
+        int flags = fcntl(conn->socket, F_GETFL, 0);
+        fcntl(conn->socket, F_SETFL, flags | O_NONBLOCK * (flags & TOU_FLAG_NONBLOCKING_DATA_ENABLE));
+    }
+
+    if (flags & TOU_FLAG_NONBLOCKING_CTRL) {
+        int flags = fcntl(conn->ctrl_socket, F_GETFL, 0);
+        fcntl(conn->ctrl_socket, F_SETFL, flags | (O_NONBLOCK * (flags & TOU_FLAG_NONBLOCKING_CTRL_ENABLE)) );
+    }
 }
 
 int tou_read(

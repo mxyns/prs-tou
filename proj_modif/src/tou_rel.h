@@ -40,7 +40,7 @@ void tou_send_ack(
     tou_packet_ack* packet
 );
 
-void tou_recv_ack(
+int tou_recv_ack(
     tou_conn* conn
 );
 

@@ -24,6 +24,7 @@ typedef struct {
 
     uint32_t packet_id;
     char acked;
+    long ack_expire;
 
     // number of payload bytes after data_start
     // ie last payload byte is at buffer + data_start + data_packet_size - 1

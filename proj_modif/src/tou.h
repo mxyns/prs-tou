@@ -29,6 +29,7 @@
 #define TOU_DEFAULT_RECVWINDOW_SIZE (10)
 #define TOU_DEFAULT_SENDWINDOW_SIZE (10)
 #define TOU_DEFAULT_EXPECTED_ID (1)
+#define TOU_DEFAULT_ACK_TIMEOUT_MS (250)
 
 #define TOU_READ_EXACT 0
 
@@ -46,7 +47,18 @@ tou_conn* tou_connect(
 
 // similar to tcp accept
 tou_conn* tou_accept_conn(
-   tou_socket* listen_sock 
+   tou_socket* listen_sock
+);
+
+// set socket opt non-blocking behaviour
+#define TOU_FLAG_NONBLOCKING_DATA (1)
+#define TOU_FLAG_NONBLOCKING_DATA_ENABLE (1)
+#define TOU_FLAG_NONBLOCKING_CTRL (1 << 1)
+#define TOU_FLAG_NONBLOCKING_CTRL_ENABLE (1 << 2)
+
+void tou_set_nonblocking(
+    tou_conn* conn,
+    char flags
 );
 
 // similar to recvfrom but for a tou_conn

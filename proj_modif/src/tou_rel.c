@@ -44,13 +44,23 @@ int tou_acknowledge_packets(
     tou_conn* conn,
     int seq
 ) {
-    
-    int removed = tou_sll_remove_under(conn->send_window->list, seq);
-    conn->send_window->expected = seq + 1;
+    int result;
+    int expected = conn->send_window->expected;
+    if (seq >= expected) {
+        result = tou_sll_remove_under(conn->send_window->list, seq);
+        conn->send_window->expected = seq + 1;
 
-    printf("[tou][tou_acknowledge_packet] removed %d packets\n", removed);
+        printf("[tou][tou_acknowledge_packet] removed %d packets. expecting : %d\n", result, (int)conn->send_window->expected);
 
-    return removed;
+    } else if (seq == expected - 1) {
+
+        result = -(expected - 1);
+        printf("[tou][tou_acknowledge_packet] some packets were dropped, last_acked = %d\n", result);
+    } else { // less than expected but not last (a late ack : ack 1 -> ack 3 -> ack 2 )
+        printf("[tou][tou_acknowledge_packet] %d late ack, no worries\n", seq);
+    }
+
+    return result;
 }
 
 
@@ -58,24 +68,25 @@ int tou_acknowledge_packets(
 // read from ctrl_socket into ctrl_buffer, peek sizes, parse into tou_packet_ack
 // acknowledge packet ids in send_window
 
-char ack_buff[TOU_LEN_PKT_ACK];
-void tou_recv_ack(
+static char ack_buff[TOU_LEN_PKT_ACK];
+int tou_recv_ack(
     tou_conn* conn
 ) {
 
+    int result = 0;
     tou_socket* ack_socket = conn->socket;
     
-    int read = tou_cbuffer_read(conn->socket, conn->recv_work_buffer, conn->recv_work_buffer->cap);
+    int read = tou_cbuffer_read(ack_socket, conn->recv_work_buffer, conn->recv_work_buffer->cap);
     if (read < 0) {
         printf("[tou][tou_recv_ack] can't read from ctrl socket\n");
-        return;
+        return result;
     }
 
     printf("[tou][tou_recv_ack] read %d\n", read);
     // not enough to parse header
     if (conn->recv_work_buffer->cnt < TOU_LEN_PKT_ACK + 1) {
-        printf("[tou][tou_recv_ack] not enough data to parse header yet, have %d < %ld bytes\n", conn->recv_work_buffer->cnt, TOU_LEN_PKT_ACK + 1);
-        return ;
+        printf("[tou][tou_recv_ack] not enough data to parse header yet, have %d < %d bytes\n", conn->recv_work_buffer->cnt, TOU_LEN_PKT_ACK + 1);
+        return result;
     }
     
     printf("[tou][tou_recv_ack] got %d in buffer\n", conn->recv_work_buffer->cnt);
@@ -85,7 +96,7 @@ void tou_recv_ack(
         int n = tou_cbuffer_pop(conn->recv_work_buffer, ack_buff, pkt_size);
         if (n < pkt_size) {
             printf("[tou][tou_recv_ack] lost %d bytes while trying to pop %d bytes ACK packet\n", pkt_size - n, pkt_size);
-            return ;
+            return result;
         }
 
         printf("[tou][tou_recv_ack] ack packet dump :\n");
@@ -104,6 +115,10 @@ void tou_recv_ack(
         int acknowledged = tou_acknowledge_packets(conn, seq_val);
         if (acknowledged > 0) {
             printf("acked %d more packets, next is %d\n", acknowledged, conn->send_window->expected);
+        } else {
+            result = MIN(result, acknowledged);
         }
     }
+
+    return result;
 }

@@ -133,7 +133,7 @@ int tou_recv_handshake_ack(
         printf("ERR = %d\n", err);
         return -1;
     } else {
-        printf("[tou][tou_recv_handshake_ack] got %s\n");
+        printf("[tou][tou_recv_handshake_ack] got %s\n", ack_msg);
         return (ack_msg[0] == 'A' && ack_msg[1] == 'C' && ack_msg[2] == 'K') ? TOU_VALUE_HANDSHAKE_ACK_CHECK : -1;
     }
 

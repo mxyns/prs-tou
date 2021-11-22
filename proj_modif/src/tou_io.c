@@ -158,7 +158,7 @@ int tou_send(
 ) {
 
     int MSS = TOU_DEFAULT_MSS /* max packet size (header included) */ - TOU_LEN_DTP;
-    printf("[tou][tou_send] MSS=%d\n", MSS);
+    // printf("[tou][tou_send] MSS=%d\n", MSS);
    
     int size = conn->out->cnt;
     char payload[MSS];
@@ -211,7 +211,9 @@ int tou_send(
 
         tou_write_packet(conn->socket, header, 6, payload, popped);
 
+        printf("EXPIRE %d SET AT %ld\n", id, tou_time_ms());
         pkt->ack_expire = tou_time_ms() + TOU_DEFAULT_ACK_TIMEOUT_MS;
+        printf("EXPIRE %d SET TO %ld\n", id, pkt->ack_expire);
 
         new_packets++;
     }

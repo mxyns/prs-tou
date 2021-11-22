@@ -19,20 +19,22 @@ int main() {
     tou_conn* conn = tou_accept_conn(listen_sock);
 
     const int MSS = TOU_DEFAULT_MSS - TOU_LEN_DTP;
-    char buffer[3*MSS+1]; // + 1 so that we always have at least a \0 to terminate our string
-    int size = 3*MSS;
+    char buffer[10*MSS+1]; // + 1 so that we always have at least a \0 to terminate our string
+    int size = 10*MSS;
     printf("i must read file '%s'\n", conn->filename);
 
 
-    for (int i = 0; i < 3*MSS; i++) {
+    for (int i = 0; i < 10*MSS; i++) {
         buffer[i] = 48 + i % (69 + 6);
     }
 
     printf("[tou][tou_send] MSS=%d\n", MSS);
+    printf("[tou][tou_send] swindowsize=%d\n", conn->send_window->list->cap);
+    printf("[tou][tou_send] sendbuffersize=%d\n", conn->out->cap);
     fd_set readset;
     struct timeval ack_timeout = {
         .tv_sec = 0,
-        .tv_usec = 0,
+        .tv_usec = 10000,
     };
 
     int written = 0;
@@ -43,55 +45,56 @@ int main() {
         written += new_write;
 
         // process out buffer into packets => send window
+        printf("SENT AT %ld\n", tou_time_ms());
         int sent = tou_send(conn);
-        if (sent > 0) 
+        if (sent > 0) {
             printf("[xserver] buffer part sent\n");
-        else
-            printf("[xserver] couldn't send more\n");
+            printf("[xserver] send window %d/%d\n", conn->send_window->list->count, conn->send_window->list->cap);
+        }
 
-        printf("Waiting for events\n");
+        tou_packet_dtp* pkt = (tou_packet_dtp*) conn->send_window->list->head->val;
+        printf("MUST RECV %d AT %ld\n", pkt->packet_id, pkt->ack_expire);
+
+        long timeout = MAX(0, pkt->ack_expire - tou_time_ms());
+        ack_timeout.tv_sec = timeout / 1000;
+        ack_timeout.tv_usec = (timeout % 1000) * 1000;
+        printf("TIMEOUT IN %ld : %lds %ldusec\n", timeout, (long)ack_timeout.tv_sec, (long)ack_timeout.tv_usec);
+
+        // printf("Waiting for events\n");
         FD_ZERO(&readset);
         FD_SET(conn->ctrl_socket->fd, &readset);
         FD_SET(conn->socket->fd, &readset);
-        int ret_select = select(MAX(conn->ctrl_socket->fd, conn->socket->fd) + 1, &readset, NULL, NULL, &ack_timeout);
-
-        if (ret_select <= 0) {
-
-            printf("[xserver] timeout expired\n");
-            goto continue_loop;
+        int range = MAX(conn->ctrl_socket->fd, conn->socket->fd) + 1;
+        int ret_select = select(range, &readset, NULL, NULL, &ack_timeout);
+        
+        printf("ret_select = %d\n", ret_select);
+        for (int i = 0; i < range; i++) {
+            if (FD_ISSET(i, &readset)) {
+                printf("FLAG %d\n", i);
+            }
         }
 
-        int new_ack = FD_ISSET(conn->socket->fd, &readset); // new data is only ack in this scenario
-        if (!new_ack) {
+        if (ret_select == 0) {
 
-            printf("[xserver] unexpected behaviour\n");
-            goto continue_loop;
-        } else {
+            printf("ACK EXPIRED %d\n", pkt->packet_id);
+
+            continue;
+        }
+
+        int ack_flag = FD_ISSET(conn->socket->fd, &readset); // new data is only ack in this scenario
+
+        if (ack_flag) {
+            printf("[xserver] checking for ack\n");
         
             // await for some acks
-            printf("[xserver] checking for ack\n");
-            tou_set_nonblocking(conn, TOU_FLAG_NONBLOCKING_DATA | TOU_FLAG_NONBLOCKING_DATA_ENABLE);
             int new_ack = tou_recv_ack(conn);
-            tou_set_nonblocking(conn, TOU_FLAG_NONBLOCKING_DATA);
-
+            if (new_ack > 0) {
+                printf("[xserver] new acked %d, at %d\n", new_ack, conn->send_window->expected- 1);
+            }
             if (new_ack < 0) {
-                printf("[xserver] some packet dropped, resend when ?\n"); // TODO
-            }
-        }
+                printf("[xserver] some packet dropped, resend when ?\n");
+                printf("[xserver] packed dropped seq : %d\n", -new_ack);
 
-        continue_loop : {
-            tou_packet_dtp* pkt = (tou_packet_dtp*) conn->send_window->list->head->val;
-
-            long delta = pkt->ack_expire - tou_time_ms();
-            if (TOU_SLL_ISEMPTY(conn->send_window->list)) {
-                printf("[xserver] no packets waiting for ack\n");
-                printf("[xserver] left to write = %d\n", size - written);
-                delta = 0;
-            }
-            if (delta > 0) {
-                ack_timeout.tv_sec = delta / 1000;
-                ack_timeout.tv_usec = (delta - 1000 * ack_timeout.tv_usec) * 1000;
-                printf("[xserver] next ack timeout is in %lds %ldµs\n", ack_timeout.tv_sec, ack_timeout.tv_usec);
             }
         }
     }

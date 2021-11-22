@@ -152,3 +152,14 @@ int tou_read(
     
     return popped;
 }
+
+int tou_retransmit(
+    tou_conn* conn,
+    tou_packet_dtp* pkt
+) {
+    
+    char header[6];
+    tou_packet_set_header(pkt, header, pkt->packet_id, pkt->buffer, pkt->data_packet_size);
+    tou_write_packet(conn->socket, header, 6, pkt->buffer, pkt->data_packet_size);
+    tou_packet_set_expiration(pkt, tou_time_ms() + TOU_DEFAULT_ACK_TIMEOUT_MS);
+}

@@ -65,5 +65,17 @@ void tou_packet_dtp_reset(
     tou_packet_dtp* packet
 );
 
+void tou_packet_set_header(
+    tou_packet_dtp* pkt,
+    char* header,
+    int id,
+    char* payload,
+    uint32_t data_packet_size
+);
+
+void tou_packet_set_expiration(
+    tou_packet_dtp* pkt,
+    long exp
+);
 
 #endif

@@ -161,3 +161,39 @@ void tou_packet_dtp_dump(
     }
     printf("\n]\n");
 }
+
+void tou_packet_set_header(
+    tou_packet_dtp* pkt,
+    char* header,
+    int id,
+    char* payload,
+    uint32_t data_packet_size
+) {
+       pkt->packet_id = id;
+       pkt->buffer = payload;
+       pkt->data_packet_size = data_packet_size;
+
+       // packet is now in send window, awaiting for ACKs
+
+       // write packet to socket
+       printf("[tou][tou_send] queued %d bytes\n", data_packet_size);
+
+        header[0] = 48 + (id / 100000) % 10;
+        header[1] = 48 + (id / 10000) % 10;
+        header[2] = 48 + (id / 1000) % 10;
+        header[3] = 48 + (id / 100) % 10; 
+        header[4] = 48 + (id / 10) % 10; 
+        header[5] = 48 + (id / 1) % 10;
+
+    tou_packet_set_expiration(pkt, tou_time_ms() + TOU_DEFAULT_ACK_TIMEOUT_MS);
+
+}
+
+void tou_packet_set_expiration(
+    tou_packet_dtp* pkt,
+    long exp
+) {
+        printf("EXPIRE %d SET AT %ld\n", pkt->packet_id, tou_time_ms());
+        pkt->ack_expire = exp;
+        printf("EXPIRE %d SET TO %ld\n", pkt->packet_id, pkt->ack_expire);
+}

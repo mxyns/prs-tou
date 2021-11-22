@@ -188,32 +188,10 @@ int tou_send(
            return new_packets;
        }
 
-
-      // TODO move header creation and pkt struct fill to function in tou_packet.c
-
-       pkt->packet_id = id;
-       pkt->buffer = payload;
-       pkt->data_packet_size = popped;
-
-       // packet is now in send window, awaiting for ACKs
-
-       // write packet to socket
-       printf("[tou][tou_send] queued %d bytes\n", popped);
-
         char header[6];
-        header[0] = 48 + (id / 100000) % 10;
-        header[1] = 48 + (id / 10000) % 10;
-        header[2] = 48 + (id / 1000) % 10;
-        header[3] = 48 + (id / 100) % 10; 
-        header[4] = 48 + (id / 10) % 10; 
-        header[5] = 48 + (id / 1) % 10;
-
-
+        tou_packet_set_header(pkt, header, id, payload, popped);
         tou_write_packet(conn->socket, header, 6, payload, popped);
-
-        printf("EXPIRE %d SET AT %ld\n", id, tou_time_ms());
-        pkt->ack_expire = tou_time_ms() + TOU_DEFAULT_ACK_TIMEOUT_MS;
-        printf("EXPIRE %d SET TO %ld\n", id, pkt->ack_expire);
+        tou_packet_set_expiration(pkt, tou_time_ms() + TOU_DEFAULT_ACK_TIMEOUT_MS);
 
         new_packets++;
     }

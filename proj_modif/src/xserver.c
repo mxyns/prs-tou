@@ -18,15 +18,28 @@ int main() {
 
     tou_conn* conn = tou_accept_conn(listen_sock);
 
-    const int MSS = TOU_DEFAULT_MSS - TOU_LEN_DTP;
-    char buffer[10*MSS+1]; // + 1 so that we always have at least a \0 to terminate our string
+    const int MSS = TOU_DEFAULT_MSS - TOU_LEN_DTP - 300;
+    char data[10*MSS+1]; // + 1 so that we always have at least a \0 to terminate our string
+    char* buffer = data;
     int size = 10*MSS;
     printf("i must read file '%s'\n", conn->filename);
 
+    FILE *f = fopen(conn->filename, "rb");
+    fseek(f, 0, SEEK_END);
+    long fsize = ftell(f);
+    fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
 
-    for (int i = 0; i < 10*MSS; i++) {
-        buffer[i] = 48 + i % (69 + 6);
-    }
+    char *string = malloc(fsize + 1);
+    fread(string, 1, fsize, f);
+    fclose(f);
+    string[fsize] = 0;
+
+    buffer=string;
+    size = fsize;
+
+    // for (int i = 0; i < 10*MSS; i++) {
+    //     buffer[i] = 48 + i % (69 + 6);
+    // }
 
     printf("[tou][tou_send] MSS=%d\n", MSS);
     printf("[tou][tou_send] swindowsize=%d\n", conn->send_window->list->cap);
@@ -77,6 +90,7 @@ int main() {
         if (ret_select == 0) {
 
             printf("ACK EXPIRED %d\n", pkt->packet_id);
+            tou_retransmit(conn, pkt);
 
             continue;
         }
@@ -89,12 +103,11 @@ int main() {
             // await for some acks
             int new_ack = tou_recv_ack(conn);
             if (new_ack > 0) {
-                printf("[xserver] new acked %d, at %d\n", new_ack, conn->send_window->expected- 1);
+                printf("[xserver] new acked %d, at %d\n", new_ack, conn->send_window->expected - 1);
             }
             if (new_ack < 0) {
                 printf("[xserver] some packet dropped, resend when ?\n");
                 printf("[xserver] packed dropped seq : %d\n", -new_ack);
-
             }
         }
     }

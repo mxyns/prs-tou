@@ -12,19 +12,19 @@ typedef struct tou_window {
 } tou_window;
 
 tou_window* tou_make_window(
-    int window_size,
-    int max_packet_size,
-    uint32_t expected
+        int window_size,
+        int max_packet_size,
+        uint32_t expected
 );
 
 void tou_free_window(
-    tou_window* window
+        tou_window* window
 );
 
 int tou_window_accept(
-    struct tou_conn* conn,
-    tou_window* window,
-    tou_cbuffer* stream
+        struct tou_conn* conn,
+        tou_window* window,
+        tou_cbuffer* stream
 );
 
 #endif

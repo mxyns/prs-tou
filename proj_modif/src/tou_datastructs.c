@@ -7,9 +7,9 @@
 // reads at max 'count' bytes from sock into cbuff
 // count limited by available buffer space
 int tou_cbuffer_read(
-    tou_socket* sock,
-    tou_cbuffer* cbuff,
-    int count
+        tou_socket* sock,
+        tou_cbuffer* cbuff,
+        int count
 ) {
     // if asked for more than what can be stored
     if (count > cbuff->cap)
@@ -17,21 +17,21 @@ int tou_cbuffer_read(
 
     // limit to available size
     count = MIN(count, cbuff->cap - cbuff->cnt);
-    printf("[tou][tou_cbuffer_read] really gonna read %d\n", count);
+    TOU_DEBUG(printf("[tou][tou_cbuffer_read] really gonna read %d\n", count));
 
     char buffer[count];
 
     int recv;
-    if ((recv=recvfrom(sock->fd, buffer, count, 0, sock->peer_addr, &sock->peer_addr_len)) < 0) {
-        printf("ERR = %d\n", recv);
+    if ((recv = recvfrom(sock->fd, buffer, count, 0, sock->peer_addr, &sock->peer_addr_len)) < 0) {
+        TOU_DEBUG(printf("ERR = %d\n", recv));
         return -1;
     }
-    printf("[tou][tou_cbuffer_read] received %d bytes\n", recv);
+    TOU_DEBUG(printf("[tou][tou_cbuffer_read] received %d bytes\n", recv));
 
     int inserted = tou_cbuffer_insert(cbuff, buffer, recv);
-    printf("[tou][tou_cbuffer_read] inserted %d bytes\n", inserted);
+    TOU_DEBUG(printf("[tou][tou_cbuffer_read] inserted %d bytes\n", inserted));
     if (inserted != recv) {
-        printf("[tou][tou_cbuffer_read] %d bytes lost\n", recv-inserted);
+        TOU_DEBUG(printf("[tou][tou_cbuffer_read] %d bytes lost\n", recv - inserted));
         return inserted - recv;
     }
 
@@ -42,11 +42,11 @@ int tou_cbuffer_read(
 // doesnt check beforehand if enough space is available in buffer
 // return written bytes count n with 0 <= n <= size 
 int tou_cbuffer_insert(
-    tou_cbuffer* cbuff,
-    char* buffer,
-    int size
+        tou_cbuffer* cbuff,
+        char* buffer,
+        int size
 ) {
-    
+
     /*
         toWrite = 5
         head < tail : bounds is first limit
@@ -73,7 +73,7 @@ int tou_cbuffer_insert(
     int tail = (cbuff->head + cbuff->cnt) % cbuff->cap;
     if (head == tail) {
         // buffer is full bc cnt != 0 so cnt = cap
-        return -1; 
+        return -1;
     }
     int written = 0;
     if (head < tail) {
@@ -100,11 +100,11 @@ int tou_cbuffer_insert(
 
 // returns total popped bytes count
 int tou_cbuffer_pop(
-    tou_cbuffer* cbuff,
-    char* buffer,
-    int size
+        tou_cbuffer* cbuff,
+        char* buffer,
+        int size
 ) {
-    
+
     /*
         toRead = 5                          
         head < tail : bounds is tail      <-----------------x
@@ -133,64 +133,64 @@ int tou_cbuffer_pop(
         cbuff->head = (cbuff->head + read) % cbuff->cap;
 
         if (read == size) return size;
-    } else printf("skipped first part\n");
+    } else TOU_DEBUG(printf("skipped first part\n"));
 
     int new_read = 0;
     if (size - read > 0) {
         tail = (cbuff->head + cbuff->cnt) % cbuff->cap;
-        printf("tail at %d, %d past head at %d\n", tail, tail-cbuff->head, cbuff->head);
+        TOU_DEBUG(printf("tail at %d, %d past head at %d\n", tail, tail - cbuff->head, cbuff->head));
 
         // as much as i can without going past tail
-        new_read = MIN(tail - cbuff->head, size - read);        
-        printf("gotta read %d\n", new_read);
+        new_read = MIN(tail - cbuff->head, size - read);
+        TOU_DEBUG(printf("gotta read %d\n", new_read));
 
         memcpy(buffer + read, cbuff->buffer + cbuff->head, new_read);
 
         cbuff->cnt = MAX(cbuff->cnt - new_read, 0);
         cbuff->head = (cbuff->head + new_read) % cbuff->cap;
-    } else printf("skipped 2nd part\n");
+    } else TOU_DEBUG(printf("skipped 2nd part\n"));
 
     return read + new_read;
 }
 
 char* tou_cbuffer_peek(
-    tou_cbuffer* cbuff,
-    int pos
+        tou_cbuffer* cbuff,
+        int pos
 ) {
 
     if (pos > cbuff->cnt) { // no data
         return NULL;
     }
-    
+
     return (cbuff->buffer + ((cbuff->head + pos) % cbuff->cap));
 }
 
 
 void tou_cbuffer_dump(
-    tou_cbuffer* buffer
+        tou_cbuffer* buffer
 ) {
 
     printf("tou_cbuffer {\n\tcap=%d\n\tcnt=%d\n}",
-        buffer->cap,
-        buffer->cnt
+           buffer->cap,
+           buffer->cnt
     );
     printf(" = [ ");
-    for (int i = 0 ; i < buffer->cap; i++) {
+    for (int i = 0; i < buffer->cap; i++) {
         if (buffer->head == i)
-            printf(" {%d} ", (int)buffer->buffer[i]);
+            printf(" {%c} ", (char) buffer->buffer[i]);
         else
-            printf(" %d ", (int)buffer->buffer[i]);
+            printf(" %c ", (char) buffer->buffer[i]);
     }
     printf("]\n");
 }
 
 void tou_cbuffer_cdump(
-    tou_cbuffer* cbuffer
+        tou_cbuffer* cbuffer
 ) {
 
     printf("tou_cbuffer {\n\tcap=%d\n\tcnt=%d\n}",
-        cbuffer->cap,
-        cbuffer->cnt
+           cbuffer->cap,
+           cbuffer->cnt
     );
     printf(" = ");
 
@@ -198,14 +198,14 @@ void tou_cbuffer_cdump(
 }
 
 tou_sll* tou_sll_new(
-    int size
+        int size
 ) {
 
     if (size < 1) return NULL;
-    
+
     tou_sll* list = (tou_sll*) calloc(1, sizeof(tou_sll) + size * sizeof(tou_sll_node));
     tou_sll_node* curr = (tou_sll_node*) (list + 1);
-    
+
     list->head = curr;
     list->cap = size;
     list->count = 0;
@@ -222,51 +222,53 @@ tou_sll* tou_sll_new(
 
 
 // private function used in tou_free_sll that finds node with smallest val ptr value
-static inline tou_sll_node* tou_sll_find_first(
-    tou_sll* list
+static inline tou_sll_node
+*
+tou_sll_find_first(
+        tou_sll
+* list
 ) {
-    tou_sll_node* curr = list->head;
-    tou_sll_node* min = list->head;
-    while (curr != NULL) {
-        min = curr->val < min->val ? curr : min;
-        curr = curr->next;
-    }
+tou_sll_node* curr = list->head;
+tou_sll_node* min = list->head;
+while (curr != NULL) {
+min = curr->val < min->val ? curr : min;
+curr = curr->next;
+}
 
-    return min;
+return
+min;
 }
 
 void tou_free_sll(
-    tou_sll* list,
-    int should_free_values
+        tou_sll* list,
+        int should_free_values
 ) {
-    switch (should_free_values)
-    {
-    case TOU_SLL_FREE_FIRST:
-        free(tou_sll_find_first(list)->val);
-        break;
+    switch (should_free_values) {
+        case TOU_SLL_FREE_FIRST:
+            free(tou_sll_find_first(list)->val);
+            break;
 
-    case TOU_SLL_FREE_ALL :
-        TOU_SLL_ITER_ALL(list, if(curr->val != NULL) free(curr->val));
-        break;
-    
-    case TOU_SLL_FREE_NONE:
-    default:
-        break;
+        case TOU_SLL_FREE_ALL : TOU_SLL_ITER_ALL(list, if (curr->val != NULL) free(curr->val));
+            break;
+
+        case TOU_SLL_FREE_NONE:
+        default:
+            break;
     }
 
     free(list); // frees all nodes and list struct at once
 }
 
 int tou_sll_insert_overwrite(
-    tou_sll* list,
-    uint32_t key,
-    void* value
+        tou_sll* list,
+        uint32_t key,
+        void* value
 ) {
     if (TOU_SLL_ISFULL(list)) return -1;
 
     if (TOU_SLL_ISEMPTY(list)) { // insertion in head
 
-        printf("list is empty\n");
+        TOU_DEBUG(printf("list is empty\n"));
         list->last = list->head; // next free cell
 
         // insert data
@@ -278,15 +280,15 @@ int tou_sll_insert_overwrite(
         return 0;
     }
 
-    tou_sll_node* node = list->last->next; // our free node
-    tou_sll_node* previous = NULL;
-    tou_sll_node* current = list->head;    
+    tou_sll_node * node = list->last->next; // our free node
+    tou_sll_node * previous = NULL;
+    tou_sll_node * current = list->head;
     list->count++; // at this point we're guaranteed to insert at some point
     node->used = 1;
 
-    while(current != node) {
+    while (current != node) {
         if (key < current->key) { // if can insert
-            
+
             list->last->next = node->next; // set new free cell
 
             if (previous == NULL) { // if inserting before head
@@ -302,7 +304,7 @@ int tou_sll_insert_overwrite(
 
             return 0;
         }
-        
+
         previous = current;
         current = current->next;
     }
@@ -319,14 +321,14 @@ int tou_sll_insert_overwrite(
 // insert a piece of data with given key(priority) and get the val ptr node->val
 // returns node->val or NULL if cant insert bc TOU_SLL_ISFULL 
 void* tou_sll_insert(
-    tou_sll* list,
-    uint32_t key
+        tou_sll* list,
+        uint32_t key
 ) {
     if (TOU_SLL_ISFULL(list)) return NULL;
 
     if (TOU_SLL_ISEMPTY(list)) { // insertion in head
 
-        printf("list is empty\n");
+        TOU_DEBUG(printf("list is empty\n"));
         list->last = list->head; // next free cell
 
         // insert data
@@ -337,15 +339,15 @@ void* tou_sll_insert(
         return list->head->val;
     }
 
-    tou_sll_node* node = list->last->next; // our free node
-    tou_sll_node* previous = NULL;
-    tou_sll_node* current = list->head;    
+    tou_sll_node * node = list->last->next; // our free node
+    tou_sll_node * previous = NULL;
+    tou_sll_node * current = list->head;
     list->count++; // at this point we're guaranteed to insert at some point
     node->used = 1;
 
-    while(current != node) {
+    while (current != node) {
         if (key < current->key) { // if can insert
-            
+
             list->last->next = node->next; // set new free cell
 
             if (previous == NULL) { // if inserting before head
@@ -360,7 +362,7 @@ void* tou_sll_insert(
 
             return node->val;
         }
-        
+
         previous = current;
         current = current->next;
     }
@@ -376,8 +378,8 @@ void* tou_sll_insert(
 // node is marked as unused and put at the back of the line
 // value stays referenced in tou_sll_node until overwritten by future insert 
 void* tou_sll_pop(
-    tou_sll* list,
-    char* err
+        tou_sll* list,
+        char* err
 ) {
 
     if (list->count == 0) {
@@ -385,7 +387,7 @@ void* tou_sll_pop(
         return NULL;
     }
 
-    tou_sll_node* popped_head = list->head;
+    tou_sll_node * popped_head = list->head;
 
     popped_head->key = 0;
     popped_head->used = 0;
@@ -404,22 +406,24 @@ void* tou_sll_pop(
 }
 
 int tou_sll_remove_under(
-    tou_sll* list,
-    int key
+        tou_sll* list,
+        int key
 ) {
 
-    tou_sll_node* curr = list->head;
-    
+    tou_sll_node * curr = list->head;
+
     char err;
     int n = 0;
-    while(curr != NULL && curr->used && curr->key <= key) {
-        printf("curr key=%d\n", curr->key);
-        printf("popping\n");
+    while (curr != NULL && curr->used && curr->key <= key) {
+        TOU_DEBUG(
+                printf("curr key=%d\n", curr->key);
+                printf("popping\n");
+        );
         tou_sll_pop(list, &err);
-        printf("ok\n");
+        TOU_DEBUG(printf("ok\n"));
         if (!err) {
             n++;
-            printf("popped %d\n", n);
+            TOU_DEBUG(printf("popped %d\n", n));
         }
 
         curr = list->head;
@@ -429,41 +433,41 @@ int tou_sll_remove_under(
 }
 
 int tou_sll_remove_keys(
-    tou_sll* list,
-    uint32_t* keys,
-    void** vals,
-    size_t val_size,
-    int keys_count
+        tou_sll* list,
+        uint32_t* keys,
+        void** vals,
+        size_t val_size,
+        int keys_count
 ) {
     // TODO find min of ack_list and start looking for packets with key > min(ack_lis)
 
     int removed = 0;
-    tou_sll_node* prev = NULL;
-    tou_sll_node* curr = list->head;
-    tou_sll_node* new_curr = NULL;
-    
-    while(curr != NULL && curr->used) {
-        
-        printf("node key=%d\n", curr->key);
-        
+    tou_sll_node * prev = NULL;
+    tou_sll_node * curr = list->head;
+    tou_sll_node * new_curr = NULL;
+
+    while (curr != NULL && curr->used) {
+
+        TOU_DEBUG(printf("node key=%d\n", curr->key));
+
         new_curr = curr;
         for (int i = 0; i < keys_count; i++) {
-            printf("matching with key=%d\n", keys[i]);
+            TOU_DEBUG(printf("matching with key=%d\n", keys[i]));
             if (curr->key == keys[i]) { // if any key from key list matches current node's key
-                printf("its a match\n");
+                TOU_DEBUG(printf("its a match\n"));
                 // if list empty stop
                 if (list->count == 0) {
-                    printf("list empty stop\n");
+                    TOU_DEBUG(printf("list empty stop\n"));
                     return -removed;
                 }
 
-                printf("clearing key=%d\n", curr->key);
+                TOU_DEBUG(printf("clearing key=%d\n", curr->key));
                 curr->key = 0;
                 curr->used = 0;
                 list->count--;
 
                 if (list->head == curr) {
-                    printf("removing head\n");
+                    TOU_DEBUG(printf("removing head\n"));
                     if (list->count == 0) { // empty list
                         list->last = NULL; // list is empty now
                     } else {
@@ -471,18 +475,18 @@ int tou_sll_remove_keys(
                         curr->next = list->last->next;
                         list->last->next = curr;
                     }
-                    
+
                     removed++;
-                    vals[MIN(keys_count,removed)-1] = curr->val;
+                    vals[MIN(keys_count, removed) - 1] = curr->val;
                     new_curr = list->head;
                     break;
                 }
-                
+
                 if (curr == list->last) {
-                    printf("was last\n");
+                    TOU_DEBUG(printf("was last\n"));
                     list->last = prev;
                 } else if (!TOU_SLL_ISTAIL(curr)) {
-                    printf("not tail\n");
+                    TOU_DEBUG(printf("not tail\n"));
                     prev->next = curr->next;
                     curr->next = list->last->next;
                     list->last->next = curr;
@@ -491,12 +495,12 @@ int tou_sll_remove_keys(
                 new_curr = prev->next;
 
                 removed++;
-                vals[MIN(keys_count,removed)-1] = curr->val;
+                vals[MIN(keys_count, removed) - 1] = curr->val;
                 break;
             }
         }
 
-        tou_sll_dump(list);
+        TOU_DEBUG(tou_sll_dump(list));
 
         if (new_curr == curr) {
             prev = curr;
@@ -515,27 +519,28 @@ int tou_sll_remove_keys(
 */
 
 void tou_sll_dump(
-    tou_sll* list
+        tou_sll* list
 ) {
 
     printf("tou_sll {\n\tcap=%d\n\tcnt=%d\n}",
-        list->cap,
-        list->count
+           list->cap,
+           list->count
     );
 
-    tou_sll_node* current = list->head;
-    
+    tou_sll_node * current = list->head;
+
     printf(" = %s:", list->count ? "used" : "free");
-    while(current != NULL) {
-        
+    while (current != NULL) {
+
         if (current == list->last)
-            printf(" [{%ld|%d|%p}] \n =>   free:", current - (tou_sll_node*)(list + 1), (int)(current->key), current->val);
+            printf(" [{%ld|%d|%p}] \n =>   free:", current - (tou_sll_node*) (list + 1), (int) (current->key),
+                   current->val);
         else if (current->used)
-            printf(" {%ld|%d|%p} ->", current - (tou_sll_node*)(list + 1), (int)(current->key), current->val);
-        else 
-            printf(" {%ld|X|%p} ->", current - (tou_sll_node*)(list + 1), current->val);
+            printf(" {%ld|%d|%p} ->", current - (tou_sll_node*) (list + 1), (int) (current->key), current->val);
+        else
+            printf(" {%ld|X|%p} ->", current - (tou_sll_node*) (list + 1), current->val);
         current = current->next;
     }
-    
+
     printf(" (nil)\n\n");
 }

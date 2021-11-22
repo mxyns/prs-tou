@@ -11,7 +11,9 @@ typedef struct tou_conn {
     char filename[128];
 
     // reception buffer containing wire bytes
-    tou_cbuffer* recv_work_buffer; 
+    tou_cbuffer* recv_work_buffer;
+
+    // unused
     tou_cbuffer* send_work_buffer;
 
     // buffer the user reads from
@@ -26,12 +28,12 @@ typedef struct tou_conn {
 } tou_conn;
 
 tou_conn* tou_make_conn(
-    tou_socket* ctrl_sock,
-    tou_socket* socket
+        tou_socket* ctrl_sock,
+        tou_socket* socket
 );
 
 void tou_free_conn(
-    tou_conn* conn
+        tou_conn* conn
 );
 
 #endif

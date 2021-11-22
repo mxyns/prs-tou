@@ -33,28 +33,28 @@
 #define TOU_LEN_HANDSHAKE_ACK (TOU_LEN_BASEHEADER + 3) // ACK
 
 int tou_send_handshake_syn(
-    tou_socket* sock
+        tou_socket* sock
 );
 
 int tou_recv_handshake_syn(
-    tou_socket* sock
+        tou_socket* sock
 );
 
 tou_socket* tou_send_handshake_synack(
-    tou_socket* sock
+        tou_socket* sock
 );
 
 uint16_t tou_recv_handshake_synack(
-    tou_socket* sock
+        tou_socket* sock
 );
 
 int tou_send_handshake_ack(
-    tou_socket* sock
+        tou_socket* sock
 );
 
 int tou_recv_handshake_ack(
-    tou_socket* sock,
-    int timeout // TODO use
+        tou_socket* sock,
+        int timeout // TODO use
 );
 
 #endif

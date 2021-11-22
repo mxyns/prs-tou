@@ -6,9 +6,9 @@
 #include "tou_io.h"
 
 tou_packet_dtp* tou_make_packet_dtp(
-    uint32_t packet_id,
-    int buffer_size,
-    char* buffer
+        uint32_t packet_id,
+        int buffer_size,
+        char* buffer
 ) {
 
     tou_packet_dtp* packet = (tou_packet_dtp*) calloc(1, sizeof(tou_packet_dtp));
@@ -23,7 +23,7 @@ tou_packet_dtp* tou_make_packet_dtp(
 }
 
 void tou_packet_dtp_reset(
-    tou_packet_dtp* packet
+        tou_packet_dtp* packet
 ) {
     packet->packet_id = 0;
     packet->data_packet_size = 0;
@@ -33,55 +33,62 @@ void tou_packet_dtp_reset(
 // tries to parse data in recv_work_buffer into packets and pushes them into recv_window
 // returns 1 on success, 0 on failure 
 int tou_parse_dtp(
-    tou_conn* conn
+        tou_conn* conn
 ) {
 
     // not enough to parse header
     if (conn->recv_work_buffer->cnt < TOU_LEN_DTP) {
-        printf("[tou][tou_parse_dtp] not enough data to parse header yet, have %d < %ld bytes\n", conn->recv_work_buffer->cnt, (long)(TOU_LEN_DTP));
+        TOU_DEBUG(printf("[tou][tou_parse_dtp] not enough data to parse header yet, have %d < %ld bytes\n",
+                         conn->recv_work_buffer->cnt, (long) (TOU_LEN_DTP)));
         return 0;
     }
 
     uint32_t* pkt_size_ptr;
     if ((pkt_size_ptr = (uint32_t*) tou_cbuffer_peek(conn->recv_work_buffer, TOU_HOFFSET_DTP_PACKET_SIZE)) == NULL) {
-        printf("[tou][tou_parse_dtp] CANT PEEK\n");
+        TOU_DEBUG(printf("[tou][tou_parse_dtp] CANT PEEK\n"));
         return 0;
     }
     uint32_t pkt_size = *pkt_size_ptr;
-    printf("[tou][tou_parse_dtp] pkt_size %d\n", pkt_size);
+    TOU_DEBUG(printf("[tou][tou_parse_dtp] pkt_size %d\n", pkt_size));
 
     // not enough to read full packet
     if (TOU_LEN_DTP + pkt_size > conn->recv_work_buffer->cnt) {
         return 0;
     }
-    printf("[tou][tou_parse_dtp] enough to read full packet\n");
+    TOU_DEBUG(printf("[tou][tou_parse_dtp] enough to read full packet\n"));
 
     uint32_t* pkt_id_ptr;
     if ((pkt_id_ptr = (uint32_t*) tou_cbuffer_peek(conn->recv_work_buffer, TOU_HOFFSET_DTP_PACKET_ID)) == NULL) {
-        printf("[tou][tou_parse_dtp] CANT PEEK\n");
+        TOU_DEBUG(printf("[tou][tou_parse_dtp] CANT PEEK\n"));
         return 0;
     }
-    printf("[tou][tou_parse_dtp] *pkt_id_ptr=%d\n", *pkt_id_ptr);
+    TOU_DEBUG(printf("[tou][tou_parse_dtp] *pkt_id_ptr=%d\n", *pkt_id_ptr));
 
     // TODO direct insert (when expected)
 
-    tou_sll_dump(conn->recv_window->list);
-    printf("ISFULL=%d\n", TOU_SLL_ISFULL(conn->recv_window->list));
-    tou_packet_dtp* packet = tou_sll_insert(conn->recv_window->list, *pkt_id_ptr); // add packet to recv_window and get packet struct
+    TOU_DEBUG(
+            tou_sll_dump(conn->recv_window->list);
+            printf("ISFULL=%d\n", TOU_SLL_ISFULL(conn->recv_window->list))
+    );
+    tou_packet_dtp* packet = tou_sll_insert(conn->recv_window->list,
+                                            *pkt_id_ptr); // add packet to recv_window and get packet struct
     if (packet == NULL) {
-        printf("[tou][tou_parse_dtp] recv_window is full. data not lost and still in recv_work_buffer\n");
+        TOU_DEBUG(printf("[tou][tou_parse_dtp] recv_window is full. data not lost and still in recv_work_buffer\n"));
         return 0;
     }
 
     tou_packet_dtp_reset(packet);
     packet->packet_id = *pkt_id_ptr;
-    
-    int total_pop = tou_cbuffer_pop(conn->recv_work_buffer, packet->buffer, pkt_size + TOU_LEN_DTP); // pop data from recv buffer to packet buffer
 
-    packet->data_packet_size = total_pop - TOU_LEN_DTP; // we must get at least TOU_LEN_DTP bytes but they dont count as data bc they're part of the header
+    int total_pop = tou_cbuffer_pop(conn->recv_work_buffer, packet->buffer,
+                                    pkt_size + TOU_LEN_DTP); // pop data from recv buffer to packet buffer
+
+    packet->data_packet_size = total_pop -
+                               TOU_LEN_DTP; // we must get at least TOU_LEN_DTP bytes but they dont count as data bc they're part of the header
 
     if (total_pop != pkt_size + TOU_LEN_DTP) {
-        printf("[tou][tou_parse_dtp] GOT %d INSTEAD OF %ld MISSING %ld BYTES\n", packet->data_packet_size, (long)(pkt_size+TOU_LEN_DTP), (long)(pkt_size+TOU_LEN_DTP-packet->data_packet_size));
+        TOU_DEBUG(printf("[tou][tou_parse_dtp] GOT %d INSTEAD OF %ld MISSING %ld BYTES\n", packet->data_packet_size,
+                         (long) (pkt_size + TOU_LEN_DTP), (long) (pkt_size + TOU_LEN_DTP - packet->data_packet_size)));
         exit(1);
         return 0;
     }
@@ -93,52 +100,58 @@ int tou_parse_dtp(
 // appends packet payload to stream and increments window->expected if successful
 // may produce fatal error if payload wasn't written completely
 int tou_packet_dtp_tostream(
-    tou_window* window,
-    tou_packet_dtp* packet,
-    tou_cbuffer* stream
+        tou_window* window,
+        tou_packet_dtp* packet,
+        tou_cbuffer* stream
 ) {
     if (window->expected != packet->packet_id) {
-        printf("[tou][tou_packet_dtp_tostream] packet %d is expected, this should've never been called\n", packet->packet_id);
+        TOU_DEBUG(printf("[tou][tou_packet_dtp_tostream] packet %d is expected, this should've never been called\n",
+                         packet->packet_id));
         return 0;
     }
 
-    if (packet->data_packet_size > stream->cap-stream->cnt) {
-        printf("[tou][tou_packet_dtp_tostream] not enough space to write packet %d in stream\n", packet->packet_id);
+    if (packet->data_packet_size > stream->cap - stream->cnt) {
+        TOU_DEBUG(printf("[tou][tou_packet_dtp_tostream] not enough space to write packet %d in stream\n",
+                         packet->packet_id));
         return 0;
     }
-    
+
     int n = tou_cbuffer_insert(stream, packet->buffer + packet->data_start, packet->data_packet_size);
     if (n < packet->data_packet_size) {
-        printf(
-            "[tou][tou_packet_dtp_tostream] fatal error occurred while writing packet %d to stream, %d less bytes were written.\
+        TOU_DEBUG(
+                printf(
+                        "[tou][tou_packet_dtp_tostream] fatal error occurred while writing packet %d to stream, %d less bytes were written.\
             \nstream is now corrupted, aborting.\n",
-            packet->packet_id,
-            packet->data_packet_size - n
+                        packet->packet_id,
+                        packet->data_packet_size - n
+                );
         );
         exit(1); // TODO gracefully terminate connection
         return 0;
     }
-    printf("[tou][tou_packet_dtp_tostream] written full %d payload bytes. stream size is now %d\n", n, stream->cnt);
+    TOU_DEBUG(printf("[tou][tou_packet_dtp_tostream] written full %d payload bytes. stream size is now %d\n", n,
+                     stream->cnt));
 
     window->expected++;
     return 1;
 }
 
 void tou_packet_dtp_dump(
-    tou_packet_dtp packet,
-    int dump_buffer
+        tou_packet_dtp packet,
+        int dump_buffer
 ) {
 
-    printf("tou_packet_dtp {\n\tid=%d\n\theader=%d bytes\n\tdata_size=%d bytes\n\tstarting at=%d\n\tin %d bytes buffer\n\tfull=%d\n\t\n}\n",
-        packet.packet_id,
-        packet.data_start,
-        packet.data_packet_size,
-        packet.data_start,
-        packet.buffer_size,
-        packet.data_packet_size + packet.data_start == packet.buffer_size
-    );
+    TOU_DEBUG(
+            printf("tou_packet_dtp {\n\tid=%d\n\theader=%d bytes\n\tdata_size=%d bytes\n\tstarting at=%d\n\tin %d bytes buffer\n\tfull=%d\n\t\n}\n",
+                   packet.packet_id,
+                   packet.data_start,
+                   packet.data_packet_size,
+                   packet.data_start,
+                   packet.buffer_size,
+                   packet.data_packet_size + packet.data_start == packet.buffer_size
+            ));
 
-    printf("packet.buffer : [\n\t*");
+    TOU_DEBUG(printf("packet.buffer : [\n\t*"));
     int zeros = 0;
     for (int i = 0; i < packet.buffer_size; i++) {
 
@@ -152,48 +165,51 @@ void tou_packet_dtp_dump(
         }
 
         printNZeros(zeros, 5);
-        zeros=0;
+        zeros = 0;
 
         if (packet.buffer[i] != 0)
-            printf("%d ", packet.buffer[i]);
-        
-        if (last_byte) printf("| ");
+                TOU_DEBUG(printf("%d ", packet.buffer[i]));
+
+        if (last_byte) TOU_DEBUG(printf("| "));
     }
-    printf("\n]\n");
+    TOU_DEBUG(printf("\n]\n"));
 }
 
 void tou_packet_set_header(
-    tou_packet_dtp* pkt,
-    char* header,
-    int id,
-    char* payload,
-    uint32_t data_packet_size
+        tou_packet_dtp* pkt,
+        char* header,
+        int id,
+        char* payload,
+        uint32_t data_packet_size
 ) {
-       pkt->packet_id = id;
-       pkt->buffer = payload;
-       pkt->data_packet_size = data_packet_size;
+    pkt->packet_id = id;
 
-       // packet is now in send window, awaiting for ACKs
+    // FIXME avoid double copy and pop directly into pre allocated tou_packet_dtp->buffer -_-"
+    memcpy(pkt->buffer, payload, data_packet_size);
+    //pkt->buffer = payload;
+    pkt->data_packet_size = data_packet_size;
 
-       // write packet to socket
-       printf("[tou][tou_send] queued %d bytes\n", data_packet_size);
+    // packet is now in send window, awaiting for ACKs
 
-        header[0] = 48 + (id / 100000) % 10;
-        header[1] = 48 + (id / 10000) % 10;
-        header[2] = 48 + (id / 1000) % 10;
-        header[3] = 48 + (id / 100) % 10; 
-        header[4] = 48 + (id / 10) % 10; 
-        header[5] = 48 + (id / 1) % 10;
+    // write packet to socket
+    TOU_DEBUG(printf("[tou][tou_send] queued %d bytes\n", data_packet_size));
+
+    header[0] = 48 + (id / 100000) % 10;
+    header[1] = 48 + (id / 10000) % 10;
+    header[2] = 48 + (id / 1000) % 10;
+    header[3] = 48 + (id / 100) % 10;
+    header[4] = 48 + (id / 10) % 10;
+    header[5] = 48 + (id / 1) % 10;
 
     tou_packet_set_expiration(pkt, tou_time_ms() + TOU_DEFAULT_ACK_TIMEOUT_MS);
 
 }
 
 void tou_packet_set_expiration(
-    tou_packet_dtp* pkt,
-    long exp
+        tou_packet_dtp* pkt,
+        long exp
 ) {
-        printf("EXPIRE %d SET AT %ld\n", pkt->packet_id, tou_time_ms());
-        pkt->ack_expire = exp;
-        printf("EXPIRE %d SET TO %ld\n", pkt->packet_id, pkt->ack_expire);
+    TOU_DEBUG(printf("EXPIRE %d SET AT %ld\n", pkt->packet_id, tou_time_ms()));
+    pkt->ack_expire = exp;
+    TOU_DEBUG(printf("EXPIRE %d SET TO %ld\n", pkt->packet_id, pkt->ack_expire));
 }

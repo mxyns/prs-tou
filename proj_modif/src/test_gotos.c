@@ -6,13 +6,15 @@ int f() {
         printf("start\n");
     }
 
-    early_stop : {
+    early_stop :
+    {
 
         printf("early_stop\n");
         return 1;
     }
     printf("in between\n");
-    error : {
+    error :
+    {
 
         printf("error\n");
         goto early_stop;

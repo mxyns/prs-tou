@@ -5,7 +5,7 @@
 #define N 4
 
 void test_tou_sll_insert_overwrite(tou_sll* list, int* arr) {
-    
+
     tou_sll_node* c = list->head;
     for (int i = 0; i < N; i++) {
 
@@ -24,7 +24,7 @@ void test_tou_sll_insert_overwrite(tou_sll* list, int* arr) {
     for (int i = 0; i < N + 1; i++) {
         void* pop = tou_sll_pop(list, &err);
         if (!err)
-            printf("popped : %d\n", *(int*)pop);
+            printf("popped : %d\n", *(int*) pop);
         tou_sll_dump(list);
     }
 }
@@ -51,7 +51,7 @@ void test_tou_sll_insert(tou_sll* list, int* arr) {
     for (int i = 0; i < N + 1; i++) {
         void* pop = tou_sll_pop(list, &err);
         if (!err)
-            printf("popped : %d\n", *(int*)pop);
+            printf("popped : %d\n", *(int*) pop);
         tou_sll_dump(list);
     }
 }
@@ -69,7 +69,7 @@ void test_tou_sll_remove(tou_sll* list, int* arr) {
     for (int i = 0; i < N + 1; i++) {
         void* full = tou_sll_insert(list, i % 3);
         if (full != NULL) {
-            *(int*)full = arr[i];
+            *(int*) full = arr[i];
             tou_sll_dump(list);
         } else {
             printf("insert failed : sll full ? %s\n", TOU_SLL_ISFULL(list) ? "YES" : "NO");
@@ -78,15 +78,15 @@ void test_tou_sll_remove(tou_sll* list, int* arr) {
 
 
     tou_sll_dump(list);
-    
+
     printf("\n\n----- removing\n");
     char err;
-    #define n 2
+#define n 2
     uint32_t keys[n] = {0, 1};
     int* vals[n] = {NULL, NULL};
-    int removed = tou_sll_remove_keys(list, keys, (void**)vals, sizeof(int), n);
+    int removed = tou_sll_remove_keys(list, keys, (void**) vals, sizeof(int), n);
     printf("removed %d : [ ", removed);
-    for (int i = 0 ; i < n; i++) {
+    for (int i = 0; i < n; i++) {
         if (vals[i] != NULL) printf("%d ", *vals[i]);
         else printf("(nil) ");
     }
@@ -107,7 +107,7 @@ void test_tou_sll_remove_under(tou_sll* list, int* arr) {
     for (int i = 0; i < N + 1; i++) {
         void* full = tou_sll_insert(list, i % 3);
         if (full != NULL) {
-            *(int*)full = arr[i];
+            *(int*) full = arr[i];
             tou_sll_dump(list);
         } else {
             printf("insert failed : sll full ? %s\n", TOU_SLL_ISFULL(list) ? "YES" : "NO");
@@ -116,14 +116,14 @@ void test_tou_sll_remove_under(tou_sll* list, int* arr) {
 
 
     tou_sll_dump(list);
-    
+
     printf("\n\n----- removing\n");
     int k = 1;
     printf("removing < %d | removed %d nodes\n", k, tou_sll_remove_under(list, k));
-    
+
     k = 2;
     printf("removing < %d | removed %d nodes\n", k, tou_sll_remove_under(list, k));
-    
+
     k = 4;
     printf("removing < %d | removed %d nodes\n", k, tou_sll_remove_under(list, k));
 
@@ -137,14 +137,14 @@ int main() {
     int* pute = (int*) calloc(1, N * sizeof(int));
 
     for (int i = 0; i < N; i++) {
-        pute[i] = 2*N-i;
+        pute[i] = 2 * N - i;
     }
 
     test_tou_sll_insert(list, pute);
 
     printf("\n\n\n\n\n\n==== test_tou_sll_remove\n");
     test_tou_sll_remove(list, pute);
-    
+
     printf("\n\n\n\n\n\n==== test_tou_sll_remove_under\n");
     test_tou_sll_remove_under(list, pute);
 

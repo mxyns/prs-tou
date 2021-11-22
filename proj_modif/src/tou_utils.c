@@ -4,21 +4,18 @@
 #include <math.h>
 
 void printNZeros(int n, int maxSeries) {
-    
     if (n > 0 && n < maxSeries) {
-        for (;n> 0; n--) printf("0 ");
+        for (; n > 0; n--) printf("0 ");
     } else if (n > 0) {
         printf("%d**[0] ", n);
     }
-
 }
 
 void compact_print_buffer(
-    char* buffer,
-    int size
+        char* buffer,
+        int size
 ) {
-
-    printf("[\n\t");    
+    printf("[\n\t");
     int zeros = 0;
     for (int i = 0; i < size; i++) {
 
@@ -29,7 +26,7 @@ void compact_print_buffer(
         }
 
         printNZeros(zeros, 5);
-        zeros=0;
+        zeros = 0;
 
         if (buffer[i] != 0)
             printf("%d ", buffer[i]);
@@ -38,8 +35,8 @@ void compact_print_buffer(
 }
 
 long tou_time_ms() {
-    
-    long            ms; // Milliseconds
+
+    long ms; // Milliseconds
     struct timespec spec;
 
     clock_gettime(CLOCK_REALTIME, &spec);

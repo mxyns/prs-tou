@@ -14,13 +14,13 @@ typedef struct {
 } tou_socket;
 
 tou_socket* tou_make_socket(
-    const char* ip,
-    int port,
-    int listen_1_connect_0
+        const char* ip,
+        int port,
+        int listen_1_connect_0
 );
 
 void tou_free_socket(
-    tou_socket* socket
+        tou_socket* socket
 );
 
 #endif

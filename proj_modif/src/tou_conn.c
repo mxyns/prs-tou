@@ -3,12 +3,12 @@
 #include "tou_conn.h"
 
 tou_conn* tou_make_conn(
-    tou_socket* ctrl_sock,
-    tou_socket* socket
+        tou_socket* ctrl_sock,
+        tou_socket* socket
 ) {
 
     tou_conn* conn = (tou_conn*) calloc(
-                                            1, 
+                                            1,
                                             sizeof(tou_conn) \
                                             + sizeof(tou_cbuffer) \
                                             + TOU_DEFAULT_RECV_WORKBUFFER_SIZE \
@@ -21,7 +21,7 @@ tou_conn* tou_make_conn(
                                             + sizeof(tou_cbuffer) \
                                             + TOU_DEFAULT_RECV_CTRLBUFFER_SIZE \
                                             /* end */
-                                        );
+    );
     conn->socket = socket;
     conn->ctrl_socket = ctrl_sock;
     conn->last_packet_id = 0;
@@ -36,7 +36,7 @@ tou_conn* tou_make_conn(
     conn->send_work_buffer = (tou_cbuffer*) (conn->in->buffer + TOU_DEFAULT_RECV_INBUFFER_SIZE);
     conn->send_work_buffer->buffer = (char*) (conn->send_work_buffer + 1);
     conn->send_work_buffer->cap = TOU_DEFAULT_SEND_WORKBUFFER_SIZE;
-    
+
     conn->out = (tou_cbuffer*) (conn->send_work_buffer->buffer + TOU_DEFAULT_SEND_WORKBUFFER_SIZE);
     conn->out->buffer = (char*) (conn->out + 1);
     conn->out->cap = TOU_DEFAULT_SEND_OUTBUFFER_SIZE;
@@ -44,15 +44,15 @@ tou_conn* tou_make_conn(
     conn->ctrl_buffer = (tou_cbuffer*) (conn->out->buffer + TOU_DEFAULT_SEND_OUTBUFFER_SIZE);
     conn->ctrl_buffer->buffer = (char*) (conn->ctrl_buffer + 1);
     conn->ctrl_buffer->cap = TOU_DEFAULT_RECV_CTRLBUFFER_SIZE;
-    
-    conn->recv_window = tou_make_window(TOU_DEFAULT_RECVWINDOW_SIZE, TOU_DEFAULT_MSS, TOU_DEFAULT_EXPECTED_ID);    
+
+    conn->recv_window = tou_make_window(TOU_DEFAULT_RECVWINDOW_SIZE, TOU_DEFAULT_MSS, TOU_DEFAULT_EXPECTED_ID);
     conn->send_window = tou_make_window(TOU_DEFAULT_SENDWINDOW_SIZE, TOU_DEFAULT_MSS, TOU_DEFAULT_EXPECTED_ID);
 
     return conn;
 }
 
 void tou_free_conn(
-    tou_conn* conn
+        tou_conn* conn
 ) {
     tou_free_socket(conn->socket);
     tou_free_socket(conn->ctrl_socket);

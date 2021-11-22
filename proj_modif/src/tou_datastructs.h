@@ -55,76 +55,76 @@ typedef struct {
 
 
 int tou_cbuffer_read(
-    tou_socket* sock,
-    tou_cbuffer* cbuff,
-    int count
+        tou_socket* sock,
+        tou_cbuffer* cbuff,
+        int count
 );
 
 int tou_cbuffer_insert(
-    tou_cbuffer* cbuff,
-    char* buffer,
-    int size
+        tou_cbuffer* cbuff,
+        char* buffer,
+        int size
 );
 
 int tou_cbuffer_pop(
-    tou_cbuffer* cbuff,
-    char* buffer,
-    int size
+        tou_cbuffer* cbuff,
+        char* buffer,
+        int size
 );
 
 char* tou_cbuffer_peek(
-    tou_cbuffer* cbuff,
-    int pos
+        tou_cbuffer* cbuff,
+        int pos
 );
 
 void tou_cbuffer_dump(
-    tou_cbuffer* buffer
+        tou_cbuffer* buffer
 );
 
 void tou_cbuffer_cdump(
-    tou_cbuffer* buffer
+        tou_cbuffer* buffer
 );
 
 tou_sll* tou_sll_new(
-    int size
+        int size
 );
 
 int tou_sll_insert_overwrite(
-    tou_sll* list,
-    uint32_t priority,
-    void* value
+        tou_sll* list,
+        uint32_t priority,
+        void* value
 );
 
 void* tou_sll_insert(
-    tou_sll* list,
-    uint32_t priority
+        tou_sll* list,
+        uint32_t priority
 );
 
 void* tou_sll_pop(
-    tou_sll* list,
-    char *err
+        tou_sll* list,
+        char* err
 );
 
 int tou_sll_remove_under(
-    tou_sll* list,
-    int key
+        tou_sll* list,
+        int key
 );
 
 int tou_sll_remove_keys(
-    tou_sll* list,
-    uint32_t* keys,
-    void** vals,
-    size_t val_size,
-    int keys_count
+        tou_sll* list,
+        uint32_t* keys,
+        void** vals,
+        size_t val_size,
+        int keys_count
 );
 
 void tou_sll_dump(
-    tou_sll* list
+        tou_sll* list
 );
 
 void tou_free_sll(
-    tou_sll* list,
-    int should_free_values
+        tou_sll* list,
+        int should_free_values
 );
 
 

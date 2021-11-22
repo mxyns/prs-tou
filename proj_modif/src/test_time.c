@@ -9,8 +9,8 @@ int main() {
     long timeout_ms = 0;
 
     struct timeval t = {
-        .tv_sec = timeout_ms / 1000,
-        .tv_usec = 1000 * (timeout_ms % 1000),
+            .tv_sec = timeout_ms / 1000,
+            .tv_usec = 1000 * (timeout_ms % 1000),
     };
 
     printf("before\n");

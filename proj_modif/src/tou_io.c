@@ -26,7 +26,7 @@ void tou_write_packet(
     memcpy(fullpacket + header_size, buffer, size);
     // compact_print_buffer(fullpacket, TOU_DEFAULT_MSS);
 
-    if (sendto(socket->fd, fullpacket, header_size + size, 0,
+    if (sendto(socket->fd, fullpacket, header_size + size, MSG_CONFIRM | MSG_DONTWAIT,  // TODO flags may cause pb one day
                socket->peer_addr, socket->peer_addr_len) < 0) {
         TOU_DEBUG(printf("[tou][tou_write_packet] can't write packet\n"));
     } else {

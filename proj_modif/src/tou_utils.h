@@ -6,7 +6,7 @@
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define ABS(x) (((x) < 0 ? (-(a)) : (a)))
 
-//#define DEBUG
+
 
 #ifdef DEBUG
 #define TOU_DEBUG(X) X

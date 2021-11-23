@@ -126,13 +126,13 @@ void tou_set_nonblocking(
 ) {
 
     if (flags & TOU_FLAG_NONBLOCKING_DATA) {
-        int flags = fcntl(conn->socket->fd, F_GETFL, 0);
-        fcntl(conn->socket->fd, F_SETFL, flags | O_NONBLOCK * (flags & TOU_FLAG_NONBLOCKING_DATA_ENABLE));
+        int curr_flags = fcntl(conn->socket->fd, F_GETFL, 0);
+        fcntl(conn->socket->fd, F_SETFL, curr_flags | (O_NONBLOCK * (flags & TOU_FLAG_NONBLOCKING_DATA_ENABLE)));
     }
 
     if (flags & TOU_FLAG_NONBLOCKING_CTRL) {
-        int flags = fcntl(conn->ctrl_socket->fd, F_GETFL, 0);
-        fcntl(conn->ctrl_socket->fd, F_SETFL, flags | (O_NONBLOCK * (flags & TOU_FLAG_NONBLOCKING_CTRL_ENABLE)));
+        int curr_flags = fcntl(conn->ctrl_socket->fd, F_GETFL, 0);
+        fcntl(conn->ctrl_socket->fd, F_SETFL, curr_flags | (O_NONBLOCK * (flags & TOU_FLAG_NONBLOCKING_CTRL_ENABLE)));
     }
 }
 

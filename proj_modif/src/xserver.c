@@ -1,10 +1,11 @@
+
+#include "tou_utils.h"
 #include "tou.h"
 #include "tou_io.h"
 #include "tou_socket.h"
 #include <arpa/inet.h>
 #include <sys/time.h>
 #include <stdlib.h>
-#include "tou_utils.h"
 
 int getport(struct sockaddr* sockaddr) {
 
@@ -18,7 +19,7 @@ int main() {
 
     tou_conn* conn = tou_accept_conn(listen_sock);
 
-    const int MSS = TOU_DEFAULT_MSS - TOU_LEN_DTP - 300;
+    const int MSS = TOU_DEFAULT_MSS - TOU_LEN_DTP;
     char data[10 * MSS + 1]; // + 1 so that we always have at least a \0 to terminate our string
     char* buffer = data;
     int size = 10 * MSS;
@@ -53,8 +54,10 @@ int main() {
             .tv_usec = 10000,
     };
 
+    tou_set_nonblocking(conn, TOU_FLAG_NONBLOCKING_DATA | TOU_FLAG_NONBLOCKING_DATA_ENABLE);
+
     int written = 0;
-    while (size - written > 0 || !TOU_SLL_ISEMPTY(conn->send_window->list)) {
+    while (size - written > 0 || conn->out->cnt != 0 || !TOU_SLL_ISEMPTY(conn->send_window->list)) {
 
         // write maximum to out buffer
         int new_write = tou_cbuffer_insert(conn->out, buffer + written, size - written);
@@ -146,12 +149,15 @@ int main() {
     TOU_DEBUG(
             printf("I'm done with this\n");
             printf("End state :\n");
+            printf("file pos : %d / %d\n", written, size);
             printf("send window : ");
             tou_sll_dump(conn->send_window->list);
             printf("recv buffer : ");
             tou_cbuffer_cdump(conn->recv_work_buffer);
-            printf("[xserver] TOTAL SENT = %d\n", written);
     );
+
+    printf("[xserver] TOTAL SENT = %d\n", written);
+    printf("[xserver] SEQ = %d\n", conn->last_packet_id);
 
     tou_free_conn(conn);
 

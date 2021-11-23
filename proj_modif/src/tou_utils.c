@@ -47,5 +47,5 @@ long tou_time_ms() {
     }
     ms += spec.tv_sec * 1.0e6;
 
-    return ms;
+    return ms * 1.0e-3;
 }

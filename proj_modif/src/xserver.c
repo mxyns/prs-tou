@@ -51,10 +51,12 @@ int main() {
     fd_set readset;
     struct timeval ack_timeout = {
             .tv_sec = 0,
-            .tv_usec = 10000,
+            .tv_usec = 2*TOU_DEFAULT_ACK_TIMEOUT_MS,
     };
 
     tou_set_nonblocking(conn, TOU_FLAG_NONBLOCKING_DATA | TOU_FLAG_NONBLOCKING_DATA_ENABLE);
+
+    long start = tou_time_ms();
 
     int written = 0;
     while (size - written > 0 || conn->out->cnt != 0 || !TOU_SLL_ISEMPTY(conn->send_window->list)) {
@@ -87,6 +89,7 @@ int main() {
         long timeout = MAX(0, pkt->ack_expire - tou_time_ms());
         ack_timeout.tv_sec = timeout / 1000;
         ack_timeout.tv_usec = (timeout % 1000) * 1000;
+
         TOU_DEBUG(printf("TIMEOUT IN %ld : %lds %ldusec\n", timeout, (long) ack_timeout.tv_sec,
                          (long) ack_timeout.tv_usec));
 
@@ -113,6 +116,7 @@ int main() {
                     compact_print_buffer(pkt->buffer, pkt->data_packet_size);
             );
             tou_retransmit(conn, pkt);
+            // tou_acknowledge_packets(conn, (int)conn->send_window->expected);
 
             continue;
         }
@@ -132,6 +136,7 @@ int main() {
                         printf("[xserver] some packet dropped, resend when ?\n");
                         printf("[xserver] packed dropped seq : %d\n", -new_ack)
                 );
+                tou_retransmit(conn, pkt);
             }
         }
     }
@@ -158,6 +163,8 @@ int main() {
 
     printf("[xserver] TOTAL SENT = %d\n", written);
     printf("[xserver] SEQ = %d\n", conn->last_packet_id);
+    printf("[xserver] TIME = %ld\n", tou_time_ms() - start);
+    printf("[xserver] TIME = %ld\n", tou_time_ms() - tou_time_ms());
 
     tou_free_conn(conn);
 

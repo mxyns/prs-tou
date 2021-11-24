@@ -65,7 +65,7 @@ int main() {
         int new_write = tou_cbuffer_insert(conn->out, buffer + written, size - written);
         TOU_DEBUG(
                 printf("[xserver] wrote %d to out\n", new_write);
-                tou_cbuffer_dump(conn->out);
+                //tou_cbuffer_dump(conn->out);
         );
         if (new_write > 0) {
             // new_write < 0 when an error occurs
@@ -86,7 +86,13 @@ int main() {
         tou_packet_dtp* pkt = (tou_packet_dtp*) conn->send_window->list->head->val;
         TOU_DEBUG(printf("MUST RECV %d AT %ld\n", pkt->packet_id, pkt->ack_expire));
 
+        TOU_SLL_ITER_USED(conn->send_window->list,
+
+            if (((tou_packet_dtp*)curr->val)->ack_expire < pkt->ack_expire)
+                        pkt = (tou_packet_dtp*) curr->val;
+                          );
         long timeout = MAX(0, pkt->ack_expire - tou_time_ms());
+        timeout = 1;
         ack_timeout.tv_sec = timeout / 1000;
         ack_timeout.tv_usec = (timeout % 1000) * 1000;
 
@@ -132,11 +138,13 @@ int main() {
                 TOU_DEBUG(printf("[xserver] new acked %d, at %d\n", new_ack, conn->send_window->expected - 1));
             }
             if (new_ack < 0) {
+                new_ack = 1-new_ack;
                 TOU_DEBUG(
                         printf("[xserver] some packet dropped, resend when ?\n");
-                        printf("[xserver] packed dropped seq : %d\n", -new_ack)
+                        printf("[xserver] packed dropped seq : %d\n", new_ack)
                 );
-                tou_retransmit(conn, pkt);
+
+                tou_retransmit_all(conn);
             }
         }
     }

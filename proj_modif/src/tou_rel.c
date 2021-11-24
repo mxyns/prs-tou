@@ -46,7 +46,7 @@ int tou_acknowledge_packets(
         int seq
 ) {
     int result = 0;
-    int expected = conn->send_window->expected;
+    int expected = (int)conn->send_window->expected;
     if (seq >= expected) {
         result = tou_sll_remove_under(conn->send_window->list, seq);
         conn->send_window->expected = seq + 1;
@@ -81,7 +81,8 @@ int tou_recv_ack(
 
     int read = tou_cbuffer_read(ack_socket, conn->recv_work_buffer, conn->recv_work_buffer->cap);
     if (read < 0) {
-        TOU_DEBUG(printf("[tou][tou_recv_ack] can't read from ctrl socket\n"));
+        TOU_DEBUG(printf("[tou][tou_recv_ack] can't read from socket\n"));
+        perror("read error: ");
         return result;
     }
 

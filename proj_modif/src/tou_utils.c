@@ -15,6 +15,7 @@ void compact_print_buffer(
         char* buffer,
         int size
 ) {
+
     printf("[\n\t");
     int zeros = 0;
     for (int i = 0; i < size; i++) {

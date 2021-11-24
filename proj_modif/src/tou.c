@@ -167,3 +167,45 @@ int tou_retransmit(
 
     return 0;
 }
+
+int tou_retransmit_all(
+        tou_conn* conn
+) {
+    tou_packet_dtp* pkt = NULL;
+    TOU_SLL_ITER_USED(conn->send_window->list,
+                      pkt = (tou_packet_dtp*) curr->val;
+                              tou_retransmit(conn, pkt);
+    );
+
+    return 0;
+}
+
+int tou_retransmit_n(
+        tou_conn* conn,
+        int n
+) {
+
+    tou_packet_dtp* pkt = NULL;
+    int i = 0;
+    TOU_SLL_ITER_USED(conn->send_window->list,
+                      if (i >= n) return n;
+                              pkt = (tou_packet_dtp*) curr->val;
+                              tou_retransmit(conn, pkt);
+                              i++;
+    );
+}
+
+int tou_retransmit_expired(
+        tou_conn* conn,
+        long expire_time
+) {
+    tou_packet_dtp* pkt = NULL;
+    TOU_SLL_ITER_USED(conn->send_window->list,
+                      pkt = (tou_packet_dtp*) curr->val;
+                              if (pkt->ack_expire < expire_time)
+                                  tou_retransmit(conn, pkt);
+                              else return 0;
+    );
+
+    return 0;
+}

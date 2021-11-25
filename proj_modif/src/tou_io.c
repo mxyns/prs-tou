@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 // write header and buffer to socket
-static n = 0;
+static int n = 0;
 void tou_write_packet(
         tou_socket* socket,
         char* header,

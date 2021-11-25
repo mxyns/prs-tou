@@ -43,6 +43,7 @@ typedef struct tou_stats {
         estimates
     */
    double estimated_rtt;
+   double estimated_throughput;
 
 } tou_stats;
 
@@ -65,6 +66,7 @@ void dump_stats(tou_stats* stats) {
             ====\n\
             estimates\n\
             double estimated_rtt = %lf\n\
+            double estimated_throughput = %lf\n\
         }\n", 
             stats->transmits,
             stats->detected_drops,
@@ -77,13 +79,15 @@ void dump_stats(tou_stats* stats) {
             stats->total_time,
             stats->last_sent_id,
             stats->last_seq,
-            stats->estimated_rtt
+            stats->estimated_rtt,
+            stats->estimated_throughput
         );
 }
 
 int main() {
 
-    tou_stats stats = { 0 };
+    tou_stats stats;
+    memset(&stats, 0, sizeof(tou_stats));
 
     tou_socket* listen_sock = tou_open_socket("0.0.0.0", 2000);
     tou_conn* conn = tou_accept_conn(listen_sock);
@@ -127,7 +131,6 @@ int main() {
 
     long start = tou_time_ms();
 
-    int last_acked = 0;
     int last_acked_n = 0;
     int written = 0; // TODO sizes to size_t / long type
     while (size - written > 0 || conn->out->cnt != 0 || !TOU_SLL_ISEMPTY(conn->send_window->list)) {
@@ -146,11 +149,12 @@ int main() {
 
         // process out buffer into packets => send window
         TOU_DEBUG(printf("SENT AT %ld\n", tou_time_ms()));
+        TOU_DEBUG(printf("[xserver] send %d\n", conn->last_packet_id));
         int sent = tou_send(conn);
         if (sent > 0) {
             stats.transmits += sent;
+            TOU_DEBUG(printf("[xserver] buffer part sent %d\n", sent));
             TOU_DEBUG(
-                    printf("[xserver] buffer part sent\n");
                     printf("[xserver] send window %d/%d\n", conn->send_window->list->count,
                            conn->send_window->list->cap)
             );
@@ -165,7 +169,8 @@ int main() {
                         pkt = (tou_packet_dtp*) curr->val;
                           );
 
-        long timeout = MAX(0, pkt->ack_expire - tou_time_ms());
+        long timeout = MAX(0, pkt->ack_expire - tou_time_ms()) * 1.5;
+        printf("timeout %ld\n", timeout);
         // timeout = 1;
         ack_timeout.tv_sec = timeout / 1000;
         ack_timeout.tv_usec = (timeout % 1000) * 1000;
@@ -183,7 +188,7 @@ int main() {
         int ret_select = select(range, &readset, NULL, NULL, &ack_timeout);
 
         TOU_DEBUG(
-                printf("ret_select = %d\n", ret_select);
+                TOU_DEBUG(printf("ret_select = %d\n", ret_select));
                 for (int i = 0; i < range; i++) {
                     if (FD_ISSET(i, &readset)) {
                         printf("FLAG %d\n", i);
@@ -193,8 +198,8 @@ int main() {
 
         if (ret_select == 0) {
 
-            TOU_DEBUG(
                     printf("ACK EXPIRED %d\n", pkt->packet_id);
+            TOU_DEBUG(
                     compact_print_buffer(pkt->buffer, pkt->data_packet_size);
             );
 
@@ -211,29 +216,24 @@ int main() {
             TOU_DEBUG(printf("[xserver] checking for ack\n"));
 
             // await for some acks
-            int n_acked = -1;
-            int new_ack = tou_recv_ack(conn, &n_acked);
-            printf("[xserver] ack result %d*%d\n", new_ack, n_acked);
+            tou_recv_ack(conn, &last_acked_n);
+            TOU_DEBUG(printf("[xserver] ack result new count %d\n", last_acked_n));
 
-            if (new_ack > 0) {
-                last_acked = new_ack;
-                last_acked_n = n_acked;
-                printf("[xserver] new acked %d, at %d\n", new_ack, conn->send_window->expected - 1);
-            }
-
-            if (new_ack == 0 && n_acked > 0) {
+            if (last_acked_n >= 1) {
                 stats.detected_drops++;
 
-                int dropped = last_acked + 1;
+                last_acked_n = 0;
+
+                int dropped = conn->send_window->expected;
 
                 TOU_DEBUG(
-                        printf("[xserver] some packet dropped, resend when ?\n");
+                    printf("[xserver] some packet dropped, resend when ?\n");
                 );
-                printf("[xserver] packed dropped seq : %d\n", dropped);
+                    printf("[xserver] packed dropped seq : %d\n", dropped);
 
-                int retransmit;
+                
                 // tou_retransmit_all(conn);
-                retransmit = tou_retransmit_id(conn, dropped);
+                int retransmit = tou_retransmit_n(conn, 5);
                 stats.ack_detect_retransmits += retransmit;
             }
         }
@@ -243,6 +243,7 @@ int main() {
         stats.last_seq = conn->send_window->expected - 1;
         stats.last_sent_id = conn->last_packet_id;
         stats.estimated_rtt = conn->rtt;
+        stats.estimated_throughput = stats.total_sent * 1.0e-6 / (stats.total_time * 1.0e-3);
     }
 
     if (sendto(conn->ctrl_socket->fd, "FIN", 4, 0, conn->ctrl_socket->peer_addr, conn->ctrl_socket->peer_addr_len) <

@@ -115,17 +115,18 @@ void test_tou_sll_remove_under(tou_sll* list, int* arr) {
     }
 
 
+    tou_sll_node* removed[list->cap];
     tou_sll_dump(list);
 
     printf("\n\n----- removing\n");
     int k = 1;
-    printf("removing < %d | removed %d nodes\n", k, tou_sll_remove_under(list, k));
+    printf("removing < %d | removed %d nodes\n", k, tou_sll_remove_under(list, k, removed));
 
     k = 2;
-    printf("removing < %d | removed %d nodes\n", k, tou_sll_remove_under(list, k));
+    printf("removing < %d | removed %d nodes\n", k, tou_sll_remove_under(list, k, removed));
 
     k = 4;
-    printf("removing < %d | removed %d nodes\n", k, tou_sll_remove_under(list, k));
+    printf("removing < %d | removed %d nodes\n", k, tou_sll_remove_under(list, k, removed));
 
 
     tou_sll_dump(list);

@@ -1,4 +1,5 @@
 #include "tou.h"
+#include "tou_consts.h"
 #include "tou_io.h"
 #include "tou_socket.h"
 #include "tou_packet.h"

@@ -107,7 +107,8 @@ void* tou_sll_pop(
 
 int tou_sll_remove_under(
         tou_sll* list,
-        int key
+        int key,
+        tou_sll_node** removed_nodes
 );
 
 int tou_sll_remove_keys(

@@ -4,6 +4,7 @@
 #include "tou_conn.h"
 #include "tou_utils.h"
 #include "tou_io.h"
+#include "tou_consts.h"
 
 tou_packet_dtp* tou_make_packet_dtp(
         uint32_t packet_id,
@@ -201,15 +202,17 @@ void tou_packet_set_header(
     header[4] = 48 + (id / 10) % 10;
     header[5] = 48 + (id / 1) % 10;
 
-    tou_packet_set_expiration(pkt, tou_time_ms() + TOU_DEFAULT_ACK_TIMEOUT_MS);
+    tou_packet_set_expiration(pkt, tou_time_ms(), TOU_DEFAULT_ACK_TIMEOUT_MS);
 
 }
 
 void tou_packet_set_expiration(
         tou_packet_dtp* pkt,
-        long exp
+        long now,
+        long timeout
 ) {
     TOU_DEBUG(printf("EXPIRE %d SET AT %ld\n", pkt->packet_id, tou_time_ms()));
-    pkt->ack_expire = exp;
+    pkt->ack_expire = now + timeout;
+    pkt->timestamp = now;
     TOU_DEBUG(printf("EXPIRE %d SET TO %ld\n", pkt->packet_id, pkt->ack_expire));
 }

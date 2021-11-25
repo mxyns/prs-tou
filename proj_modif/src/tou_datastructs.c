@@ -407,7 +407,8 @@ void* tou_sll_pop(
 
 int tou_sll_remove_under(
         tou_sll* list,
-        int key
+        int key,
+        tou_sll_node** removed_nodes
 ) {
 
     tou_sll_node * curr = list->head;
@@ -419,9 +420,11 @@ int tou_sll_remove_under(
                 printf("curr key=%d\n", curr->key);
                 printf("popping\n");
         );
+        tou_sll_head* head = list->head;
         tou_sll_pop(list, &err);
         TOU_DEBUG(printf("ok\n"));
         if (!err) {
+            removed_nodes[n] = head;
             n++;
             TOU_DEBUG(printf("popped %d\n", n));
         }

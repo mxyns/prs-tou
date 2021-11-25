@@ -19,17 +19,8 @@
 #define TOU_LEN_BASEHEADER (0)
 
 #define TOU_HANDSHAKE_ACK_DEFAULT_TIMEOUT (0)
-#define TOU_DEFAULT_MSS (1500) // max payload size
-#define TOU_DEFAULT_RECVWINDOW_SIZE (10)
-#define TOU_DEFAULT_SENDWINDOW_SIZE (20)
-#define TOU_DEFAULT_RECV_WORKBUFFER_SIZE (TOU_DEFAULT_MSS * 3)
-#define TOU_DEFAULT_RECV_INBUFFER_SIZE (TOU_DEFAULT_MSS * 3)
-#define TOU_DEFAULT_SEND_WORKBUFFER_SIZE (TOU_DEFAULT_MSS * 3)
-#define TOU_DEFAULT_SEND_OUTBUFFER_SIZE (TOU_DEFAULT_MSS * TOU_DEFAULT_SENDWINDOW_SIZE)
-#define TOU_DEFAULT_RECV_CTRLBUFFER_SIZE ((TOU_LEN_PKT_ACK + sizeof(ack_id_t) * TOU_PKT_ACK_MAX_ACK_COUNT) * 5)
 
 #define TOU_DEFAULT_EXPECTED_ID (1)
-#define TOU_DEFAULT_ACK_TIMEOUT_MS (10)
 
 #define TOU_READ_EXACT 0
 
@@ -94,6 +85,11 @@ int tou_retransmit_n(
 int tou_retransmit_expired(
         tou_conn* conn,
         long expire_time
+);
+
+int tou_retransmit_id(
+        tou_conn* conn,
+        uint32_t id
 );
 
 #endif

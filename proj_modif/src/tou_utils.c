@@ -37,16 +37,18 @@ void compact_print_buffer(
 
 long tou_time_ms() {
 
-    long ms; // Milliseconds
     struct timespec spec;
 
     clock_gettime(CLOCK_REALTIME, &spec);
 
-    ms = round(spec.tv_nsec / 1.0e6); // Convert nanoseconds to milliseconds
-    if (ms > 999) {
-        ms = 1000;
-    }
-    ms += spec.tv_sec * 1.0e6;
+    return (long)((double)spec.tv_sec * 1.0e3 + (double)spec.tv_nsec * 1.0e-6);
+}
 
-    return ms * 1.0e-3;
+long tou_time_ns() {
+
+    struct timespec spec;
+
+    clock_gettime(CLOCK_REALTIME, &spec);
+
+    return (long)((double)spec.tv_sec * 1.0e9 + (double)spec.tv_nsec);
 }

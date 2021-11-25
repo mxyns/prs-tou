@@ -23,15 +23,13 @@ if __name__ == "__main__":
     parameters = readFile("parameters.txt")
     for i in range(len(parameters)) : 
         if (i == int(sys.argv[1])) :
-            bashCommand = "mkdir build{}".format(i)
-            process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-            process.wait()
             for j in range(int(sys.argv[2])) :
                 parameters[i]= str((j+1)*int(sys.argv[3]))
+                
+                toFile = os.path.join('./src','tou_consts.h')
+                writeFile (toFile, lines, parameters)
 
-                bashCommand = "mkdir ./build{}/".format(i) + parameters[i]
+                bashCommand = "make -C ./build"
                 process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
                 process.wait()
-                
-                toFile = os.path.join('./build{}/{}'.format(i,parameters[i]),'tou_consts.h')
-                writeFile (toFile, lines, parameters)
+                print("passed once")

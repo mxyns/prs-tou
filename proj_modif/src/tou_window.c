@@ -4,6 +4,7 @@
 #include "tou_packet.h"
 #include "tou_rel.h"
 #include "tou_utils.h"
+#include "tou_consts.h"
 #include <stdlib.h>
 
 tou_window* tou_make_window(

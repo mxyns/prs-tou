@@ -3,6 +3,7 @@
 #include "tou.h"
 #include "tou_io.h"
 #include "tou_socket.h"
+#include "tou_consts.h"
 #include <arpa/inet.h>
 #include <sys/time.h>
 #include <stdlib.h>
@@ -13,10 +14,78 @@ int getport(struct sockaddr* sockaddr) {
     return ntohs(addr->sin_port);
 }
 
+typedef struct tou_stats {
+
+    long transmits;
+    
+    long detected_drops;
+    long ack_detect_retransmits;
+
+    long timeout_retransmits;
+    long timeouts;
+    
+    double average_timeout;
+    
+    long total_loop;
+    long total_time;
+    long total_sent;
+
+    long last_sent_id;
+    long last_seq;
+
+    /*
+        ====
+        computed
+    */
+
+    /*
+        ====
+        estimates
+    */
+   double estimated_rtt;
+
+} tou_stats;
+
+void dump_stats(tou_stats* stats) {
+
+    printf("stats {\n\
+            long transmits = %ld\n\
+            long detected_drops = %ld\n\
+            long ack_detect_retransmits = %ld\n\
+            long timeout_retransmits = %ld\n\
+            long timeouts = %ld\n\
+            double average_timeout = %lf\n\
+            long total_loop = %ld\n\
+            long total_sent = %ld\n\
+            long total_time = %ld\n\
+            long last_sent_id = %ld\n\
+            long last_seq = %ld\n\
+            ====\n\
+            computed\n\
+            ====\n\
+            estimates\n\
+            double estimated_rtt = %lf\n\
+        }\n", 
+            stats->transmits,
+            stats->detected_drops,
+            stats->ack_detect_retransmits,
+            stats->timeout_retransmits,
+            stats->timeouts,
+            stats->average_timeout,
+            stats->total_loop,
+            stats->total_sent,
+            stats->total_time,
+            stats->last_sent_id,
+            stats->last_seq,
+            stats->estimated_rtt
+        );
+}
+
 int main() {
 
-    tou_socket* listen_sock = tou_open_socket("0.0.0.0", 2000);
+    tou_stats stats = { 0 };
 
+    tou_socket* listen_sock = tou_open_socket("0.0.0.0", 2000);
     tou_conn* conn = tou_accept_conn(listen_sock);
 
     const int MSS = TOU_DEFAULT_MSS - TOU_LEN_DTP;
@@ -51,14 +120,16 @@ int main() {
     fd_set readset;
     struct timeval ack_timeout = {
             .tv_sec = 0,
-            .tv_usec = 2*TOU_DEFAULT_ACK_TIMEOUT_MS,
+            .tv_usec = 2*1000*TOU_DEFAULT_ACK_TIMEOUT_MS,
     };
 
     tou_set_nonblocking(conn, TOU_FLAG_NONBLOCKING_DATA | TOU_FLAG_NONBLOCKING_DATA_ENABLE);
 
     long start = tou_time_ms();
 
-    int written = 0;
+    int last_acked = 0;
+    int last_acked_n = 0;
+    int written = 0; // TODO sizes to size_t / long type
     while (size - written > 0 || conn->out->cnt != 0 || !TOU_SLL_ISEMPTY(conn->send_window->list)) {
 
         // write maximum to out buffer
@@ -70,12 +141,14 @@ int main() {
         if (new_write > 0) {
             // new_write < 0 when an error occurs
             written += new_write;
+            stats.total_sent += new_write;
         }
 
         // process out buffer into packets => send window
         TOU_DEBUG(printf("SENT AT %ld\n", tou_time_ms()));
         int sent = tou_send(conn);
         if (sent > 0) {
+            stats.transmits += sent;
             TOU_DEBUG(
                     printf("[xserver] buffer part sent\n");
                     printf("[xserver] send window %d/%d\n", conn->send_window->list->count,
@@ -91,10 +164,13 @@ int main() {
             if (((tou_packet_dtp*)curr->val)->ack_expire < pkt->ack_expire)
                         pkt = (tou_packet_dtp*) curr->val;
                           );
+
         long timeout = MAX(0, pkt->ack_expire - tou_time_ms());
-        timeout = 1;
+        // timeout = 1;
         ack_timeout.tv_sec = timeout / 1000;
         ack_timeout.tv_usec = (timeout % 1000) * 1000;
+
+        stats.average_timeout = (stats.average_timeout * stats.total_loop + timeout) / (stats.total_loop + 1);
 
         TOU_DEBUG(printf("TIMEOUT IN %ld : %lds %ldusec\n", timeout, (long) ack_timeout.tv_sec,
                          (long) ack_timeout.tv_usec));
@@ -121,7 +197,9 @@ int main() {
                     printf("ACK EXPIRED %d\n", pkt->packet_id);
                     compact_print_buffer(pkt->buffer, pkt->data_packet_size);
             );
-            tou_retransmit(conn, pkt);
+
+            stats.timeouts++;
+            stats.timeout_retransmits += tou_retransmit(conn, pkt);
             // tou_acknowledge_packets(conn, (int)conn->send_window->expected);
 
             continue;
@@ -133,20 +211,38 @@ int main() {
             TOU_DEBUG(printf("[xserver] checking for ack\n"));
 
             // await for some acks
-            int new_ack = tou_recv_ack(conn);
+            int n_acked = -1;
+            int new_ack = tou_recv_ack(conn, &n_acked);
+            printf("[xserver] ack result %d*%d\n", new_ack, n_acked);
+
             if (new_ack > 0) {
-                TOU_DEBUG(printf("[xserver] new acked %d, at %d\n", new_ack, conn->send_window->expected - 1));
+                last_acked = new_ack;
+                last_acked_n = n_acked;
+                printf("[xserver] new acked %d, at %d\n", new_ack, conn->send_window->expected - 1);
             }
-            if (new_ack < 0) {
-                new_ack = 1-new_ack;
+
+            if (new_ack == 0 && n_acked > 0) {
+                stats.detected_drops++;
+
+                int dropped = last_acked + 1;
+
                 TOU_DEBUG(
                         printf("[xserver] some packet dropped, resend when ?\n");
-                        printf("[xserver] packed dropped seq : %d\n", new_ack)
                 );
+                printf("[xserver] packed dropped seq : %d\n", dropped);
 
-                tou_retransmit_all(conn);
+                int retransmit;
+                // tou_retransmit_all(conn);
+                retransmit = tou_retransmit_id(conn, dropped);
+                stats.ack_detect_retransmits += retransmit;
             }
         }
+
+        stats.total_loop++;
+        stats.total_time = tou_time_ms() - start;
+        stats.last_seq = conn->send_window->expected - 1;
+        stats.last_sent_id = conn->last_packet_id;
+        stats.estimated_rtt = conn->rtt;
     }
 
     if (sendto(conn->ctrl_socket->fd, "FIN", 4, 0, conn->ctrl_socket->peer_addr, conn->ctrl_socket->peer_addr_len) <
@@ -159,6 +255,7 @@ int main() {
         return -1;
     }
 
+
     TOU_DEBUG(
             printf("I'm done with this\n");
             printf("End state :\n");
@@ -169,10 +266,7 @@ int main() {
             tou_cbuffer_cdump(conn->recv_work_buffer);
     );
 
-    printf("[xserver] TOTAL SENT = %d\n", written);
-    printf("[xserver] SEQ = %d\n", conn->last_packet_id);
-    printf("[xserver] TIME = %ld\n", tou_time_ms() - start);
-    printf("[xserver] TIME = %ld\n", tou_time_ms() - tou_time_ms());
+    dump_stats(&stats);
 
     tou_free_conn(conn);
 

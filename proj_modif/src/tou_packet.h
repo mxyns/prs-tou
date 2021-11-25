@@ -25,6 +25,7 @@ typedef struct {
     uint32_t packet_id;
     char acked;
     long ack_expire;
+    long timestamp;
 
     // number of payload bytes after data_start
     // ie last payload byte is at buffer + data_start + data_packet_size - 1
@@ -75,7 +76,8 @@ void tou_packet_set_header(
 
 void tou_packet_set_expiration(
         tou_packet_dtp* pkt,
-        long exp
+        long now,
+        long timeout
 );
 
 #endif

@@ -24,7 +24,7 @@ typedef struct tou_conn {
     tou_window* recv_window;
     tou_window* send_window;
     uint32_t last_packet_id;
-    long rtt;
+    double rtt;
 } tou_conn;
 
 tou_conn* tou_make_conn(

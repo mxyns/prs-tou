@@ -91,7 +91,8 @@ noinst_PROGRAMS = cserver$(EXEEXT) cclient$(EXEEXT) \
 	test_cbuff$(EXEEXT) test_sll$(EXEEXT) test_pserver$(EXEEXT) \
 	test_pclient$(EXEEXT) test_window$(EXEEXT) \
 	test_cblocks$(EXEEXT) test_gotos$(EXEEXT) test_time$(EXEEXT) \
-	test_test$(EXEEXT) xserver$(EXEEXT) xclient$(EXEEXT)
+	test_timeunit$(EXEEXT) test_test$(EXEEXT) xserver$(EXEEXT) \
+	xclient$(EXEEXT)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -150,6 +151,10 @@ am_test_time_OBJECTS = test_time.$(OBJEXT)
 test_time_OBJECTS = $(am_test_time_OBJECTS)
 test_time_LDADD = $(LDADD)
 test_time_DEPENDENCIES =
+am_test_timeunit_OBJECTS = $(am__objects_1) test_time_unit.$(OBJEXT)
+test_timeunit_OBJECTS = $(am_test_timeunit_OBJECTS)
+test_timeunit_LDADD = $(LDADD)
+test_timeunit_DEPENDENCIES =
 am_test_window_OBJECTS = $(am__objects_1) test_window.$(OBJEXT)
 test_window_OBJECTS = $(am_test_window_OBJECTS)
 test_window_LDADD = $(LDADD)
@@ -182,13 +187,14 @@ am__depfiles_remade = ./$(DEPDIR)/client_classic.Po \
 	./$(DEPDIR)/test_cblocks.Po ./$(DEPDIR)/test_cbuff.Po \
 	./$(DEPDIR)/test_gotos.Po ./$(DEPDIR)/test_packet_client.Po \
 	./$(DEPDIR)/test_packet_server.Po ./$(DEPDIR)/test_sll.Po \
-	./$(DEPDIR)/test_time.Po ./$(DEPDIR)/test_window.Po \
-	./$(DEPDIR)/tou.Po ./$(DEPDIR)/tou_conn.Po \
-	./$(DEPDIR)/tou_datastructs.Po ./$(DEPDIR)/tou_handshake.Po \
-	./$(DEPDIR)/tou_io.Po ./$(DEPDIR)/tou_packet.Po \
-	./$(DEPDIR)/tou_rel.Po ./$(DEPDIR)/tou_socket.Po \
-	./$(DEPDIR)/tou_utils.Po ./$(DEPDIR)/tou_window.Po \
-	./$(DEPDIR)/xclient.Po ./$(DEPDIR)/xserver.Po
+	./$(DEPDIR)/test_time.Po ./$(DEPDIR)/test_time_unit.Po \
+	./$(DEPDIR)/test_window.Po ./$(DEPDIR)/tou.Po \
+	./$(DEPDIR)/tou_conn.Po ./$(DEPDIR)/tou_datastructs.Po \
+	./$(DEPDIR)/tou_handshake.Po ./$(DEPDIR)/tou_io.Po \
+	./$(DEPDIR)/tou_packet.Po ./$(DEPDIR)/tou_rel.Po \
+	./$(DEPDIR)/tou_socket.Po ./$(DEPDIR)/tou_utils.Po \
+	./$(DEPDIR)/tou_window.Po ./$(DEPDIR)/xclient.Po \
+	./$(DEPDIR)/xserver.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -207,13 +213,15 @@ SOURCES = $(cclient_SOURCES) $(cserver_SOURCES) \
 	$(test_gotos_SOURCES) $(test_pclient_SOURCES) \
 	$(test_pserver_SOURCES) $(test_sll_SOURCES) \
 	$(test_test_SOURCES) $(test_time_SOURCES) \
-	$(test_window_SOURCES) $(xclient_SOURCES) $(xserver_SOURCES)
+	$(test_timeunit_SOURCES) $(test_window_SOURCES) \
+	$(xclient_SOURCES) $(xserver_SOURCES)
 DIST_SOURCES = $(cclient_SOURCES) $(cserver_SOURCES) \
 	$(test_cblocks_SOURCES) $(test_cbuff_SOURCES) \
 	$(test_gotos_SOURCES) $(test_pclient_SOURCES) \
 	$(test_pserver_SOURCES) $(test_sll_SOURCES) \
 	$(test_test_SOURCES) $(test_time_SOURCES) \
-	$(test_window_SOURCES) $(xclient_SOURCES) $(xserver_SOURCES)
+	$(test_timeunit_SOURCES) $(test_window_SOURCES) \
+	$(xclient_SOURCES) $(xserver_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -382,6 +390,10 @@ test_window_SOURCES = $(TOU_CORE) \
 test_cblocks_SOURCES = test_cblocks.c
 test_gotos_SOURCES = test_gotos.c
 test_time_SOURCES = test_time.c
+test_timeunit_SOURCES = $(TOU_CORE) \
+    test_time_unit.c \
+    #end
+
 test_test_SOURCES = test.c
 xserver_SOURCES = $(TOU_CORE) \
                 xserver.c \
@@ -468,6 +480,10 @@ test_time$(EXEEXT): $(test_time_OBJECTS) $(test_time_DEPENDENCIES) $(EXTRA_test_
 	@rm -f test_time$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_time_OBJECTS) $(test_time_LDADD) $(LIBS)
 
+test_timeunit$(EXEEXT): $(test_timeunit_OBJECTS) $(test_timeunit_DEPENDENCIES) $(EXTRA_test_timeunit_DEPENDENCIES) 
+	@rm -f test_timeunit$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_timeunit_OBJECTS) $(test_timeunit_LDADD) $(LIBS)
+
 test_window$(EXEEXT): $(test_window_OBJECTS) $(test_window_DEPENDENCIES) $(EXTRA_test_window_DEPENDENCIES) 
 	@rm -f test_window$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_window_OBJECTS) $(test_window_LDADD) $(LIBS)
@@ -496,6 +512,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_packet_server.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_sll.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_time.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_time_unit.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test_window.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tou.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tou_conn.Po@am__quote@ # am--include-marker
@@ -664,6 +681,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test_packet_server.Po
 	-rm -f ./$(DEPDIR)/test_sll.Po
 	-rm -f ./$(DEPDIR)/test_time.Po
+	-rm -f ./$(DEPDIR)/test_time_unit.Po
 	-rm -f ./$(DEPDIR)/test_window.Po
 	-rm -f ./$(DEPDIR)/tou.Po
 	-rm -f ./$(DEPDIR)/tou_conn.Po
@@ -732,6 +750,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test_packet_server.Po
 	-rm -f ./$(DEPDIR)/test_sll.Po
 	-rm -f ./$(DEPDIR)/test_time.Po
+	-rm -f ./$(DEPDIR)/test_time_unit.Po
 	-rm -f ./$(DEPDIR)/test_window.Po
 	-rm -f ./$(DEPDIR)/tou.Po
 	-rm -f ./$(DEPDIR)/tou_conn.Po

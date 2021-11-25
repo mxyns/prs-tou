@@ -41,28 +41,58 @@ void tou_send_ack(
     printf("]\n");
 }
 
+void tou_estimate_rtt(
+    tou_conn* conn,
+    long* rtts,
+    int rttscnt
+) {
+
+    const double k = 0.9;
+    for (int i = 0 ; i < rttscnt; i++) { 
+        TOU_DEBUG(printf("[tou][tou_estimate_rtt] packet rtt %lf\n", rtts[i]));
+        conn->rtt = (double)(k * conn->rtt + (1-k) * rtts[i]);
+        TOU_DEBUG(printf("[tou][tou_estimate_rtt] new rtt %lf\n", conn->rtt));
+    }
+}
+
+// if some packets are acknowledged, return new seq
+// return -1 if same ack as last ack seq
+// return 0 if its just a late ack packet
 int tou_acknowledge_packets(
         tou_conn* conn,
         int seq
 ) {
-    int result = 0;
+   
     int expected = (int)conn->send_window->expected;
     if (seq >= expected) {
-        result = tou_sll_remove_under(conn->send_window->list, seq);
+        tou_sll_node* removed[conn->send_window->list->cap];
+        int result = tou_sll_remove_under(conn->send_window->list, seq, removed);
+
+        int old_expected = expected;
         conn->send_window->expected = seq + 1;
 
-        TOU_DEBUG(printf("[tou][tou_acknowledge_packet] removed %d packets. expecting : %d\n", result,
-                         (int) conn->send_window->expected));
+        long rtts[result];
+        long now = tou_time_ms();
+        for (int i = 0 ; i < result; i++) {
+            rtts[i] = now - ((tou_packet_dtp*)removed[i]->val)->timestamp;
+        }
+        tou_estimate_rtt(conn, rtts, result);
+
+
+        printf("[tou][tou_acknowledge_packet] from %d removed %d packets. expecting : %d\n", old_expected, result,
+                         (int) conn->send_window->expected);
+
+        return seq;
 
     } else if (seq == expected - 1) {
 
-        result = -(expected - 1);
-        TOU_DEBUG(printf("[tou][tou_acknowledge_packet] some packets were dropped, last_acked = %d\n", result));
+        printf("[tou][tou_acknowledge_packet] some packets were dropped, last_acked = %d\n", seq);
+        return -1;
+
     } else { // less than expected but not last (a late ack : ack 1 -> ack 3 -> ack 2 )
         TOU_DEBUG(printf("[tou][tou_acknowledge_packet] %d late ack, no worries\n", seq));
+        return 0;
     }
-
-    return result;
 }
 
 
@@ -72,18 +102,21 @@ int tou_acknowledge_packets(
 
 static char ack_buff[TOU_LEN_PKT_ACK];
 
+// return last seq number acknowledged
+// return 0 when last seq number is expected - 1
+// set *n_ack_ptr to number of times it was acknowledged
+// 
 int tou_recv_ack(
-        tou_conn* conn
+        tou_conn* conn,
+        int* n_ack_ptr
 ) {
-
-    int result = 0;
     tou_socket* ack_socket = conn->socket;
 
     int read = tou_cbuffer_read(ack_socket, conn->recv_work_buffer, conn->recv_work_buffer->cap);
     if (read < 0) {
         TOU_DEBUG(printf("[tou][tou_recv_ack] can't read from socket\n"));
         perror("read error: ");
-        return result;
+        return -1;
     }
 
     TOU_DEBUG(printf("[tou][tou_recv_ack] read %d\n", read));
@@ -91,19 +124,22 @@ int tou_recv_ack(
     if (conn->recv_work_buffer->cnt < TOU_LEN_PKT_ACK + 1) {
         TOU_DEBUG(printf("[tou][tou_recv_ack] not enough data to parse header yet, have %d < %d bytes\n",
                          conn->recv_work_buffer->cnt, TOU_LEN_PKT_ACK + 1));
-        return result;
+        return -1;
     }
 
     TOU_DEBUG(printf("[tou][tou_recv_ack] got %d in buffer\n", conn->recv_work_buffer->cnt));
+
+    int last_seq_ack = 0;
+    int n_acked = 0;
     const int pkt_size = TOU_LEN_PKT_ACK + 1;
-    while (conn->recv_work_buffer->cnt >= TOU_LEN_PKT_ACK + 1) {
+    while (conn->recv_work_buffer->cnt >= pkt_size) {
 
         int n = tou_cbuffer_pop(conn->recv_work_buffer, ack_buff, pkt_size);
         if (n < pkt_size) {
             TOU_DEBUG(
                     printf("[tou][tou_recv_ack] lost %d bytes while trying to pop %d bytes ACK packet\n", pkt_size - n,
                            pkt_size));
-            return result;
+            return -1;
         }
         TOU_DEBUG(
                 printf("[tou][tou_recv_ack] ack packet dump :\n");
@@ -118,15 +154,24 @@ int tou_recv_ack(
                       + (seq[4] - 48) * 10
                       + (seq[5] - 48) * 1;
 
-        TOU_DEBUG(printf("recv seq value %d\n", seq_val));
+        printf("recv seq value %d\n", seq_val);
 
-        int acknowledged = tou_acknowledge_packets(conn, seq_val);
-        if (acknowledged > 0) {
-            TOU_DEBUG(printf("acked %d more packets, next is %d\n", acknowledged, conn->send_window->expected));
+        int new_seq = tou_acknowledge_packets(conn, seq_val);
+        if (new_seq > 0 && new_seq > last_seq_ack) {
+            last_seq_ack = new_seq;
+            n_acked = 1;
+            printf("acked %d more packets, next is %d\n", new_seq, conn->send_window->expected);
+        } else if (new_seq > 0 && new_seq == last_seq_ack) {
+            TOU_DEBUG(printf("duplicated ack %d\n", new_seq));
+            n_acked++;
+        } else if (new_seq < 0) {
+            n_acked++;
+            TOU_DEBUG(printf("duplicated ack %d\n", new_seq));
         } else {
-            result = MIN(result, acknowledged);
+            TOU_DEBUG(printf("old ack %d\n", new_seq));
         }
     }
 
-    return result;
+    *n_ack_ptr = n_acked;
+    return last_seq_ack;
 }

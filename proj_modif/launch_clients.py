@@ -16,4 +16,4 @@ if __name__ == "__main__":
         with open("logsclient/stdout{}.txt".format(i), "wb") as out, open("logsclient/stderr{}.txt".format(i),"wb") as err:
             process = subprocess.Popen(bashCommand.split(),stdout=out, stderr=out)
             process.wait()
-            time.sleep(1)
+            time.sleep(0.001)

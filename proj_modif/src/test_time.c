@@ -6,7 +6,7 @@
 
 int main() {
 
-    long timeout_ms = 0;
+    long timeout_ms = 1234;
 
     struct timeval t = {
             .tv_sec = timeout_ms / 1000,

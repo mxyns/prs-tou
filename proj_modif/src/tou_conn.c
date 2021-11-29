@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "tou.h"
 #include "tou_conn.h"
+#include "tou_consts.h"
 
 tou_conn* tou_make_conn(
         tou_socket* ctrl_sock,

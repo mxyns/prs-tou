@@ -6,9 +6,9 @@
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define ABS(x) (((x) < 0 ? (-(a)) : (a)))
 
-// #define DEBUG
+#include "tou_consts.h"
 
-#ifdef DEBUG
+#ifdef TOU_DEBUG_ON
 #define TOU_DEBUG(X) X
 #else
 #define TOU_DEBUG(X)
@@ -22,5 +22,6 @@ void compact_print_buffer(
 );
 
 long tou_time_ms();
+long tou_time_ns();
 
 #endif

@@ -3,6 +3,7 @@
 #include "tou_handshake.h"
 #include "tou_io.h"
 #include "tou_utils.h"
+#include "tou_consts.h"
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <stdio.h>
@@ -46,7 +47,8 @@ tou_conn* tou_accept_conn(
     }
     TOU_DEBUG(printf("[tou][open] got syn\n"));
 
-    long rtt = tou_time_ms();
+    long rtt_start = tou_time_ns();
+    TOU_DEBUG(printf("[tou][rtt_estimate] got syn at %ld\n", rtt_start));
     tou_socket* client_sock = tou_send_handshake_synack(listen_sock);
     if (client_sock == NULL || client_sock->fd <= listen_sock->fd) {
         TOU_DEBUG(printf("[tou][recv_handshake_synack] failed\n"));
@@ -58,8 +60,10 @@ tou_conn* tou_accept_conn(
         TOU_DEBUG(printf("[tou][recv_handshake_ack] failed\n"));
         return NULL;
     }
-    rtt = tou_time_ms() - rtt;
+    long rtt_end = tou_time_ns();
+    long rtt = rtt_end - rtt_start;
     TOU_DEBUG(printf("[tou][open] got ack\n"));
+    TOU_DEBUG(printf("[tou][rtt_estimate] got ack at %ld, delta rtt = %ld\n", rtt_end, rtt));
 
     tou_conn* client_conn = tou_make_conn(listen_sock, client_sock); // 2000 | 2000 + 1
     client_conn->rtt = rtt;
@@ -84,7 +88,7 @@ tou_conn* tou_connect(
 
     tou_socket* conn_sock = tou_make_socket(target_ip, target_port, 0); // listen=0 so ip in filled in sock->peer_addr
 
-    long start = tou_time_ms();
+    long start = tou_time_ns();
 
     if (tou_send_handshake_syn(conn_sock) < 0) {
         TOU_DEBUG(printf("[tou][tou_send_handshake_syn] failed\n"));
@@ -101,7 +105,7 @@ tou_conn* tou_connect(
         return NULL;
     }
 
-    long rtt = start - tou_time_ms();
+    long rtt = start - tou_time_ns();
 
     // tou_free_socket(conn_sock); now conn_sock is needed
 
@@ -163,21 +167,23 @@ int tou_retransmit(
     char header[6];
     tou_packet_set_header(pkt, header, pkt->packet_id, pkt->buffer, pkt->data_packet_size);
     tou_write_packet(conn->socket, header, 6, pkt->buffer, pkt->data_packet_size);
-    tou_packet_set_expiration(pkt, tou_time_ms() + TOU_DEFAULT_ACK_TIMEOUT_MS);
+    tou_packet_set_expiration(pkt, tou_time_ms(), TOU_DEFAULT_ACK_TIMEOUT_MS);
 
-    return 0;
+    return 1;
 }
 
 int tou_retransmit_all(
         tou_conn* conn
 ) {
     tou_packet_dtp* pkt = NULL;
+    int i = 0;
     TOU_SLL_ITER_USED(conn->send_window->list,
                       pkt = (tou_packet_dtp*) curr->val;
                               tou_retransmit(conn, pkt);
+                              i++;
     );
 
-    return 0;
+    return i;
 }
 
 int tou_retransmit_n(
@@ -188,11 +194,13 @@ int tou_retransmit_n(
     tou_packet_dtp* pkt = NULL;
     int i = 0;
     TOU_SLL_ITER_USED(conn->send_window->list,
-                      if (i >= n) return n;
+                      if (i >= n) return i;
                               pkt = (tou_packet_dtp*) curr->val;
                               tou_retransmit(conn, pkt);
                               i++;
     );
+
+    return i;
 }
 
 int tou_retransmit_expired(
@@ -200,11 +208,32 @@ int tou_retransmit_expired(
         long expire_time
 ) {
     tou_packet_dtp* pkt = NULL;
+    int n = 0;
     TOU_SLL_ITER_USED(conn->send_window->list,
                       pkt = (tou_packet_dtp*) curr->val;
-                              if (pkt->ack_expire < expire_time)
+                              if (pkt->ack_expire < expire_time) {
                                   tou_retransmit(conn, pkt);
-                              else return 0;
+                                  n++;
+                              }
+                              else return n;
+    );
+
+    return n;
+}
+
+int tou_retransmit_id(
+        tou_conn* conn,
+        uint32_t id
+) {
+
+    tou_packet_dtp* pkt = NULL;
+    TOU_SLL_ITER_USED(conn->send_window->list,
+                      pkt = (tou_packet_dtp*) curr->val;
+                      if (pkt->packet_id == id) {
+                          tou_retransmit(conn, pkt);
+                          return 1;
+                      }
+                
     );
 
     return 0;

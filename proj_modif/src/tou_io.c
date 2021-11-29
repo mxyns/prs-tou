@@ -5,9 +5,11 @@
 #include "tou_packet.h"
 #include "tou.h"
 #include "tou_rel.h"
+#include "tou_consts.h"
 #include <stdlib.h>
 
 // write header and buffer to socket
+static n = 0;
 void tou_write_packet(
         tou_socket* socket,
         char* header,
@@ -15,7 +17,7 @@ void tou_write_packet(
         char* buffer,
         int size
 ) {
-
+    n++;
     static char fullpacket[TOU_DEFAULT_MSS];
     memset(fullpacket, 0, TOU_DEFAULT_MSS);
 
@@ -32,6 +34,8 @@ void tou_write_packet(
     } else {
         TOU_DEBUG(printf("[tou][tou_write_packet] %d bytes packet wrote\n", header_size + size));
     }
+    printf("%d\n", n);
+
 }
 
 
@@ -154,7 +158,8 @@ void tou_send_2(
         if (await_ack) {
             // await for some acks
             TOU_DEBUG(printf("[tou][tou_send_2] awaiting ack\n"));
-            tou_recv_ack(conn);
+            int n;
+            tou_recv_ack(conn, &n);
         }
     }
 }
@@ -200,7 +205,7 @@ int tou_send(
         char header[6];
         tou_packet_set_header(pkt, header, id, payload, popped);
         tou_write_packet(conn->socket, header, 6, payload, popped);
-        tou_packet_set_expiration(pkt, tou_time_ms() + TOU_DEFAULT_ACK_TIMEOUT_MS);
+        tou_packet_set_expiration(pkt, tou_time_ms(), TOU_DEFAULT_ACK_TIMEOUT_MS);
 
         new_packets++;
     }

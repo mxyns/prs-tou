@@ -8,6 +8,7 @@ noinst_PROGRAMS=cserver \
                 test_cblocks \
                 test_gotos \
                 test_time \
+                test_timeunit \
                 test_test \
                 xserver \
                 xclient \
@@ -71,6 +72,10 @@ test_cblocks_SOURCES = test_cblocks.c
 test_gotos_SOURCES = test_gotos.c
 
 test_time_SOURCES = test_time.c
+
+test_timeunit_SOURCES = $(TOU_CORE) \
+    test_time_unit.c \
+    #end
 
 test_test_SOURCES = test.c
 

@@ -37,15 +37,16 @@ if __name__ == "__main__":
             bashCommand = "mkdir logs/logs{}".format(i)
             process = Popen(bashCommand.split(), stdout=PIPE)
             process.wait()
+
+            bashCommand = "make -C ./build"
+            process = Popen(bashCommand.split(), stdout=PIPE)
+            process.wait()
+            
             for j in range(int(sys.argv[2])) :
                 parameters[i]= str((j+1)*int(sys.argv[3]))
                 
                 toFile = os.path.join('./src','tou_consts.h')
                 writeFile (toFile, lines, parameters)
-
-                bashCommand = "make -C ./build"
-                process = Popen(bashCommand.split(), stdout=PIPE)
-                process.wait()
 
                 with open("logs/logs{}/stdout{}.txt".format(i,j),"wb") as out, open("logs/logs{}/stderr{}.txt".format(i,j),"wb") as err:
                     bashCommand = "./build/src/xserver"

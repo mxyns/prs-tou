@@ -168,6 +168,10 @@ int tou_retransmit(
     tou_packet_set_header(pkt, header, pkt->packet_id, pkt->buffer, pkt->data_packet_size);
     tou_write_packet(conn->socket, header, 6, pkt->buffer, pkt->data_packet_size);
     tou_packet_set_expiration(pkt, tou_time_ms(), TOU_DEFAULT_ACK_TIMEOUT_MS);
+    
+    TOU_DEBUG(
+    );
+        printf("retransmit %d\n", pkt->packet_id);
 
     return 1;
 }

@@ -37,7 +37,7 @@ void tou_send_ack(
 
 int tou_recv_ack(
         tou_conn* conn,
-        int* list
+        int* ack_count
 );
 
 int tou_acknowledge_packets(

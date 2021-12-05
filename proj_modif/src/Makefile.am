@@ -11,6 +11,7 @@ noinst_PROGRAMS=cserver \
                 test_timeunit \
                 test_test \
                 xserver \
+                xmserver \
                 xclient \
                 #end 
 
@@ -82,6 +83,11 @@ test_test_SOURCES = test.c
 xserver_SOURCES = $(TOU_CORE) \
                 xserver.c \
                 #end
+
+xmserver_SOURCES = $(TOU_CORE) \
+                xmserver.c \
+                #end
+
 xclient_SOURCES = $(TOU_CORE) \
                 xclient.c \
                 #end

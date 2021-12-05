@@ -92,7 +92,7 @@ noinst_PROGRAMS = cserver$(EXEEXT) cclient$(EXEEXT) \
 	test_pclient$(EXEEXT) test_window$(EXEEXT) \
 	test_cblocks$(EXEEXT) test_gotos$(EXEEXT) test_time$(EXEEXT) \
 	test_timeunit$(EXEEXT) test_test$(EXEEXT) xserver$(EXEEXT) \
-	xclient$(EXEEXT)
+	xmserver$(EXEEXT) xclient$(EXEEXT)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -163,6 +163,10 @@ am_xclient_OBJECTS = $(am__objects_1) xclient.$(OBJEXT)
 xclient_OBJECTS = $(am_xclient_OBJECTS)
 xclient_LDADD = $(LDADD)
 xclient_DEPENDENCIES =
+am_xmserver_OBJECTS = $(am__objects_1) xmserver.$(OBJEXT)
+xmserver_OBJECTS = $(am_xmserver_OBJECTS)
+xmserver_LDADD = $(LDADD)
+xmserver_DEPENDENCIES =
 am_xserver_OBJECTS = $(am__objects_1) xserver.$(OBJEXT)
 xserver_OBJECTS = $(am_xserver_OBJECTS)
 xserver_LDADD = $(LDADD)
@@ -194,7 +198,7 @@ am__depfiles_remade = ./$(DEPDIR)/client_classic.Po \
 	./$(DEPDIR)/tou_packet.Po ./$(DEPDIR)/tou_rel.Po \
 	./$(DEPDIR)/tou_socket.Po ./$(DEPDIR)/tou_utils.Po \
 	./$(DEPDIR)/tou_window.Po ./$(DEPDIR)/xclient.Po \
-	./$(DEPDIR)/xserver.Po
+	./$(DEPDIR)/xmserver.Po ./$(DEPDIR)/xserver.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -214,14 +218,14 @@ SOURCES = $(cclient_SOURCES) $(cserver_SOURCES) \
 	$(test_pserver_SOURCES) $(test_sll_SOURCES) \
 	$(test_test_SOURCES) $(test_time_SOURCES) \
 	$(test_timeunit_SOURCES) $(test_window_SOURCES) \
-	$(xclient_SOURCES) $(xserver_SOURCES)
+	$(xclient_SOURCES) $(xmserver_SOURCES) $(xserver_SOURCES)
 DIST_SOURCES = $(cclient_SOURCES) $(cserver_SOURCES) \
 	$(test_cblocks_SOURCES) $(test_cbuff_SOURCES) \
 	$(test_gotos_SOURCES) $(test_pclient_SOURCES) \
 	$(test_pserver_SOURCES) $(test_sll_SOURCES) \
 	$(test_test_SOURCES) $(test_time_SOURCES) \
 	$(test_timeunit_SOURCES) $(test_window_SOURCES) \
-	$(xclient_SOURCES) $(xserver_SOURCES)
+	$(xclient_SOURCES) $(xmserver_SOURCES) $(xserver_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -399,6 +403,10 @@ xserver_SOURCES = $(TOU_CORE) \
                 xserver.c \
                 #end
 
+xmserver_SOURCES = $(TOU_CORE) \
+                xmserver.c \
+                #end
+
 xclient_SOURCES = $(TOU_CORE) \
                 xclient.c \
                 #end
@@ -492,6 +500,10 @@ xclient$(EXEEXT): $(xclient_OBJECTS) $(xclient_DEPENDENCIES) $(EXTRA_xclient_DEP
 	@rm -f xclient$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(xclient_OBJECTS) $(xclient_LDADD) $(LIBS)
 
+xmserver$(EXEEXT): $(xmserver_OBJECTS) $(xmserver_DEPENDENCIES) $(EXTRA_xmserver_DEPENDENCIES) 
+	@rm -f xmserver$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(xmserver_OBJECTS) $(xmserver_LDADD) $(LIBS)
+
 xserver$(EXEEXT): $(xserver_OBJECTS) $(xserver_DEPENDENCIES) $(EXTRA_xserver_DEPENDENCIES) 
 	@rm -f xserver$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(xserver_OBJECTS) $(xserver_LDADD) $(LIBS)
@@ -525,6 +537,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tou_utils.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tou_window.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xclient.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xmserver.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xserver.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -694,6 +707,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/tou_utils.Po
 	-rm -f ./$(DEPDIR)/tou_window.Po
 	-rm -f ./$(DEPDIR)/xclient.Po
+	-rm -f ./$(DEPDIR)/xmserver.Po
 	-rm -f ./$(DEPDIR)/xserver.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
@@ -763,6 +777,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/tou_utils.Po
 	-rm -f ./$(DEPDIR)/tou_window.Po
 	-rm -f ./$(DEPDIR)/xclient.Po
+	-rm -f ./$(DEPDIR)/xmserver.Po
 	-rm -f ./$(DEPDIR)/xserver.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic

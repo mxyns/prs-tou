@@ -8,14 +8,14 @@ int tou_recv_handshake_syn(
     char syn_msg[TOU_LEN_SYN + 1] = {0};
     int err = 0;
     if ((err = recvfrom(sock->fd, syn_msg, TOU_LEN_SYN, 0, sock->peer_addr, &sock->peer_addr_len)) < 0) {
-        TOU_DEBUG(printf("ERR = %d\n", err));
+        printf("ERR = %d\n", err);
         return -1;
     }
 
-    TOU_DEBUG(printf("got : SYN = %c%c%c\n", (int) (syn_msg[0]), (int) (syn_msg[1]), (int) (syn_msg[2])));
+    printf("got : SYN = %c%c%c\n", (int) (syn_msg[0]), (int) (syn_msg[1]), (int) (syn_msg[2]));
     struct sockaddr_in* client_addr = (struct sockaddr_in*) sock->peer_addr;
-    TOU_DEBUG(printf("from IP: %s and port: %i\n",
-                     inet_ntoa(client_addr->sin_addr), ntohs(client_addr->sin_port)));
+    printf("from IP: %s and port: %i\n",
+                     inet_ntoa(client_addr->sin_addr), ntohs(client_addr->sin_port));
     return (syn_msg[0] == 'S' && syn_msg[1] == 'Y' && syn_msg[2] == 'N');
 }
 
@@ -31,9 +31,9 @@ int tou_send_handshake_syn(
 
     char syn_msg[4] = "SYN";
 
-    TOU_DEBUG(printf("[tou][tou_send_handshake_syn] %d\n", sock->fd));
+    printf("[tou][tou_send_handshake_syn] %d\n", sock->fd);
     if (sendto(sock->fd, syn_msg, TOU_LEN_SYN, 0, sock->peer_addr, sock->peer_addr_len) < 0) {
-        TOU_DEBUG(printf("[tou][tou_send_handshake_syn] send SYN failed\n"));
+        printf("[tou][tou_send_handshake_syn] send SYN failed\n");
         perror("SYN\n");
         return -1;
     }
@@ -64,24 +64,24 @@ tou_socket* tou_send_handshake_synack(
     synack_msg[9] = 48 + (new_port / 10) % 10;
     synack_msg[10] = 48 + (new_port / 1) % 10;
 
-    TOU_DEBUG(printf("[tou][tou_send_handshake_synack] fd=%d\n", sock->fd));
-    TOU_DEBUG(printf("[tou][tou_send_handshake_synack] listen_port=%d\n", sock->port));
-    TOU_DEBUG(printf("[tou][tou_send_handshake_synack] msg=%s\n", synack_msg));
+    printf("[tou][tou_send_handshake_synack] fd=%d\n", sock->fd);
+    printf("[tou][tou_send_handshake_synack] listen_port=%d\n", sock->port);
+    printf("[tou][tou_send_handshake_synack] msg=%s\n", synack_msg);
 
     // TODO get ip from listen_sock
     tou_socket* new_sock = tou_make_socket("0.0.0.0", new_port, 1); // listen for client ack
     new_sock->id = client_id;
     if (bind(new_sock->fd, new_sock->my_addr, new_sock->my_addr_len) < 0) {
-        TOU_DEBUG(printf("Couldn't bind to the port of new_sock\n"));
+        printf("Couldn't bind to the port of new_sock\n");
         return NULL;
     }
 
     if (sendto(sock->fd, synack_msg, TOU_LEN_SYNACK + 1, 0, sock->peer_addr, sock->peer_addr_len) < 0) {
-        TOU_DEBUG(printf("[tou][tou_send_handshake_synack] send SYNACK failed\n"));
+        printf("[tou][tou_send_handshake_synack] send SYNACK failed\n");
         return NULL;
     }
 
-    TOU_DEBUG(printf("[tou][tou_send_handshake_synack] send success\n"));
+    printf("[tou][tou_send_handshake_synack] send success\n");
 
     return new_sock;
 }
@@ -93,14 +93,14 @@ uint16_t tou_recv_handshake_synack(
     char synack_msg[TOU_LEN_SYNACK + 1] = {0};
     int err = 0;
     if ((err = recvfrom(sock->fd, synack_msg, TOU_LEN_SYNACK, 0, sock->peer_addr, &sock->peer_addr_len)) < 0) {
-        TOU_DEBUG(printf("ERR = %d\n", err));
+        printf("ERR = %d\n", err);
         return 0;
     } else {
 
-        TOU_DEBUG(printf("[tou][tou_recv_handshake_synack] got %s\n", synack_msg));
+        printf("[tou][tou_recv_handshake_synack] got %s\n", synack_msg);
         uint16_t new_port = (synack_msg[7] - 48) * 1000 + (synack_msg[8] - 48) * 100 + (synack_msg[9] - 48) * 10 +
                             (synack_msg[10] - 48);
-        TOU_DEBUG(printf("[tou][tou_recv_handshake_synack] port %d\n", (int) (new_port)));
+        printf("[tou][tou_recv_handshake_synack] port %d\n", (int) (new_port));
         return new_port;
     }
 
@@ -122,7 +122,7 @@ int tou_send_handshake_ack(
     char ack_msg[TOU_LEN_HANDSHAKE_ACK] = "ACK";
 
     if (sendto(sock->fd, ack_msg, TOU_LEN_HANDSHAKE_ACK, 0, sock->peer_addr, sock->peer_addr_len) < 0) {
-        TOU_DEBUG(printf("[tou][tou_send_handshake_ack] send ACK failed\n"));
+        printf("[tou][tou_send_handshake_ack] send ACK failed\n");
         return -1;
     }
 
@@ -138,10 +138,10 @@ int tou_recv_handshake_ack(
     int err = 0;
 
     if ((err = recvfrom(sock->fd, ack_msg, TOU_LEN_HANDSHAKE_ACK, 0, sock->peer_addr, &sock->peer_addr_len)) < 0) {
-        TOU_DEBUG(printf("ERR = %d\n", err));
+        printf("ERR = %d\n", err);
         return -1;
     } else {
-        TOU_DEBUG(printf("[tou][tou_recv_handshake_ack] got %s\n", ack_msg));
+        printf("[tou][tou_recv_handshake_ack] got %s\n", ack_msg);
         return (ack_msg[0] == 'A' && ack_msg[1] == 'C' && ack_msg[2] == 'K') ? TOU_VALUE_HANDSHAKE_ACK_CHECK : -1;
     }
 

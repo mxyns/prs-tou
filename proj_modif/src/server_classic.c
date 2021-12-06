@@ -53,7 +53,7 @@ int main(void) {
                 }
                 count++;
             }
-            tou_free_conn(conn);
+            tou_free_conn(conn, 1);
         }
     }
     TOU_DEBUG(printf("I'm done with this\n"));

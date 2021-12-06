@@ -98,6 +98,7 @@ int main() {
     printf("new client on port %d\n", conn->socket->port);
 
     if (fork() != 0) {
+        tou_free_conn(conn, 0);
         goto accept;
     }
     else {
@@ -121,6 +122,7 @@ int main() {
         size = fsize;
 
         // for (int i = 0; i < 10*MSS; i++) {
+        //     buffer[i] = 48 + i % (69 + 6);
         //     buffer[i] = 48 + i % (69 + 6);
         // }
 
@@ -283,7 +285,7 @@ int main() {
     }
 
     printf("free conn\n");
-    tou_free_conn(conn);
+    tou_free_conn(conn, 1);
 
     return 0;
 }

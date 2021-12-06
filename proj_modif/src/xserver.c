@@ -272,7 +272,7 @@ int main() {
 
     dump_stats(&stats);
 
-    tou_free_conn(conn);
+    tou_free_conn(conn, 1);
 
     return 0;
 }

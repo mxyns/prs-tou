@@ -31,7 +31,7 @@ int main(void) {
 
 
     printf("I'm done with this\n");
-    tou_free_conn(conn);
+    tou_free_conn(conn, 1);
     tou_free_socket(listen_sock);
 
     return 0;

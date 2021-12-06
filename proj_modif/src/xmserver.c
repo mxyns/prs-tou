@@ -102,29 +102,24 @@ int main() {
         goto accept;
     }
     else {
-        const int MSS = TOU_DEFAULT_MSS - TOU_LEN_DTP;
-        char data[10 * MSS + 1]; // + 1 so that we always have at least a \0 to terminate our string
-        char* buffer = data;
-        int size = 10 * MSS;
         TOU_DEBUG(printf("i must read file '%s'\n", conn->filename));
 
         FILE* f = fopen(conn->filename, "rb");
+        if (f == NULL) {
+            printf("file not found\n");
+            goto ErrorExit;
+        }
         fseek(f, 0, SEEK_END);
-        long fsize = ftell(f);
+        long size = ftell(f);
         fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
 
-        char* string = malloc(fsize + 1);
-        fread(string, 1, fsize, f);
-        fclose(f);
-        string[fsize] = 0;
+        // char* string = malloc(size + 1);
+        // fread(string, 1, size, f);
+        // fclose(f);
+        // string[size] = 0;
 
-        buffer = string;
-        size = fsize;
+        // char* buffer = string;
 
-        // for (int i = 0; i < 10*MSS; i++) {
-        //     buffer[i] = 48 + i % (69 + 6);
-        //     buffer[i] = 48 + i % (69 + 6);
-        // }
 
         TOU_DEBUG(
                 printf("[tou][tou_send] MSS=%d\n", MSS);
@@ -147,9 +142,10 @@ int main() {
         while (size - written > 0 || conn->out->cnt != 0 || !TOU_SLL_ISEMPTY(conn->send_window->list)) {
 
             // write maximum to out buffer
-            int new_write = tou_cbuffer_insert(conn->out, buffer + written, size - written);
+            int new_write = tou_cbuffer_fread(f, conn->out, size - written);
+            // int new_write = tou_cbuffer_insert(conn->out, buffer + written, size - written);
             TOU_DEBUG(
-                    printf("[xserver] wrote %d to out\n", new_write);
+                    // printf("[xserver] wrote %d to out\n", new_write);
                     //tou_cbuffer_dump(conn->out);
             );
             if (new_write > 0) {
@@ -233,14 +229,14 @@ int main() {
                 tou_recv_ack(conn, &last_acked_n);
                 TOU_DEBUG(printf("[xserver] ack result new count %d\n", last_acked_n));
 
-                if (last_acked_n >= 1) {
+                if (last_acked_n >= 10) {
                     stats.detected_drops++;
 
                     last_acked_n = 0;
 
-                    int dropped = conn->send_window->expected;
 
                     TOU_DEBUG(
+                        int dropped = conn->send_window->expected;
                         printf("[xserver] some packet dropped, resend when ?\n");
                         printf("[xserver] packed dropped seq : %d\n", dropped);
                     );
@@ -260,15 +256,18 @@ int main() {
             stats.estimated_throughput = stats.total_sent * 1.0e-6 / (stats.total_time * 1.0e-3);
         }
 
-        if (sendto(conn->ctrl_socket->fd, "FIN", 4, 0, conn->ctrl_socket->peer_addr, conn->ctrl_socket->peer_addr_len) <
-            0) {
-            TOU_DEBUG(
-                    printf("[tou][tou_send_handshake_syn] send FIN failed\n");
-                    perror("FIN\n");
-            );
 
-            return -1;
-        }
+        ErrorExit :
+            if (sendto(conn->ctrl_socket->fd, "FIN", 4, 0, conn->ctrl_socket->peer_addr, conn->ctrl_socket->peer_addr_len) <
+                0) {
+                TOU_DEBUG(
+                        printf("[tou][tou_send_handshake_syn] send FIN failed\n");
+                        perror("FIN\n");
+                );
+
+                return -1;
+            }
+            printf("done\n");
 
 
         TOU_DEBUG(

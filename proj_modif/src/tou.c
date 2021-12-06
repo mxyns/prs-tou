@@ -81,6 +81,8 @@ tou_conn* tou_accept_conn(
         printf("[tou][open] got filename=%s\n", client_conn->filename);
     }
 
+    printf("return value\n");
+
     return client_conn;
 }
 

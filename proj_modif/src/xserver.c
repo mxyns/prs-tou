@@ -99,6 +99,10 @@ int main() {
     TOU_DEBUG(printf("i must read file '%s'\n", conn->filename));
 
     FILE* f = fopen(conn->filename, "rb");
+    if (f == NULL) {
+        printf("file not found\n");
+        goto ErrorExit;
+    }
     fseek(f, 0, SEEK_END);
     long fsize = ftell(f);
     fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
@@ -227,9 +231,9 @@ int main() {
 
                 last_acked_n = 0;
 
-                int dropped = conn->send_window->expected;
 
                 TOU_DEBUG(
+                    int dropped = conn->send_window->expected;
                     printf("[xserver] some packet dropped, resend when ?\n");
                     printf("[xserver] packed dropped seq : %d\n", dropped);
                 );
@@ -249,6 +253,8 @@ int main() {
         stats.estimated_throughput = stats.total_sent * 1.0e-6 / (stats.total_time * 1.0e-3);
     }
 
+
+    ErrorExit :
     if (sendto(conn->ctrl_socket->fd, "FIN", 4, 0, conn->ctrl_socket->peer_addr, conn->ctrl_socket->peer_addr_len) <
         0) {
         TOU_DEBUG(

@@ -51,7 +51,7 @@ tou_socket* tou_send_handshake_synack(
      *  target_port (uint16_t)
      */
 
-    char flags = TOU_FLAG_SYNACK;
+    // char flags = TOU_FLAG_SYNACK;
 
     char synack_msg[TOU_LEN_SYNACK + 1] = "SYN-ACK";
 
@@ -117,7 +117,7 @@ int tou_send_handshake_ack(
      *  check_value (char)
      */
 
-    char flags = TOU_FLAG_HANDSHAKE_ACK;
+    // char flags = TOU_FLAG_HANDSHAKE_ACK;
 
     char ack_msg[TOU_LEN_HANDSHAKE_ACK] = "ACK";
 

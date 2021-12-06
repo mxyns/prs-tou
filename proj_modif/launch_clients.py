@@ -11,8 +11,8 @@ if __name__ == "__main__":
     process = Popen(bashCommand.split(), stdout=PIPE)
     process.wait()
     
-    bashCommand = "../situation/"+sys.argv[1]+" 10.43.11.140 2000 parameters.txt"
-    for i in range (int(sys.argv[2])):
+    bashCommand = "../situation/"+sys.argv[1]+" 10.43.9.17 2000 lorem_10M 0"
+    for i in range (int(sys.argv[2])*5):
         with open("logsclient/stdout{}.txt".format(i), "wb") as out, open("logsclient/stderr{}.txt".format(i),"wb") as err:
             process = subprocess.Popen(bashCommand.split(),stdout=out, stderr=out)
             process.wait()

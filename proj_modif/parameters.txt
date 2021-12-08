@@ -7,3 +7,5 @@
 (TOU_DEFAULT_MSS * TOU_DEFAULT_SENDWINDOW_SIZE)
 ((TOU_LEN_PKT_ACK + sizeof(ack_id_t) * TOU_PKT_ACK_MAX_ACK_COUNT) * 5)
 (10)
+(5)
+tou_retransmit_all(conn)

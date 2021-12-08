@@ -234,7 +234,7 @@ int main() {
 
                 
                 // tou_retransmit_all(conn);
-                int retransmit = TOU_DEFAULT_RETRANSMIT_METHOD(conn, expired_pkt, dropped, last_acked_n);
+                int retransmit = TOU_DEFAULT_RETRANSMIT_METHOD(conn, pkt, dropped, last_acked_n);
                 stats.ack_detect_retransmits += retransmit;
 
                 last_acked_n = 0;
@@ -250,7 +250,7 @@ int main() {
             stats.estimated_throughput = stats.total_sent * 1.0e-6 / (stats.total_time * 1.0e-3);
     }
 
-    for (int i = 0; i < TOU_DEFAULT_SENDWINDOW_SIZE / 2; i++) {
+    for (int i = 0; i < 1 + TOU_DEFAULT_SENDWINDOW_SIZE / 2; i++) {
         if (sendto(conn->ctrl_socket->fd, "FIN", 4, 0, conn->ctrl_socket->peer_addr, conn->ctrl_socket->peer_addr_len) <
             0) {
             TOU_DEBUG(

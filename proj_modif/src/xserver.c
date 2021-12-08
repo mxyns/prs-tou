@@ -222,10 +222,8 @@ int main() {
             tou_recv_ack(conn, &last_acked_n);
             TOU_DEBUG(printf("[xserver] ack result new count %d\n", last_acked_n));
 
-            if (last_acked_n >= 1) {
+            if (last_acked_n >= TOU_DEFAULT_FAST_RETRANSMIT_ACK_COUNT) {
                 stats.detected_drops++;
-
-                last_acked_n = 0;
 
                 int dropped = conn->send_window->expected;
 
@@ -236,29 +234,37 @@ int main() {
 
                 
                 // tou_retransmit_all(conn);
-                int retransmit = tou_retransmit_all(conn);
+                int retransmit = TOU_DEFAULT_RETRANSMIT_METHOD(conn, expired_pkt, dropped, last_acked_n);
                 stats.ack_detect_retransmits += retransmit;
+
+                last_acked_n = 0;
             }
         }
-
-        stats.total_loop++;
-        stats.total_time = tou_time_ms() - start;
-        stats.last_seq = conn->send_window->expected - 1;
-        stats.last_sent_id = conn->last_packet_id;
-        stats.estimated_rtt = conn->rtt;
-        stats.estimated_throughput = stats.total_sent * 1.0e-6 / (stats.total_time * 1.0e-3);
+        
+        LoopEnd :
+            stats.total_loop++;
+            stats.total_time = tou_time_ms() - start;
+            stats.last_seq = conn->send_window->expected - 1;
+            stats.last_sent_id = conn->last_packet_id;
+            stats.estimated_rtt = conn->rtt;
+            stats.estimated_throughput = stats.total_sent * 1.0e-6 / (stats.total_time * 1.0e-3);
     }
 
-    if (sendto(conn->ctrl_socket->fd, "FIN", 4, 0, conn->ctrl_socket->peer_addr, conn->ctrl_socket->peer_addr_len) <
-        0) {
-        TOU_DEBUG(
-                printf("[tou][tou_send_handshake_syn] send FIN failed\n");
-                perror("FIN\n");
-        );
+    for (int i = 0; i < TOU_DEFAULT_SENDWINDOW_SIZE / 2; i++) {
+        if (sendto(conn->ctrl_socket->fd, "FIN", 4, 0, conn->ctrl_socket->peer_addr, conn->ctrl_socket->peer_addr_len) <
+            0) {
+            TOU_DEBUG(
+                    printf("[tou][tou_send_handshake_syn] send FIN failed\n");
+                    perror("FIN\n");
+            );
 
-        return -1;
+            return -1;
+        }
+
+        int timeout = MAX(TOU_DEFAULT_ACK_TIMEOUT_MS / 2, MIN(TOU_DEFAULT_ACK_TIMEOUT_MS, stats.estimated_rtt)) * 1000;
+        printf("FIN timeout %d\n", timeout);
+        usleep(2 * timeout);
     }
-
 
     TOU_DEBUG(
             printf("I'm done with this\n");

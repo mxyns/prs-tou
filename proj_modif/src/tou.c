@@ -170,8 +170,8 @@ int tou_retransmit(
     tou_packet_set_expiration(pkt, tou_time_ms(), TOU_DEFAULT_ACK_TIMEOUT_MS);
     
     TOU_DEBUG(
-    );
         printf("retransmit %d\n", pkt->packet_id);
+    );
 
     return 1;
 }

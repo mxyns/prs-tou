@@ -34,7 +34,7 @@ void tou_write_packet(
     } else {
         TOU_DEBUG(printf("[tou][tou_write_packet] %d bytes packet wrote\n", header_size + size));
     }
-    printf("%d\n", n);
+    // printf("%d\n", n);
 
 }
 

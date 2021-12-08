@@ -25,6 +25,7 @@ def log_subprocess_output(pipe):
         logging.info('got line from subprocess: %r', line)
 
 def launch_bash_command(command):
+    print(command)
     process = Popen(command.split())
     process.wait()
 
@@ -34,27 +35,33 @@ if __name__ == "__main__":
     parameters = readFile("parameters.txt")
 
     if (str(os.path.exists('logs')) == 'False') : 
-        bashCommand = "mkdir logs"
+        bashCommand = "rm -r -d -f logs/ ; rm -r -d -f logsclient/ ; mkdir logs"
         launch_bash_command(bashCommand)
 
     for i in range(len(parameters)) : 
         if (i == int(sys.argv[1])) :
 
             if (str(os.path.exists('logs/logs{}'.format(i))) == 'False') : 
-                bashCommand = "mkdir logs/logs{}".format(i)
+                bashCommand = "mkdir -p logs/logs{}".format(i)
                 launch_bash_command(bashCommand)
 
-            bashCommand = "make -j{} -C ./build".format(8)
-            process = Popen(bashCommand.split(), stdout=PIPE)
-            process.wait()
-            
+
+
+        
             for j in range(int(sys.argv[2])) :
                 parameters[i]= str(int(sys.argv[3])+(j*int(sys.argv[4])))
                 
                 toFile = os.path.join('./src','tou_consts.h')
                 writeFile (toFile, lines, parameters)
+                
+                print(f"building #{j}")
+                bashCommand = "make -j{} -s -C ./build".format(2)
+                process = Popen(bashCommand.split())
+                process.wait()
 
-                for k in range(5) :
+                for k in range(100) :
+                    
+                    print(f"running #{j} run {k}")
                     with open("logs/logs{}/stdout{}_{}.txt".format(i,j,k),"wb") as out:
                         bashCommand = "./build/src/xserver"
                         process = subprocess.Popen(bashCommand.split(),stdout=out)

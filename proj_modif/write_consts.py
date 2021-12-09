@@ -3,6 +3,10 @@ import sys
 import os
 import logging
 import string
+import copy
+
+from pathlib import Path
+from functools import partial
 
 from subprocess import Popen, PIPE, STDOUT
 
@@ -19,7 +23,7 @@ def writeFile(filename, lines, parameters):
 
     file.write("#ifndef TOU_CONSTS_H\n#define TOU_CONSTS_H\n")
     for i in range(len(lines)) :
-        file.write(lines[i].rstrip("\n")+parameters[i]+"\n")
+        file.write(lines[i].rstrip("\n")+str(parameters[i])+"\n")
     
     file.write("\n#endif")
 
@@ -40,14 +44,32 @@ def build_project(iter_n) :
     process = Popen(bashCommand.split())
     process.wait()
 
-def run_batch(n, parameter_index, batch_index) :
+def run_batch(n, parameter_index, batch_index, logdst=None) :
 
     for k in range(n) :
         print(f"running #{batch_index} run {k}")
-        with open("logs/logs{}/stdout{}_{}.txt".format(parameter_index,batch_index,k),"wb") as out:
+
+        dst = logdst
+        if dst is None : 
+            dst = "logs/logs{}/stdout{}_{}.txt".format(parameter_index,batch_index,k)
+        else :
+            dst = logdst(batch=k)
+
+        Path(dst).parent.mkdir(parents=True, exist_ok=True)
+
+        with open(dst,"wb") as out:
             bashCommand = "./build/src/xserver"
             process = subprocess.Popen(bashCommand.split(),stdout=out)
             exitcode = process.wait()
+
+
+def run_config(lines, parameters, batch_index=-1, parameter_index=-1, logdst=None, dst_dir="./src", dst_file="tou_consts.h"):
+    toFile = os.path.join(dst_dir,dst_file)
+    writeFile(toFile, lines, parameters)
+
+    build_project(batch_index)
+    print("\n".join([lines[i] + str(parameters[i]) for i in range(len(lines))]))
+    run_batch(BATCH_SIZE, parameter_index, batch_index, logdst=logdst)
 
 
 def int_range_param(parameters, lines, parameter_index) : 
@@ -71,7 +93,7 @@ def retransmit_param(paramters, lines, parameter_index) :
     ]
 
     option_id = int(sys.argv[2])
-    if len([x[1] for x in string.Formatter().parse(options[option_id]) if x[1] is not None]) :
+    if len([x[1] for x in string.Formatter().parse(options[option_id]) if x[1] is not None]) : # if has format
         batch_count = int(sys.argv[3])
         initial_value = int(sys.argv[4])
         step_size = int(sys.argv[5])
@@ -105,18 +127,57 @@ if __name__ == "__main__":
         bashCommand = "rm -r -d -f logs/ ; rm -r -d -f logsclient/ ; mkdir logs"
         launch_bash_command(bashCommand)
 
-    funcmap = dict()
-    funcmap[-1] = int_range_param
-    funcmap[10] = retransmit_param
+    if len(sys.argv) > 1 :
+        print("running arg parse mode")
 
-    for i in range(len(parameters)) :
-        if (i == int(sys.argv[1])) :
+        funcmap = dict()
+        funcmap[-1] = int_range_param
+        funcmap[10] = retransmit_param
 
-            if (str(os.path.exists('logs/logs{}'.format(i))) == 'False') : 
-                bashCommand = "mkdir -p logs/logs{}".format(i)
-                launch_bash_command(bashCommand)
+        for i in range(len(parameters)) :
+            if (i == int(sys.argv[1])) :
 
-                        
-            func = funcmap.get(i) if funcmap.get(i) is not None else funcmap.get(-1)
-            print(f"func : {func.__name__}")
-            func(parameters, lines, i)
+                if (str(os.path.exists('logs/logs{}'.format(i))) == 'False') : 
+                    bashCommand = "mkdir -p logs/logs{}".format(i)
+                    launch_bash_command(bashCommand)
+
+                            
+                func = funcmap.get(i) if funcmap.get(i) is not None else funcmap.get(-1)
+                print(f"func : {func.__name__}")
+                func(parameters, lines, i)
+    else :
+        print("running prog mode")
+
+        configs = list()
+
+        window_id = 2
+        retransmit_id = 10
+
+        # make configs
+        for window in range(0, 100 + 1, 30) :
+            window = max(1, 100 - window) # make <= 0 be 1 instead
+            for retransmit in range(0, 100 + 1, 30) :
+                # retransmit = max(1, retransmit) # make <= 0 be 1 instead
+                conf = copy.deepcopy(parameters)
+
+                conf[window_id] = window
+                conf[retransmit_id] = "tou_retransmit_n(conn, {})".format(retransmit)
+
+                configs.append(((window, retransmit), conf))
+        
+        for batch_index in range(len(configs)) : 
+            coord = configs[batch_index][0]
+            config = configs[batch_index][1]
+            print(f"running config : \n{str(config)}")
+            run_config( \
+                lines, \
+                config, \
+                batch_index=batch_index, \
+                logdst=partial("logs/logs{logid}/stdout_{x}_{y}_{batch}.txt".format, \
+                    logid=f"{window_id}_{retransmit_id}", \
+                    x=coord[0], \
+                    y=coord[1] \
+                )
+            )
+
+

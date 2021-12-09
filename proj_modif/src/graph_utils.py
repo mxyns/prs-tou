@@ -29,6 +29,11 @@ d1 = [
 ]
 
 
+def graph(x, y):
+    plt.scatter(x, y, c=cm.hot(np.abs(y)), edgecolor='none')
+    plt.show()
+
+
 def scaled_surface(scalex, scaley, data):
     X, Y = np.meshgrid(scalex, scaley)
     arr = np.array(data)

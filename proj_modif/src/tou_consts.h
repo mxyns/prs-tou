@@ -4,8 +4,7 @@
 
 #define TOU_DEFAULT_RECVWINDOW_SIZE (10)
 
-#define TOU_DEFAULT_SENDWINDOW_SIZE (1)
-
+#define TOU_DEFAULT_SENDWINDOW_SIZE 10
 #define TOU_DEFAULT_RECV_WORKBUFFER_SIZE (TOU_DEFAULT_MSS * 3)
 
 #define TOU_DEFAULT_RECV_INBUFFER_SIZE (TOU_DEFAULT_MSS * 3)
@@ -18,8 +17,8 @@
 
 #define TOU_DEFAULT_ACK_TIMEOUT_MS (10)
 
-#define TOU_DEFAULT_FAST_RETRANSMIT_ACK_COUNT  (5)
+#define TOU_DEFAULT_FAST_RETRANSMIT_ACK_COUNT (3)
 
-#define TOU_DEFAULT_RETRANSMIT_METHOD(conn, expired_pkt, dropped_id, ack_stack_count) tou_retransmit_n(conn, 10)
+#define TOU_DEFAULT_RETRANSMIT_METHOD(conn, expired_pkt, dropped_id, ack_stack_count) tou_retransmit_n(conn, 90)
 
 #endif

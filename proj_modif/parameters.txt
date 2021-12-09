@@ -1,11 +1,11 @@
 (1500) // max payload size
 (10)
-(1)
+(80)
 (TOU_DEFAULT_MSS * 3)
 (TOU_DEFAULT_MSS * 3)
 (TOU_DEFAULT_MSS * 3)
 (TOU_DEFAULT_MSS * TOU_DEFAULT_SENDWINDOW_SIZE)
 ((TOU_LEN_PKT_ACK + sizeof(ack_id_t) * TOU_PKT_ACK_MAX_ACK_COUNT) * 5)
-(10)
+(4)
 (3)
 tou_retransmit_all(conn)

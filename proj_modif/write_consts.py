@@ -56,6 +56,9 @@ def run_batch(n, parameter_index, batch_index, logdst=None) :
             dst = logdst(batch=k)
 
         Path(dst).parent.mkdir(parents=True, exist_ok=True)
+        if os.path.isfile(dst):
+            print(f"{dst} already exists, skipped")
+            continue
 
         with open(dst,"wb") as out:
             bashCommand = "./build/src/xserver"
@@ -154,9 +157,9 @@ if __name__ == "__main__":
         retransmit_id = 10
 
         # make configs
-        for window in range(0, 100 + 1, 30) :
-            window = max(1, 100 - window) # make <= 0 be 1 instead
-            for retransmit in range(0, 100 + 1, 30) :
+        for window in range(0, 150 + 1, 10) :
+            window = max(1, window) # make <= 0 be 1 instead
+            for retransmit in range(0, 150 + 1, 10) :
                 # retransmit = max(1, retransmit) # make <= 0 be 1 instead
                 conf = copy.deepcopy(parameters)
 

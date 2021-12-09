@@ -21,15 +21,15 @@ def await_for_process(targetname, timeout=0.2) :
     time.sleep(timeout)
 
 if __name__ == "__main__":
-    bashCommand = "mkdir logsclient"
+    bashCommand = "mkdir -p logsclient"
     process = Popen(bashCommand.split(), stdout=PIPE)
     process.wait()
     
-    bashCommand = "../situation/"+sys.argv[1]+" 0.0.0.0 2000 lorem_1M 0"
+    bashCommand = "../situation/"+sys.argv[1]+" 0.0.0.0 2000 lorem_5M"
     for i in range (int(sys.argv[2])*5):
 
-        await_for_process("xserver", 0.05)
-        time.sleep(.05)
+        await_for_process("xserver", 0.025)
+        time.sleep(.5)
         with open("logsclient/stdout{}.txt".format(i), "wb") as out, open("logsclient/stderr{}.txt".format(i),"wb") as err:
             process = subprocess.Popen(bashCommand.split(),stdout=out, stderr=out)
             process.wait()

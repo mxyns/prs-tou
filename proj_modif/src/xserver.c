@@ -257,8 +257,6 @@ int main() {
                     printf("[tou][tou_send_handshake_syn] send FIN failed\n");
                     perror("FIN\n");
             );
-
-            return -1;
         }
 
         int timeout = MAX(TOU_DEFAULT_ACK_TIMEOUT_MS / 2, MIN(TOU_DEFAULT_ACK_TIMEOUT_MS, stats.estimated_rtt)) * 1000;

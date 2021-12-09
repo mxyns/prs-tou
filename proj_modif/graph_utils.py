@@ -1,6 +1,7 @@
 # Press the green button in the gutter to run the script.
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import cm
 
 d0 = [
     [1, 2, 4, 8, 16, 32, 24, 18, 10, 2],
@@ -30,7 +31,7 @@ d1 = [
 
 
 def graph(x, y):
-    plt.scatter(x, y, c=cm.hot(np.abs(y)), edgecolor='none')
+    plt.scatter(x, y, c=y, cmap="winter", edgecolor='none')
     plt.show()
 
 
@@ -67,7 +68,10 @@ def convert_points_map_to_arrays(datamap):
     DimX = len(Xs)
     DimY = len(Ys)
 
-    return Xs, Ys, [[datamap[(Xs[xi], Ys[yi])] for yi in range(DimY)] for xi in range(DimX)]
+    data = [[datamap.get((Xs[xi], Ys[yi])) for yi in range(DimY)] for xi in range(DimX)]
+    data = [[data[yi][xi] if data[yi][xi] is not None else -1 for yi in range(DimY) ] for xi in range(DimX)]
+
+    return Xs, Ys, data
 
 
 def main():

@@ -1,0 +1,50 @@
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+FIN timeout 1444
+stats {
+            long transmits = 670
+            long detected_drops = 750
+            long ack_detect_retransmits = 44719
+            long timeout_retransmits = 180372
+            long timeouts = 180372
+            double average_timeout = 0.108125
+            long total_loop = 2369
+            long total_sent = 1000000
+            long total_time = 10882
+            long last_sent_id = 670
+            long last_seq = 670
+            ====
+            computed
+            ====
+            estimates
+            double estimated_rtt = 1.444251
+            double estimated_throughput = 0.091895
+        }

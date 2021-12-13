@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <sys/time.h>
 #include <stdlib.h>
+#include <pthread.h>
 
 int getport(struct sockaddr* sockaddr) {
 
@@ -84,207 +85,259 @@ void dump_stats(tou_stats* stats) {
         );
 }
 
-int main() {
+typedef struct {
+ int id;
+ tou_conn* conn;
+ pthread_t* thread;
+ int* client_counter;
+ int MAX_CLIENTS;
+} thread_args;
 
+void tou_handle_client(thread_args* args) {
+    
+    tou_conn* conn = args->conn;
+    
     tou_stats stats;
     memset(&stats, 0, sizeof(tou_stats));
+
+    printf("hi from client %d\n", args->id);
+    printf("i must read file '%s'\n", conn->filename);
+
+    FILE* f = fopen(conn->filename, "rb");
+    if (f == NULL) {
+        printf("file not found\n");
+        goto ErrorExit;
+    }
+    fseek(f, 0, SEEK_END);
+    long size = ftell(f);
+    fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
+
+    // char* string = malloc(size + 1);
+    // fread(string, 1, size, f);
+    // fclose(f);
+    // string[size] = 0;
+
+    // char* buffer = string;
+
+
+    TOU_DEBUG(
+            printf("[tou][tou_send] MSS=%d\n", MSS);
+            printf("[tou][tou_send] swindowsize=%d\n", conn->send_window->list->cap);
+            printf("[tou][tou_send] sendbuffersize=%d\n", conn->out->cap)
+    );
+
+    fd_set readset;
+    struct timeval ack_timeout = {
+            .tv_sec = 0,
+            .tv_usec = 2*1000*TOU_DEFAULT_ACK_TIMEOUT_MS,
+    };
+
+    tou_set_nonblocking(conn, TOU_FLAG_NONBLOCKING_DATA | TOU_FLAG_NONBLOCKING_DATA_ENABLE);
+
+    long start = tou_time_ms();
+
+    int last_acked_n = 0;
+    int written = 0; // TODO sizes to size_t / long type
+    while (size - written > 0 || conn->out->cnt != 0 || !TOU_SLL_ISEMPTY(conn->send_window->list)) {
+
+        // write maximum to out buffer
+        int new_write = tou_cbuffer_fread(f, conn->out, size - written);
+        // int new_write = tou_cbuffer_insert(conn->out, buffer + written, size - written);
+        TOU_DEBUG(
+                // printf("[xserver] wrote %d to out\n", new_write);
+                //tou_cbuffer_dump(conn->out);
+        );
+        if (new_write > 0) {
+            // new_write < 0 when an error occurs
+            written += new_write;
+            stats.total_sent += new_write;
+        }
+
+        // process out buffer into packets => send window
+        TOU_DEBUG(
+            printf("SENT AT %ld\n", tou_time_ms());
+            printf("[xserver] send %d\n", conn->last_packet_id)
+        );
+
+        int sent = tou_send(conn);
+        if (sent > 0) {
+            stats.transmits += sent;
+            TOU_DEBUG(
+                    printf("[xserver] buffer part sent %d\n", sent);
+                    printf("[xserver] send window %d/%d\n", conn->send_window->list->count,
+                        conn->send_window->list->cap)
+            );
+        }
+
+        tou_packet_dtp* pkt = (tou_packet_dtp*) conn->send_window->list->head->val;
+        TOU_DEBUG(printf("MUST RECV %d AT %ld\n", pkt->packet_id, pkt->ack_expire));
+
+        TOU_SLL_ITER_USED(conn->send_window->list,
+
+            if (((tou_packet_dtp*)curr->val)->ack_expire < pkt->ack_expire)
+                        pkt = (tou_packet_dtp*) curr->val;
+                        );
+
+        long timeout = MAX(0, pkt->ack_expire - tou_time_ms());
+        // printf("timeout %ld\n", timeout);
+        // timeout = 1;
+        ack_timeout.tv_sec = timeout / 1000;
+        ack_timeout.tv_usec = (timeout % 1000) * 1000;
+
+        stats.average_timeout = (stats.average_timeout * stats.total_loop + timeout) / (stats.total_loop + 1);
+
+        TOU_DEBUG(printf("TIMEOUT IN %ld : %lds %ldusec\n", timeout, (long) ack_timeout.tv_sec,
+                        (long) ack_timeout.tv_usec));
+
+        // printf("Waiting for events\n");
+        FD_ZERO(&readset);
+        FD_SET(conn->ctrl_socket->fd, &readset);
+        FD_SET(conn->socket->fd, &readset);
+        int range = MAX(conn->ctrl_socket->fd, conn->socket->fd) + 1;
+        int ret_select = select(range, &readset, NULL, NULL, &ack_timeout);
+
+        TOU_DEBUG(
+                printf("ret_select = %d\n", ret_select);
+                for (int i = 0; i < range; i++) {
+                    if (FD_ISSET(i, &readset)) {
+                        printf("FLAG %d\n", i);
+                    }
+                }
+        );
+
+        if (ret_select == 0) {
+
+            TOU_DEBUG(
+                    printf("ACK EXPIRED %d\n", pkt->packet_id);
+                    compact_print_buffer(pkt->buffer, pkt->data_packet_size);
+            );
+
+            stats.timeouts++;
+            stats.timeout_retransmits += tou_retransmit(conn, pkt);
+            // tou_acknowledge_packets(conn, (int)conn->send_window->expected);
+
+            continue;
+        }
+
+        int ack_flag = FD_ISSET(conn->socket->fd, &readset); // new data is only ack in this scenario
+
+        if (ack_flag) {
+            TOU_DEBUG(printf("[xserver] checking for ack\n"));
+
+            // await for some acks
+            tou_recv_ack(conn, &last_acked_n);
+            TOU_DEBUG(printf("[xserver] ack result new count %d\n", last_acked_n));
+
+            if (last_acked_n >= 10) {
+                stats.detected_drops++;
+
+                last_acked_n = 0;
+
+
+                TOU_DEBUG(
+                    int dropped = conn->send_window->expected;
+                    printf("[xserver] some packet dropped, resend when ?\n");
+                    printf("[xserver] packed dropped seq : %d\n", dropped);
+                );
+
+                
+                // tou_retransmit_all(conn);
+                int retransmit = tou_retransmit_all(conn);
+                stats.ack_detect_retransmits += retransmit;
+            }
+        }
+
+        stats.total_loop++;
+        stats.total_time = tou_time_ms() - start;
+        stats.last_seq = conn->send_window->expected - 1;
+        stats.last_sent_id = conn->last_packet_id;
+        stats.estimated_rtt = conn->rtt;
+        stats.estimated_throughput = stats.total_sent * 1.0e-6 / (stats.total_time * 1.0e-3);
+    }
+
+
+    ErrorExit :
+            for (int i = 0; i < 1 + TOU_DEFAULT_SENDWINDOW_SIZE / 2; i++) {
+                if (sendto(conn->ctrl_socket->fd, "FIN", 4, 0, conn->ctrl_socket->peer_addr, conn->ctrl_socket->peer_addr_len) <
+                    0) {
+                    TOU_DEBUG(
+                            printf("[tou][tou_send_handshake_syn] send FIN failed\n");
+                            perror("FIN\n");
+                    );
+                }
+
+                int timeout = MAX(TOU_DEFAULT_ACK_TIMEOUT_MS / 2, MIN(TOU_DEFAULT_ACK_TIMEOUT_MS, stats.estimated_rtt)) * 1000;
+                printf("FIN timeout %d\n", timeout);
+                usleep(2 * timeout);
+            }
+
+
+
+    TOU_DEBUG(
+            printf("I'm done with this\n");
+            printf("End state :\n");
+            printf("file pos : %d / %d\n", written, size);
+            printf("send window : ");
+            tou_sll_dump(conn->send_window->list);
+            printf("recv buffer : ");
+            tou_cbuffer_cdump(conn->recv_work_buffer);
+    );
+
+    close(f);
+    *args->client_counter = *args->client_counter - 1;
+    dump_stats(&stats);
+    printf("client out : %d\n", *args->client_counter);
+    tou_free_conn(args->conn, 0);
+    free(args->thread);
+    free(args);
+
+    return NULL;
+}
+
+int main() {
 
     tou_socket* listen_sock = tou_open_socket("0.0.0.0", 2000);
     tou_conn* conn;
 
+    int total = 0;
+    int counter = 0;
+    int MAX_CLIENTS = 10;
     accept :
-    listen_sock->id %= 65535 - 1;
+    listen_sock->id %= 65535 - 1; // TODO BE CAREFUL MAKE PORT IS 9999, MUST USE 9999 - INPUT_PORT as MOD
     conn = tou_accept_conn(listen_sock);
     printf("new client on port %d\n", conn->socket->port);
+    
+    counter++;
+    total++;
 
-    if (fork() != 0) {
-        tou_free_conn(conn, 0);
+    pthread_t* client_thread = calloc(1, sizeof(pthread_t));
+    thread_args* args = calloc(1, sizeof(thread_args));
+    args->id = counter;
+    args->conn = conn;
+    args->client_counter = &counter;
+    args->MAX_CLIENTS = MAX_CLIENTS;
+    args->thread = client_thread;
+
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, 1);
+    pthread_create(client_thread, &attr, tou_handle_client, (void*)args);
+    pthread_attr_destroy(&attr);
+
+    if (total < 5) {
+        printf("====== counter %d\n", counter);
         goto accept;
     }
-    else {
-        TOU_DEBUG(printf("i must read file '%s'\n", conn->filename));
 
-        FILE* f = fopen(conn->filename, "rb");
-        if (f == NULL) {
-            printf("file not found\n");
-            goto ErrorExit;
-        }
-        fseek(f, 0, SEEK_END);
-        long size = ftell(f);
-        fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
-
-        // char* string = malloc(size + 1);
-        // fread(string, 1, size, f);
-        // fclose(f);
-        // string[size] = 0;
-
-        // char* buffer = string;
-
-
-        TOU_DEBUG(
-                printf("[tou][tou_send] MSS=%d\n", MSS);
-                printf("[tou][tou_send] swindowsize=%d\n", conn->send_window->list->cap);
-                printf("[tou][tou_send] sendbuffersize=%d\n", conn->out->cap)
-        );
-
-        fd_set readset;
-        struct timeval ack_timeout = {
-                .tv_sec = 0,
-                .tv_usec = 2*1000*TOU_DEFAULT_ACK_TIMEOUT_MS,
-        };
-
-        tou_set_nonblocking(conn, TOU_FLAG_NONBLOCKING_DATA | TOU_FLAG_NONBLOCKING_DATA_ENABLE);
-
-        long start = tou_time_ms();
-
-        int last_acked_n = 0;
-        int written = 0; // TODO sizes to size_t / long type
-        while (size - written > 0 || conn->out->cnt != 0 || !TOU_SLL_ISEMPTY(conn->send_window->list)) {
-
-            // write maximum to out buffer
-            int new_write = tou_cbuffer_fread(f, conn->out, size - written);
-            // int new_write = tou_cbuffer_insert(conn->out, buffer + written, size - written);
-            TOU_DEBUG(
-                    // printf("[xserver] wrote %d to out\n", new_write);
-                    //tou_cbuffer_dump(conn->out);
-            );
-            if (new_write > 0) {
-                // new_write < 0 when an error occurs
-                written += new_write;
-                stats.total_sent += new_write;
-            }
-
-            // process out buffer into packets => send window
-            TOU_DEBUG(
-                printf("SENT AT %ld\n", tou_time_ms());
-                printf("[xserver] send %d\n", conn->last_packet_id)
-            );
-
-            int sent = tou_send(conn);
-            if (sent > 0) {
-                stats.transmits += sent;
-                TOU_DEBUG(
-                        printf("[xserver] buffer part sent %d\n", sent);
-                        printf("[xserver] send window %d/%d\n", conn->send_window->list->count,
-                            conn->send_window->list->cap)
-                );
-            }
-
-            tou_packet_dtp* pkt = (tou_packet_dtp*) conn->send_window->list->head->val;
-            TOU_DEBUG(printf("MUST RECV %d AT %ld\n", pkt->packet_id, pkt->ack_expire));
-
-            TOU_SLL_ITER_USED(conn->send_window->list,
-
-                if (((tou_packet_dtp*)curr->val)->ack_expire < pkt->ack_expire)
-                            pkt = (tou_packet_dtp*) curr->val;
-                            );
-
-            long timeout = MAX(0, pkt->ack_expire - tou_time_ms());
-            // printf("timeout %ld\n", timeout);
-            // timeout = 1;
-            ack_timeout.tv_sec = timeout / 1000;
-            ack_timeout.tv_usec = (timeout % 1000) * 1000;
-
-            stats.average_timeout = (stats.average_timeout * stats.total_loop + timeout) / (stats.total_loop + 1);
-
-            TOU_DEBUG(printf("TIMEOUT IN %ld : %lds %ldusec\n", timeout, (long) ack_timeout.tv_sec,
-                            (long) ack_timeout.tv_usec));
-
-            // printf("Waiting for events\n");
-            FD_ZERO(&readset);
-            FD_SET(conn->ctrl_socket->fd, &readset);
-            FD_SET(conn->socket->fd, &readset);
-            int range = MAX(conn->ctrl_socket->fd, conn->socket->fd) + 1;
-            int ret_select = select(range, &readset, NULL, NULL, &ack_timeout);
-
-            TOU_DEBUG(
-                    printf("ret_select = %d\n", ret_select);
-                    for (int i = 0; i < range; i++) {
-                        if (FD_ISSET(i, &readset)) {
-                            printf("FLAG %d\n", i);
-                        }
-                    }
-            );
-
-            if (ret_select == 0) {
-
-                TOU_DEBUG(
-                        printf("ACK EXPIRED %d\n", pkt->packet_id);
-                        compact_print_buffer(pkt->buffer, pkt->data_packet_size);
-                );
-
-                stats.timeouts++;
-                stats.timeout_retransmits += tou_retransmit(conn, pkt);
-                // tou_acknowledge_packets(conn, (int)conn->send_window->expected);
-
-                continue;
-            }
-
-            int ack_flag = FD_ISSET(conn->socket->fd, &readset); // new data is only ack in this scenario
-
-            if (ack_flag) {
-                TOU_DEBUG(printf("[xserver] checking for ack\n"));
-
-                // await for some acks
-                tou_recv_ack(conn, &last_acked_n);
-                TOU_DEBUG(printf("[xserver] ack result new count %d\n", last_acked_n));
-
-                if (last_acked_n >= 10) {
-                    stats.detected_drops++;
-
-                    last_acked_n = 0;
-
-
-                    TOU_DEBUG(
-                        int dropped = conn->send_window->expected;
-                        printf("[xserver] some packet dropped, resend when ?\n");
-                        printf("[xserver] packed dropped seq : %d\n", dropped);
-                    );
-
-                    
-                    // tou_retransmit_all(conn);
-                    int retransmit = tou_retransmit_all(conn);
-                    stats.ack_detect_retransmits += retransmit;
-                }
-            }
-
-            stats.total_loop++;
-            stats.total_time = tou_time_ms() - start;
-            stats.last_seq = conn->send_window->expected - 1;
-            stats.last_sent_id = conn->last_packet_id;
-            stats.estimated_rtt = conn->rtt;
-            stats.estimated_throughput = stats.total_sent * 1.0e-6 / (stats.total_time * 1.0e-3);
-        }
-
-
-        ErrorExit :
-            if (sendto(conn->ctrl_socket->fd, "FIN", 4, 0, conn->ctrl_socket->peer_addr, conn->ctrl_socket->peer_addr_len) <
-                0) {
-                TOU_DEBUG(
-                        printf("[tou][tou_send_handshake_syn] send FIN failed\n");
-                        perror("FIN\n");
-                );
-
-                return -1;
-            }
-            printf("done\n");
-
-
-        TOU_DEBUG(
-                printf("I'm done with this\n");
-                printf("End state :\n");
-                printf("file pos : %d / %d\n", written, size);
-                printf("send window : ");
-                tou_sll_dump(conn->send_window->list);
-                printf("recv buffer : ");
-                tou_cbuffer_cdump(conn->recv_work_buffer);
-        );
-
-        dump_stats(&stats);
+    printf("counter %d\n", counter);
+    while(counter != 0) {
+        
+        printf("counter %d\n", counter);
+        usleep(1000);
     }
 
     printf("free conn\n");
-    tou_free_conn(conn, 1);
+    tou_free_socket(listen_sock);
 
     return 0;
 }

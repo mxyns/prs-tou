@@ -339,7 +339,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = -I$(srcdir) -Wall
-LDADD = -lm
+LDADD = -lm -lpthread
 TOU_CORE = tou.c \
             tou_handshake.c \
             tou_io.c \

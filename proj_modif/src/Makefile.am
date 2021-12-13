@@ -16,7 +16,7 @@ noinst_PROGRAMS=cserver \
                 #end 
 
 AM_CPPFLAGS = -I$(srcdir) -Wall
-LDADD = -lm
+LDADD = -lm -lpthread
 
 TOU_CORE = tou.c \
             tou_handshake.c \

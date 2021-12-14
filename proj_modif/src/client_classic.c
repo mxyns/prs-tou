@@ -41,7 +41,7 @@ int main(void) {
     }
 
     // Close the socket:
-    tou_free_conn(conn);
+    tou_free_conn(conn, 1);
 
     return 0;
 }

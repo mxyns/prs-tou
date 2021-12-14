@@ -16,7 +16,7 @@
 
 #define TOU_DEFAULT_RECV_CTRLBUFFER_SIZE ((TOU_LEN_PKT_ACK + sizeof(ack_id_t) * TOU_PKT_ACK_MAX_ACK_COUNT) * 5)
 
-#define TOU_DEFAULT_ACK_TIMEOUT_MS 1
+#define TOU_DEFAULT_ACK_TIMEOUT_MS 2
 #define TOU_DEFAULT_FAST_RETRANSMIT_ACK_COUNT (3)
 
 #define TOU_DEFAULT_RETRANSMIT_METHOD(conn, expired_pkt, dropped_id, ack_stack_count) tou_retransmit_all(conn)

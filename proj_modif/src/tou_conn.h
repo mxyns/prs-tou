@@ -33,7 +33,8 @@ tou_conn* tou_make_conn(
 );
 
 void tou_free_conn(
-        tou_conn* conn
+        tou_conn* conn,
+        char free_ctrl
 );
 
 #endif

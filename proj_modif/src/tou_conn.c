@@ -53,10 +53,13 @@ tou_conn* tou_make_conn(
 }
 
 void tou_free_conn(
-        tou_conn* conn
+        tou_conn* conn,
+        char free_ctrl
 ) {
     tou_free_socket(conn->socket);
-    tou_free_socket(conn->ctrl_socket);
+
+    if (free_ctrl)
+        tou_free_socket(conn->ctrl_socket);
 
     tou_free_window(conn->recv_window);
     tou_free_window(conn->send_window);

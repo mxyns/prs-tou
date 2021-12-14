@@ -1,0 +1,35 @@
+FIN timeout 2998
+FIN timeout 2998
+FIN timeout 2998
+FIN timeout 2998
+FIN timeout 2998
+FIN timeout 2998
+FIN timeout 2998
+FIN timeout 2998
+FIN timeout 2998
+FIN timeout 2998
+FIN timeout 2998
+FIN timeout 2998
+FIN timeout 2998
+FIN timeout 2998
+FIN timeout 2998
+FIN timeout 2998
+stats {
+            long transmits = 670
+            long detected_drops = 204
+            long ack_detect_retransmits = 6044
+            long timeout_retransmits = 4969
+            long timeouts = 4969
+            double average_timeout = 0.600154
+            long total_loop = 1146
+            long total_sent = 1000000
+            long total_time = 1362
+            long last_sent_id = 670
+            long last_seq = 670
+            ====
+            computed
+            ====
+            estimates
+            double estimated_rtt = 2.998573
+            double estimated_throughput = 0.734214
+        }

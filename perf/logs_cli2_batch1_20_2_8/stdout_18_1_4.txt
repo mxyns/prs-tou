@@ -1,0 +1,29 @@
+FIN timeout 661
+FIN timeout 661
+FIN timeout 661
+FIN timeout 661
+FIN timeout 661
+FIN timeout 661
+FIN timeout 661
+FIN timeout 661
+FIN timeout 661
+FIN timeout 661
+stats {
+            long transmits = 670
+            long detected_drops = 473
+            long ack_detect_retransmits = 8502
+            long timeout_retransmits = 157159
+            long timeouts = 157159
+            double average_timeout = 0.066679
+            long total_loop = 1645
+            long total_sent = 1000000
+            long total_time = 10013
+            long last_sent_id = 670
+            long last_seq = 670
+            ====
+            computed
+            ====
+            estimates
+            double estimated_rtt = 0.661418
+            double estimated_throughput = 0.099870
+        }

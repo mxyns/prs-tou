@@ -1,0 +1,40 @@
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+FIN timeout 1962
+stats {
+            long transmits = 670
+            long detected_drops = 555
+            long ack_detect_retransmits = 22110
+            long timeout_retransmits = 115516
+            long timeouts = 115516
+            double average_timeout = 0.113035
+            long total_loop = 1876
+            long total_sent = 1000000
+            long total_time = 10065
+            long last_sent_id = 670
+            long last_seq = 670
+            ====
+            computed
+            ====
+            estimates
+            double estimated_rtt = 1.962143
+            double estimated_throughput = 0.099354
+        }

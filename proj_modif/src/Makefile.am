@@ -1,18 +1,7 @@
-noinst_PROGRAMS=cserver \
-                cclient \
-                test_cbuff \
-                test_sll \
-                test_pserver \
-                test_pclient \
-                test_window \
-                test_cblocks \
-                test_gotos \
-                test_time \
-                test_timeunit \
-                test_test \
-                xserver \
-                xmserver \
-                xclient \
+noinst_PROGRAMS= \
+                serveur1-LesSemiCroustillants \
+                serveur2-LesSemiCroustillants \
+                serveur3-LesSemiCroustillants \
                 #end 
 
 AM_CPPFLAGS = -I$(srcdir) -Wall
@@ -42,52 +31,14 @@ noinst_HEADERS= tou.h \
                     tou_conn.h \
                     #end
 
-cserver_SOURCES= $(TOU_CORE) \
-                server_classic.c \
-                #end
-
-cclient_SOURCES= $(TOU_CORE) \
-                client_classic.c
-                #end
-
-test_cbuff_SOURCES = $(TOU_CORE) \
-                test_cbuff.c \
-                #end
-
-test_sll_SOURCES = $(TOU_CORE) \
-                test_sll.c \
-                #end
-
-test_pserver_SOURCES = $(TOU_CORE) \
-                test_packet_server.c \
-                #end
-test_pclient_SOURCES = $(TOU_CORE) \
-                test_packet_client.c \
-                #end
-
-test_window_SOURCES = $(TOU_CORE) \
-                test_window.c \
-                #end
-
-test_cblocks_SOURCES = test_cblocks.c
-test_gotos_SOURCES = test_gotos.c
-
-test_time_SOURCES = test_time.c
-
-test_timeunit_SOURCES = $(TOU_CORE) \
-    test_time_unit.c \
-    #end
-
-test_test_SOURCES = test.c
-
-xserver_SOURCES = $(TOU_CORE) \
+serveur1_LesSemiCroustillants_SOURCES = $(TOU_CORE) \
                 xserver.c \
                 #end
 
-xmserver_SOURCES = $(TOU_CORE) \
-                xmserver.c \
+serveur2_LesSemiCroustillants_SOURCES = $(TOU_CORE) \
+                xserver_2.c \
                 #end
 
-xclient_SOURCES = $(TOU_CORE) \
-                xclient.c \
+serveur3_LesSemiCroustillants_SOURCES = $(TOU_CORE) \
+                xmserver.c \
                 #end

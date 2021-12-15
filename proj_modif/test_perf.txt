@@ -1,0 +1,11 @@
+Client 1:
+	Test sur la SendWindow : de 1 à 101 avec un pas de 10 --> 10 valeurs
+
+	write_consts : lance le serveur et modifie les parametres :
+	python3 write_consts.py <parameter_index> <number_iterations> <lower_bound> <step_value>
+
+	launch_clients : Lance les clients :
+	python3 launch_clients.py <executable> <number_iterations>
+
+	stat_analysis : analyse stat vers un csv :
+	python3 stat_analysis.py <filename>

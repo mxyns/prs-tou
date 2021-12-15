@@ -287,6 +287,19 @@ int main(int argc, char* argv[]) {
     }
 
     printf("free conn\n");
+
+    TOU_DEBUG(
+            printf("I'm done with this\n");
+            printf("End state :\n");
+            printf("file pos : %d / %d\n", written, size);
+            printf("send window : ");
+            tou_sll_dump(conn->send_window->list);
+            printf("recv buffer : ");
+            tou_cbuffer_cdump(conn->recv_work_buffer);
+    );
+
+    dump_stats(&stats);
+
     tou_free_conn(conn, 1);
 
     return 0;

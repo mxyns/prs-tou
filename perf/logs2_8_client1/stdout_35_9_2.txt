@@ -1,0 +1,37 @@
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+FIN timeout 9000
+stats {
+            long transmits = 67
+            long detected_drops = 31
+            long ack_detect_retransmits = 957
+            long timeout_retransmits = 0
+            long timeouts = 0
+            double average_timeout = 6.891156
+            long total_loop = 147
+            long total_sent = 100000
+            long total_time = 91
+            long last_sent_id = 67
+            long last_seq = 67
+            ====
+            computed
+            ====
+            estimates
+            double estimated_rtt = 381.367906
+            double estimated_throughput = 1.098901
+        }

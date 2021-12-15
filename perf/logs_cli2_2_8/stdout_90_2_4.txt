@@ -1,0 +1,65 @@
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+FIN timeout 1996
+stats {
+            long transmits = 670
+            long detected_drops = 772
+            long ack_detect_retransmits = 67088
+            long timeout_retransmits = 191595
+            long timeouts = 191595
+            double average_timeout = 0.054856
+            long total_loop = 2412
+            long total_sent = 1000000
+            long total_time = 5949
+            long last_sent_id = 670
+            long last_seq = 670
+            ====
+            computed
+            ====
+            estimates
+            double estimated_rtt = 1.996958
+            double estimated_throughput = 0.168095
+        }

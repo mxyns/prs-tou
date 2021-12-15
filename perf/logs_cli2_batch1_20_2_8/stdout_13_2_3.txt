@@ -1,0 +1,26 @@
+FIN timeout 1017
+FIN timeout 1017
+FIN timeout 1017
+FIN timeout 1017
+FIN timeout 1017
+FIN timeout 1017
+FIN timeout 1017
+stats {
+            long transmits = 670
+            long detected_drops = 138
+            long ack_detect_retransmits = 1794
+            long timeout_retransmits = 10359
+            long timeouts = 10359
+            double average_timeout = 0.256159
+            long total_loop = 1107
+            long total_sent = 1000000
+            long total_time = 1871
+            long last_sent_id = 670
+            long last_seq = 670
+            ====
+            computed
+            ====
+            estimates
+            double estimated_rtt = 1.017980
+            double estimated_throughput = 0.534474
+        }

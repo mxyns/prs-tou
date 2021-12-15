@@ -31,14 +31,18 @@ noinst_HEADERS= tou.h \
                     tou_conn.h \
                     #end
 
+serveur1_LesSemiCroustillants_CFLAGS = -DSERVER1
 serveur1_LesSemiCroustillants_SOURCES = $(TOU_CORE) \
                 xserver.c \
                 #end
 
+
+serveur2_LesSemiCroustillants_CFLAGS = -DSERVER2
 serveur2_LesSemiCroustillants_SOURCES = $(TOU_CORE) \
                 xserver_2.c \
                 #end
 
+serveur3_LesSemiCroustillants_CFLAGS = -DSERVER3
 serveur3_LesSemiCroustillants_SOURCES = $(TOU_CORE) \
                 xmserver.c \
                 #end

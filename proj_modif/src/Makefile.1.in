@@ -104,28 +104,63 @@ CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
-am__objects_1 = tou.$(OBJEXT) tou_handshake.$(OBJEXT) tou_io.$(OBJEXT) \
-	tou_rel.$(OBJEXT) tou_utils.$(OBJEXT) tou_window.$(OBJEXT) \
-	tou_datastructs.$(OBJEXT) tou_socket.$(OBJEXT) \
-	tou_packet.$(OBJEXT) tou_conn.$(OBJEXT)
+am__objects_1 = serveur1_LesSemiCroustillants-tou.$(OBJEXT) \
+	serveur1_LesSemiCroustillants-tou_handshake.$(OBJEXT) \
+	serveur1_LesSemiCroustillants-tou_io.$(OBJEXT) \
+	serveur1_LesSemiCroustillants-tou_rel.$(OBJEXT) \
+	serveur1_LesSemiCroustillants-tou_utils.$(OBJEXT) \
+	serveur1_LesSemiCroustillants-tou_window.$(OBJEXT) \
+	serveur1_LesSemiCroustillants-tou_datastructs.$(OBJEXT) \
+	serveur1_LesSemiCroustillants-tou_socket.$(OBJEXT) \
+	serveur1_LesSemiCroustillants-tou_packet.$(OBJEXT) \
+	serveur1_LesSemiCroustillants-tou_conn.$(OBJEXT)
 am_serveur1_LesSemiCroustillants_OBJECTS = $(am__objects_1) \
-	xserver.$(OBJEXT)
+	serveur1_LesSemiCroustillants-xserver.$(OBJEXT)
 serveur1_LesSemiCroustillants_OBJECTS =  \
 	$(am_serveur1_LesSemiCroustillants_OBJECTS)
 serveur1_LesSemiCroustillants_LDADD = $(LDADD)
 serveur1_LesSemiCroustillants_DEPENDENCIES =
-am_serveur2_LesSemiCroustillants_OBJECTS = $(am__objects_1) \
-	xserver_2.$(OBJEXT)
+serveur1_LesSemiCroustillants_LINK = $(CCLD) \
+	$(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+am__objects_2 = serveur2_LesSemiCroustillants-tou.$(OBJEXT) \
+	serveur2_LesSemiCroustillants-tou_handshake.$(OBJEXT) \
+	serveur2_LesSemiCroustillants-tou_io.$(OBJEXT) \
+	serveur2_LesSemiCroustillants-tou_rel.$(OBJEXT) \
+	serveur2_LesSemiCroustillants-tou_utils.$(OBJEXT) \
+	serveur2_LesSemiCroustillants-tou_window.$(OBJEXT) \
+	serveur2_LesSemiCroustillants-tou_datastructs.$(OBJEXT) \
+	serveur2_LesSemiCroustillants-tou_socket.$(OBJEXT) \
+	serveur2_LesSemiCroustillants-tou_packet.$(OBJEXT) \
+	serveur2_LesSemiCroustillants-tou_conn.$(OBJEXT)
+am_serveur2_LesSemiCroustillants_OBJECTS = $(am__objects_2) \
+	serveur2_LesSemiCroustillants-xserver_2.$(OBJEXT)
 serveur2_LesSemiCroustillants_OBJECTS =  \
 	$(am_serveur2_LesSemiCroustillants_OBJECTS)
 serveur2_LesSemiCroustillants_LDADD = $(LDADD)
 serveur2_LesSemiCroustillants_DEPENDENCIES =
-am_serveur3_LesSemiCroustillants_OBJECTS = $(am__objects_1) \
-	xmserver.$(OBJEXT)
+serveur2_LesSemiCroustillants_LINK = $(CCLD) \
+	$(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+am__objects_3 = serveur3_LesSemiCroustillants-tou.$(OBJEXT) \
+	serveur3_LesSemiCroustillants-tou_handshake.$(OBJEXT) \
+	serveur3_LesSemiCroustillants-tou_io.$(OBJEXT) \
+	serveur3_LesSemiCroustillants-tou_rel.$(OBJEXT) \
+	serveur3_LesSemiCroustillants-tou_utils.$(OBJEXT) \
+	serveur3_LesSemiCroustillants-tou_window.$(OBJEXT) \
+	serveur3_LesSemiCroustillants-tou_datastructs.$(OBJEXT) \
+	serveur3_LesSemiCroustillants-tou_socket.$(OBJEXT) \
+	serveur3_LesSemiCroustillants-tou_packet.$(OBJEXT) \
+	serveur3_LesSemiCroustillants-tou_conn.$(OBJEXT)
+am_serveur3_LesSemiCroustillants_OBJECTS = $(am__objects_3) \
+	serveur3_LesSemiCroustillants-xmserver.$(OBJEXT)
 serveur3_LesSemiCroustillants_OBJECTS =  \
 	$(am_serveur3_LesSemiCroustillants_OBJECTS)
 serveur3_LesSemiCroustillants_LDADD = $(LDADD)
 serveur3_LesSemiCroustillants_DEPENDENCIES =
+serveur3_LesSemiCroustillants_LINK = $(CCLD) \
+	$(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -141,14 +176,45 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/tou.Po ./$(DEPDIR)/tou_conn.Po \
-	./$(DEPDIR)/tou_datastructs.Po ./$(DEPDIR)/tou_handshake.Po \
-	./$(DEPDIR)/tou_io.Po ./$(DEPDIR)/tou_packet.Po \
-	./$(DEPDIR)/tou_rel.Po ./$(DEPDIR)/tou_socket.Po \
-	./$(DEPDIR)/tou_utils.Po ./$(DEPDIR)/tou_window.Po \
-	./$(DEPDIR)/xmserver.Po ./$(DEPDIR)/xserver.Po \
-	./$(DEPDIR)/xserver_2.Po
+am__depfiles_remade =  \
+	./$(DEPDIR)/serveur1_LesSemiCroustillants-tou.Po \
+	./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_conn.Po \
+	./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_datastructs.Po \
+	./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_handshake.Po \
+	./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_io.Po \
+	./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_packet.Po \
+	./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_rel.Po \
+	./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_socket.Po \
+	./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_utils.Po \
+	./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_window.Po \
+	./$(DEPDIR)/serveur1_LesSemiCroustillants-xserver.Po \
+	./$(DEPDIR)/serveur2_LesSemiCroustillants-tou.Po \
+	./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_conn.Po \
+	./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_datastructs.Po \
+	./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_handshake.Po \
+	./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_io.Po \
+	./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_packet.Po \
+	./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_rel.Po \
+	./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_socket.Po \
+	./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_utils.Po \
+	./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_window.Po \
+	./$(DEPDIR)/serveur2_LesSemiCroustillants-xserver_2.Po \
+	./$(DEPDIR)/serveur3_LesSemiCroustillants-tou.Po \
+	./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_conn.Po \
+	./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_datastructs.Po \
+	./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_handshake.Po \
+	./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_io.Po \
+	./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_packet.Po \
+	./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_rel.Po \
+	./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_socket.Po \
+	./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_utils.Po \
+	./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_window.Po \
+	./$(DEPDIR)/serveur3_LesSemiCroustillants-xmserver.Po
 am__mv = mv -f
+AM_V_lt = $(am__v_lt_@AM_V@)
+am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+am__v_lt_0 = --silent
+am__v_lt_1 = 
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 AM_V_CC = $(am__v_CC_@AM_V@)
@@ -325,14 +391,17 @@ noinst_HEADERS = tou.h \
                     tou_conn.h \
                     #end
 
+serveur1_LesSemiCroustillants_CFLAGS = -DSERVER1
 serveur1_LesSemiCroustillants_SOURCES = $(TOU_CORE) \
                 xserver.c \
                 #end
 
+serveur2_LesSemiCroustillants_CFLAGS = -DSERVER2
 serveur2_LesSemiCroustillants_SOURCES = $(TOU_CORE) \
                 xserver_2.c \
                 #end
 
+serveur3_LesSemiCroustillants_CFLAGS = -DSERVER3
 serveur3_LesSemiCroustillants_SOURCES = $(TOU_CORE) \
                 xmserver.c \
                 #end
@@ -396,15 +465,15 @@ clean-noinstPROGRAMS:
 
 serveur1-LesSemiCroustillants$(EXEEXT): $(serveur1_LesSemiCroustillants_OBJECTS) $(serveur1_LesSemiCroustillants_DEPENDENCIES) $(EXTRA_serveur1_LesSemiCroustillants_DEPENDENCIES) 
 	@rm -f serveur1-LesSemiCroustillants$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(serveur1_LesSemiCroustillants_OBJECTS) $(serveur1_LesSemiCroustillants_LDADD) $(LIBS)
+	$(AM_V_CCLD)$(serveur1_LesSemiCroustillants_LINK) $(serveur1_LesSemiCroustillants_OBJECTS) $(serveur1_LesSemiCroustillants_LDADD) $(LIBS)
 
 serveur2-LesSemiCroustillants$(EXEEXT): $(serveur2_LesSemiCroustillants_OBJECTS) $(serveur2_LesSemiCroustillants_DEPENDENCIES) $(EXTRA_serveur2_LesSemiCroustillants_DEPENDENCIES) 
 	@rm -f serveur2-LesSemiCroustillants$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(serveur2_LesSemiCroustillants_OBJECTS) $(serveur2_LesSemiCroustillants_LDADD) $(LIBS)
+	$(AM_V_CCLD)$(serveur2_LesSemiCroustillants_LINK) $(serveur2_LesSemiCroustillants_OBJECTS) $(serveur2_LesSemiCroustillants_LDADD) $(LIBS)
 
 serveur3-LesSemiCroustillants$(EXEEXT): $(serveur3_LesSemiCroustillants_OBJECTS) $(serveur3_LesSemiCroustillants_DEPENDENCIES) $(EXTRA_serveur3_LesSemiCroustillants_DEPENDENCIES) 
 	@rm -f serveur3-LesSemiCroustillants$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(serveur3_LesSemiCroustillants_OBJECTS) $(serveur3_LesSemiCroustillants_LDADD) $(LIBS)
+	$(AM_V_CCLD)$(serveur3_LesSemiCroustillants_LINK) $(serveur3_LesSemiCroustillants_OBJECTS) $(serveur3_LesSemiCroustillants_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -412,19 +481,39 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tou.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tou_conn.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tou_datastructs.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tou_handshake.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tou_io.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tou_packet.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tou_rel.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tou_socket.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tou_utils.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tou_window.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xmserver.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xserver.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xserver_2.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur1_LesSemiCroustillants-tou.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_conn.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_datastructs.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_handshake.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_io.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_packet.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_rel.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_socket.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_utils.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_window.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur1_LesSemiCroustillants-xserver.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur2_LesSemiCroustillants-tou.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_conn.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_datastructs.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_handshake.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_io.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_packet.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_rel.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_socket.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_utils.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_window.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur2_LesSemiCroustillants-xserver_2.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur3_LesSemiCroustillants-tou.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_conn.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_datastructs.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_handshake.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_io.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_packet.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_rel.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_socket.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_utils.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_window.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serveur3_LesSemiCroustillants-xmserver.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -445,6 +534,468 @@ am--depfiles: $(am__depfiles_remade)
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+serveur1_LesSemiCroustillants-tou.o: tou.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou.o -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou.Tpo -c -o serveur1_LesSemiCroustillants-tou.o `test -f 'tou.c' || echo '$(srcdir)/'`tou.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou.c' object='serveur1_LesSemiCroustillants-tou.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou.o `test -f 'tou.c' || echo '$(srcdir)/'`tou.c
+
+serveur1_LesSemiCroustillants-tou.obj: tou.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou.obj -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou.Tpo -c -o serveur1_LesSemiCroustillants-tou.obj `if test -f 'tou.c'; then $(CYGPATH_W) 'tou.c'; else $(CYGPATH_W) '$(srcdir)/tou.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou.c' object='serveur1_LesSemiCroustillants-tou.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou.obj `if test -f 'tou.c'; then $(CYGPATH_W) 'tou.c'; else $(CYGPATH_W) '$(srcdir)/tou.c'; fi`
+
+serveur1_LesSemiCroustillants-tou_handshake.o: tou_handshake.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_handshake.o -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_handshake.Tpo -c -o serveur1_LesSemiCroustillants-tou_handshake.o `test -f 'tou_handshake.c' || echo '$(srcdir)/'`tou_handshake.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_handshake.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_handshake.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_handshake.c' object='serveur1_LesSemiCroustillants-tou_handshake.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_handshake.o `test -f 'tou_handshake.c' || echo '$(srcdir)/'`tou_handshake.c
+
+serveur1_LesSemiCroustillants-tou_handshake.obj: tou_handshake.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_handshake.obj -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_handshake.Tpo -c -o serveur1_LesSemiCroustillants-tou_handshake.obj `if test -f 'tou_handshake.c'; then $(CYGPATH_W) 'tou_handshake.c'; else $(CYGPATH_W) '$(srcdir)/tou_handshake.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_handshake.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_handshake.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_handshake.c' object='serveur1_LesSemiCroustillants-tou_handshake.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_handshake.obj `if test -f 'tou_handshake.c'; then $(CYGPATH_W) 'tou_handshake.c'; else $(CYGPATH_W) '$(srcdir)/tou_handshake.c'; fi`
+
+serveur1_LesSemiCroustillants-tou_io.o: tou_io.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_io.o -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_io.Tpo -c -o serveur1_LesSemiCroustillants-tou_io.o `test -f 'tou_io.c' || echo '$(srcdir)/'`tou_io.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_io.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_io.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_io.c' object='serveur1_LesSemiCroustillants-tou_io.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_io.o `test -f 'tou_io.c' || echo '$(srcdir)/'`tou_io.c
+
+serveur1_LesSemiCroustillants-tou_io.obj: tou_io.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_io.obj -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_io.Tpo -c -o serveur1_LesSemiCroustillants-tou_io.obj `if test -f 'tou_io.c'; then $(CYGPATH_W) 'tou_io.c'; else $(CYGPATH_W) '$(srcdir)/tou_io.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_io.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_io.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_io.c' object='serveur1_LesSemiCroustillants-tou_io.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_io.obj `if test -f 'tou_io.c'; then $(CYGPATH_W) 'tou_io.c'; else $(CYGPATH_W) '$(srcdir)/tou_io.c'; fi`
+
+serveur1_LesSemiCroustillants-tou_rel.o: tou_rel.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_rel.o -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_rel.Tpo -c -o serveur1_LesSemiCroustillants-tou_rel.o `test -f 'tou_rel.c' || echo '$(srcdir)/'`tou_rel.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_rel.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_rel.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_rel.c' object='serveur1_LesSemiCroustillants-tou_rel.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_rel.o `test -f 'tou_rel.c' || echo '$(srcdir)/'`tou_rel.c
+
+serveur1_LesSemiCroustillants-tou_rel.obj: tou_rel.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_rel.obj -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_rel.Tpo -c -o serveur1_LesSemiCroustillants-tou_rel.obj `if test -f 'tou_rel.c'; then $(CYGPATH_W) 'tou_rel.c'; else $(CYGPATH_W) '$(srcdir)/tou_rel.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_rel.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_rel.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_rel.c' object='serveur1_LesSemiCroustillants-tou_rel.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_rel.obj `if test -f 'tou_rel.c'; then $(CYGPATH_W) 'tou_rel.c'; else $(CYGPATH_W) '$(srcdir)/tou_rel.c'; fi`
+
+serveur1_LesSemiCroustillants-tou_utils.o: tou_utils.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_utils.o -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_utils.Tpo -c -o serveur1_LesSemiCroustillants-tou_utils.o `test -f 'tou_utils.c' || echo '$(srcdir)/'`tou_utils.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_utils.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_utils.c' object='serveur1_LesSemiCroustillants-tou_utils.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_utils.o `test -f 'tou_utils.c' || echo '$(srcdir)/'`tou_utils.c
+
+serveur1_LesSemiCroustillants-tou_utils.obj: tou_utils.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_utils.obj -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_utils.Tpo -c -o serveur1_LesSemiCroustillants-tou_utils.obj `if test -f 'tou_utils.c'; then $(CYGPATH_W) 'tou_utils.c'; else $(CYGPATH_W) '$(srcdir)/tou_utils.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_utils.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_utils.c' object='serveur1_LesSemiCroustillants-tou_utils.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_utils.obj `if test -f 'tou_utils.c'; then $(CYGPATH_W) 'tou_utils.c'; else $(CYGPATH_W) '$(srcdir)/tou_utils.c'; fi`
+
+serveur1_LesSemiCroustillants-tou_window.o: tou_window.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_window.o -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_window.Tpo -c -o serveur1_LesSemiCroustillants-tou_window.o `test -f 'tou_window.c' || echo '$(srcdir)/'`tou_window.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_window.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_window.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_window.c' object='serveur1_LesSemiCroustillants-tou_window.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_window.o `test -f 'tou_window.c' || echo '$(srcdir)/'`tou_window.c
+
+serveur1_LesSemiCroustillants-tou_window.obj: tou_window.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_window.obj -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_window.Tpo -c -o serveur1_LesSemiCroustillants-tou_window.obj `if test -f 'tou_window.c'; then $(CYGPATH_W) 'tou_window.c'; else $(CYGPATH_W) '$(srcdir)/tou_window.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_window.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_window.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_window.c' object='serveur1_LesSemiCroustillants-tou_window.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_window.obj `if test -f 'tou_window.c'; then $(CYGPATH_W) 'tou_window.c'; else $(CYGPATH_W) '$(srcdir)/tou_window.c'; fi`
+
+serveur1_LesSemiCroustillants-tou_datastructs.o: tou_datastructs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_datastructs.o -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_datastructs.Tpo -c -o serveur1_LesSemiCroustillants-tou_datastructs.o `test -f 'tou_datastructs.c' || echo '$(srcdir)/'`tou_datastructs.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_datastructs.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_datastructs.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_datastructs.c' object='serveur1_LesSemiCroustillants-tou_datastructs.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_datastructs.o `test -f 'tou_datastructs.c' || echo '$(srcdir)/'`tou_datastructs.c
+
+serveur1_LesSemiCroustillants-tou_datastructs.obj: tou_datastructs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_datastructs.obj -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_datastructs.Tpo -c -o serveur1_LesSemiCroustillants-tou_datastructs.obj `if test -f 'tou_datastructs.c'; then $(CYGPATH_W) 'tou_datastructs.c'; else $(CYGPATH_W) '$(srcdir)/tou_datastructs.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_datastructs.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_datastructs.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_datastructs.c' object='serveur1_LesSemiCroustillants-tou_datastructs.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_datastructs.obj `if test -f 'tou_datastructs.c'; then $(CYGPATH_W) 'tou_datastructs.c'; else $(CYGPATH_W) '$(srcdir)/tou_datastructs.c'; fi`
+
+serveur1_LesSemiCroustillants-tou_socket.o: tou_socket.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_socket.o -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_socket.Tpo -c -o serveur1_LesSemiCroustillants-tou_socket.o `test -f 'tou_socket.c' || echo '$(srcdir)/'`tou_socket.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_socket.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_socket.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_socket.c' object='serveur1_LesSemiCroustillants-tou_socket.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_socket.o `test -f 'tou_socket.c' || echo '$(srcdir)/'`tou_socket.c
+
+serveur1_LesSemiCroustillants-tou_socket.obj: tou_socket.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_socket.obj -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_socket.Tpo -c -o serveur1_LesSemiCroustillants-tou_socket.obj `if test -f 'tou_socket.c'; then $(CYGPATH_W) 'tou_socket.c'; else $(CYGPATH_W) '$(srcdir)/tou_socket.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_socket.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_socket.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_socket.c' object='serveur1_LesSemiCroustillants-tou_socket.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_socket.obj `if test -f 'tou_socket.c'; then $(CYGPATH_W) 'tou_socket.c'; else $(CYGPATH_W) '$(srcdir)/tou_socket.c'; fi`
+
+serveur1_LesSemiCroustillants-tou_packet.o: tou_packet.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_packet.o -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_packet.Tpo -c -o serveur1_LesSemiCroustillants-tou_packet.o `test -f 'tou_packet.c' || echo '$(srcdir)/'`tou_packet.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_packet.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_packet.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_packet.c' object='serveur1_LesSemiCroustillants-tou_packet.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_packet.o `test -f 'tou_packet.c' || echo '$(srcdir)/'`tou_packet.c
+
+serveur1_LesSemiCroustillants-tou_packet.obj: tou_packet.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_packet.obj -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_packet.Tpo -c -o serveur1_LesSemiCroustillants-tou_packet.obj `if test -f 'tou_packet.c'; then $(CYGPATH_W) 'tou_packet.c'; else $(CYGPATH_W) '$(srcdir)/tou_packet.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_packet.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_packet.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_packet.c' object='serveur1_LesSemiCroustillants-tou_packet.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_packet.obj `if test -f 'tou_packet.c'; then $(CYGPATH_W) 'tou_packet.c'; else $(CYGPATH_W) '$(srcdir)/tou_packet.c'; fi`
+
+serveur1_LesSemiCroustillants-tou_conn.o: tou_conn.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_conn.o -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_conn.Tpo -c -o serveur1_LesSemiCroustillants-tou_conn.o `test -f 'tou_conn.c' || echo '$(srcdir)/'`tou_conn.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_conn.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_conn.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_conn.c' object='serveur1_LesSemiCroustillants-tou_conn.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_conn.o `test -f 'tou_conn.c' || echo '$(srcdir)/'`tou_conn.c
+
+serveur1_LesSemiCroustillants-tou_conn.obj: tou_conn.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-tou_conn.obj -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-tou_conn.Tpo -c -o serveur1_LesSemiCroustillants-tou_conn.obj `if test -f 'tou_conn.c'; then $(CYGPATH_W) 'tou_conn.c'; else $(CYGPATH_W) '$(srcdir)/tou_conn.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-tou_conn.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-tou_conn.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_conn.c' object='serveur1_LesSemiCroustillants-tou_conn.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-tou_conn.obj `if test -f 'tou_conn.c'; then $(CYGPATH_W) 'tou_conn.c'; else $(CYGPATH_W) '$(srcdir)/tou_conn.c'; fi`
+
+serveur1_LesSemiCroustillants-xserver.o: xserver.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-xserver.o -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-xserver.Tpo -c -o serveur1_LesSemiCroustillants-xserver.o `test -f 'xserver.c' || echo '$(srcdir)/'`xserver.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-xserver.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-xserver.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='xserver.c' object='serveur1_LesSemiCroustillants-xserver.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-xserver.o `test -f 'xserver.c' || echo '$(srcdir)/'`xserver.c
+
+serveur1_LesSemiCroustillants-xserver.obj: xserver.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur1_LesSemiCroustillants-xserver.obj -MD -MP -MF $(DEPDIR)/serveur1_LesSemiCroustillants-xserver.Tpo -c -o serveur1_LesSemiCroustillants-xserver.obj `if test -f 'xserver.c'; then $(CYGPATH_W) 'xserver.c'; else $(CYGPATH_W) '$(srcdir)/xserver.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur1_LesSemiCroustillants-xserver.Tpo $(DEPDIR)/serveur1_LesSemiCroustillants-xserver.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='xserver.c' object='serveur1_LesSemiCroustillants-xserver.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur1_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur1_LesSemiCroustillants-xserver.obj `if test -f 'xserver.c'; then $(CYGPATH_W) 'xserver.c'; else $(CYGPATH_W) '$(srcdir)/xserver.c'; fi`
+
+serveur2_LesSemiCroustillants-tou.o: tou.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou.o -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou.Tpo -c -o serveur2_LesSemiCroustillants-tou.o `test -f 'tou.c' || echo '$(srcdir)/'`tou.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou.c' object='serveur2_LesSemiCroustillants-tou.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou.o `test -f 'tou.c' || echo '$(srcdir)/'`tou.c
+
+serveur2_LesSemiCroustillants-tou.obj: tou.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou.obj -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou.Tpo -c -o serveur2_LesSemiCroustillants-tou.obj `if test -f 'tou.c'; then $(CYGPATH_W) 'tou.c'; else $(CYGPATH_W) '$(srcdir)/tou.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou.c' object='serveur2_LesSemiCroustillants-tou.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou.obj `if test -f 'tou.c'; then $(CYGPATH_W) 'tou.c'; else $(CYGPATH_W) '$(srcdir)/tou.c'; fi`
+
+serveur2_LesSemiCroustillants-tou_handshake.o: tou_handshake.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_handshake.o -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_handshake.Tpo -c -o serveur2_LesSemiCroustillants-tou_handshake.o `test -f 'tou_handshake.c' || echo '$(srcdir)/'`tou_handshake.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_handshake.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_handshake.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_handshake.c' object='serveur2_LesSemiCroustillants-tou_handshake.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_handshake.o `test -f 'tou_handshake.c' || echo '$(srcdir)/'`tou_handshake.c
+
+serveur2_LesSemiCroustillants-tou_handshake.obj: tou_handshake.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_handshake.obj -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_handshake.Tpo -c -o serveur2_LesSemiCroustillants-tou_handshake.obj `if test -f 'tou_handshake.c'; then $(CYGPATH_W) 'tou_handshake.c'; else $(CYGPATH_W) '$(srcdir)/tou_handshake.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_handshake.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_handshake.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_handshake.c' object='serveur2_LesSemiCroustillants-tou_handshake.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_handshake.obj `if test -f 'tou_handshake.c'; then $(CYGPATH_W) 'tou_handshake.c'; else $(CYGPATH_W) '$(srcdir)/tou_handshake.c'; fi`
+
+serveur2_LesSemiCroustillants-tou_io.o: tou_io.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_io.o -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_io.Tpo -c -o serveur2_LesSemiCroustillants-tou_io.o `test -f 'tou_io.c' || echo '$(srcdir)/'`tou_io.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_io.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_io.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_io.c' object='serveur2_LesSemiCroustillants-tou_io.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_io.o `test -f 'tou_io.c' || echo '$(srcdir)/'`tou_io.c
+
+serveur2_LesSemiCroustillants-tou_io.obj: tou_io.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_io.obj -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_io.Tpo -c -o serveur2_LesSemiCroustillants-tou_io.obj `if test -f 'tou_io.c'; then $(CYGPATH_W) 'tou_io.c'; else $(CYGPATH_W) '$(srcdir)/tou_io.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_io.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_io.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_io.c' object='serveur2_LesSemiCroustillants-tou_io.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_io.obj `if test -f 'tou_io.c'; then $(CYGPATH_W) 'tou_io.c'; else $(CYGPATH_W) '$(srcdir)/tou_io.c'; fi`
+
+serveur2_LesSemiCroustillants-tou_rel.o: tou_rel.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_rel.o -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_rel.Tpo -c -o serveur2_LesSemiCroustillants-tou_rel.o `test -f 'tou_rel.c' || echo '$(srcdir)/'`tou_rel.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_rel.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_rel.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_rel.c' object='serveur2_LesSemiCroustillants-tou_rel.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_rel.o `test -f 'tou_rel.c' || echo '$(srcdir)/'`tou_rel.c
+
+serveur2_LesSemiCroustillants-tou_rel.obj: tou_rel.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_rel.obj -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_rel.Tpo -c -o serveur2_LesSemiCroustillants-tou_rel.obj `if test -f 'tou_rel.c'; then $(CYGPATH_W) 'tou_rel.c'; else $(CYGPATH_W) '$(srcdir)/tou_rel.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_rel.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_rel.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_rel.c' object='serveur2_LesSemiCroustillants-tou_rel.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_rel.obj `if test -f 'tou_rel.c'; then $(CYGPATH_W) 'tou_rel.c'; else $(CYGPATH_W) '$(srcdir)/tou_rel.c'; fi`
+
+serveur2_LesSemiCroustillants-tou_utils.o: tou_utils.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_utils.o -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_utils.Tpo -c -o serveur2_LesSemiCroustillants-tou_utils.o `test -f 'tou_utils.c' || echo '$(srcdir)/'`tou_utils.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_utils.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_utils.c' object='serveur2_LesSemiCroustillants-tou_utils.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_utils.o `test -f 'tou_utils.c' || echo '$(srcdir)/'`tou_utils.c
+
+serveur2_LesSemiCroustillants-tou_utils.obj: tou_utils.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_utils.obj -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_utils.Tpo -c -o serveur2_LesSemiCroustillants-tou_utils.obj `if test -f 'tou_utils.c'; then $(CYGPATH_W) 'tou_utils.c'; else $(CYGPATH_W) '$(srcdir)/tou_utils.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_utils.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_utils.c' object='serveur2_LesSemiCroustillants-tou_utils.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_utils.obj `if test -f 'tou_utils.c'; then $(CYGPATH_W) 'tou_utils.c'; else $(CYGPATH_W) '$(srcdir)/tou_utils.c'; fi`
+
+serveur2_LesSemiCroustillants-tou_window.o: tou_window.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_window.o -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_window.Tpo -c -o serveur2_LesSemiCroustillants-tou_window.o `test -f 'tou_window.c' || echo '$(srcdir)/'`tou_window.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_window.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_window.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_window.c' object='serveur2_LesSemiCroustillants-tou_window.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_window.o `test -f 'tou_window.c' || echo '$(srcdir)/'`tou_window.c
+
+serveur2_LesSemiCroustillants-tou_window.obj: tou_window.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_window.obj -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_window.Tpo -c -o serveur2_LesSemiCroustillants-tou_window.obj `if test -f 'tou_window.c'; then $(CYGPATH_W) 'tou_window.c'; else $(CYGPATH_W) '$(srcdir)/tou_window.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_window.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_window.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_window.c' object='serveur2_LesSemiCroustillants-tou_window.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_window.obj `if test -f 'tou_window.c'; then $(CYGPATH_W) 'tou_window.c'; else $(CYGPATH_W) '$(srcdir)/tou_window.c'; fi`
+
+serveur2_LesSemiCroustillants-tou_datastructs.o: tou_datastructs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_datastructs.o -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_datastructs.Tpo -c -o serveur2_LesSemiCroustillants-tou_datastructs.o `test -f 'tou_datastructs.c' || echo '$(srcdir)/'`tou_datastructs.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_datastructs.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_datastructs.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_datastructs.c' object='serveur2_LesSemiCroustillants-tou_datastructs.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_datastructs.o `test -f 'tou_datastructs.c' || echo '$(srcdir)/'`tou_datastructs.c
+
+serveur2_LesSemiCroustillants-tou_datastructs.obj: tou_datastructs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_datastructs.obj -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_datastructs.Tpo -c -o serveur2_LesSemiCroustillants-tou_datastructs.obj `if test -f 'tou_datastructs.c'; then $(CYGPATH_W) 'tou_datastructs.c'; else $(CYGPATH_W) '$(srcdir)/tou_datastructs.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_datastructs.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_datastructs.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_datastructs.c' object='serveur2_LesSemiCroustillants-tou_datastructs.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_datastructs.obj `if test -f 'tou_datastructs.c'; then $(CYGPATH_W) 'tou_datastructs.c'; else $(CYGPATH_W) '$(srcdir)/tou_datastructs.c'; fi`
+
+serveur2_LesSemiCroustillants-tou_socket.o: tou_socket.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_socket.o -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_socket.Tpo -c -o serveur2_LesSemiCroustillants-tou_socket.o `test -f 'tou_socket.c' || echo '$(srcdir)/'`tou_socket.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_socket.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_socket.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_socket.c' object='serveur2_LesSemiCroustillants-tou_socket.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_socket.o `test -f 'tou_socket.c' || echo '$(srcdir)/'`tou_socket.c
+
+serveur2_LesSemiCroustillants-tou_socket.obj: tou_socket.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_socket.obj -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_socket.Tpo -c -o serveur2_LesSemiCroustillants-tou_socket.obj `if test -f 'tou_socket.c'; then $(CYGPATH_W) 'tou_socket.c'; else $(CYGPATH_W) '$(srcdir)/tou_socket.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_socket.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_socket.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_socket.c' object='serveur2_LesSemiCroustillants-tou_socket.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_socket.obj `if test -f 'tou_socket.c'; then $(CYGPATH_W) 'tou_socket.c'; else $(CYGPATH_W) '$(srcdir)/tou_socket.c'; fi`
+
+serveur2_LesSemiCroustillants-tou_packet.o: tou_packet.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_packet.o -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_packet.Tpo -c -o serveur2_LesSemiCroustillants-tou_packet.o `test -f 'tou_packet.c' || echo '$(srcdir)/'`tou_packet.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_packet.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_packet.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_packet.c' object='serveur2_LesSemiCroustillants-tou_packet.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_packet.o `test -f 'tou_packet.c' || echo '$(srcdir)/'`tou_packet.c
+
+serveur2_LesSemiCroustillants-tou_packet.obj: tou_packet.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_packet.obj -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_packet.Tpo -c -o serveur2_LesSemiCroustillants-tou_packet.obj `if test -f 'tou_packet.c'; then $(CYGPATH_W) 'tou_packet.c'; else $(CYGPATH_W) '$(srcdir)/tou_packet.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_packet.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_packet.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_packet.c' object='serveur2_LesSemiCroustillants-tou_packet.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_packet.obj `if test -f 'tou_packet.c'; then $(CYGPATH_W) 'tou_packet.c'; else $(CYGPATH_W) '$(srcdir)/tou_packet.c'; fi`
+
+serveur2_LesSemiCroustillants-tou_conn.o: tou_conn.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_conn.o -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_conn.Tpo -c -o serveur2_LesSemiCroustillants-tou_conn.o `test -f 'tou_conn.c' || echo '$(srcdir)/'`tou_conn.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_conn.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_conn.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_conn.c' object='serveur2_LesSemiCroustillants-tou_conn.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_conn.o `test -f 'tou_conn.c' || echo '$(srcdir)/'`tou_conn.c
+
+serveur2_LesSemiCroustillants-tou_conn.obj: tou_conn.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-tou_conn.obj -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-tou_conn.Tpo -c -o serveur2_LesSemiCroustillants-tou_conn.obj `if test -f 'tou_conn.c'; then $(CYGPATH_W) 'tou_conn.c'; else $(CYGPATH_W) '$(srcdir)/tou_conn.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-tou_conn.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-tou_conn.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_conn.c' object='serveur2_LesSemiCroustillants-tou_conn.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-tou_conn.obj `if test -f 'tou_conn.c'; then $(CYGPATH_W) 'tou_conn.c'; else $(CYGPATH_W) '$(srcdir)/tou_conn.c'; fi`
+
+serveur2_LesSemiCroustillants-xserver_2.o: xserver_2.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-xserver_2.o -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-xserver_2.Tpo -c -o serveur2_LesSemiCroustillants-xserver_2.o `test -f 'xserver_2.c' || echo '$(srcdir)/'`xserver_2.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-xserver_2.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-xserver_2.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='xserver_2.c' object='serveur2_LesSemiCroustillants-xserver_2.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-xserver_2.o `test -f 'xserver_2.c' || echo '$(srcdir)/'`xserver_2.c
+
+serveur2_LesSemiCroustillants-xserver_2.obj: xserver_2.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur2_LesSemiCroustillants-xserver_2.obj -MD -MP -MF $(DEPDIR)/serveur2_LesSemiCroustillants-xserver_2.Tpo -c -o serveur2_LesSemiCroustillants-xserver_2.obj `if test -f 'xserver_2.c'; then $(CYGPATH_W) 'xserver_2.c'; else $(CYGPATH_W) '$(srcdir)/xserver_2.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur2_LesSemiCroustillants-xserver_2.Tpo $(DEPDIR)/serveur2_LesSemiCroustillants-xserver_2.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='xserver_2.c' object='serveur2_LesSemiCroustillants-xserver_2.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur2_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur2_LesSemiCroustillants-xserver_2.obj `if test -f 'xserver_2.c'; then $(CYGPATH_W) 'xserver_2.c'; else $(CYGPATH_W) '$(srcdir)/xserver_2.c'; fi`
+
+serveur3_LesSemiCroustillants-tou.o: tou.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou.o -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou.Tpo -c -o serveur3_LesSemiCroustillants-tou.o `test -f 'tou.c' || echo '$(srcdir)/'`tou.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou.c' object='serveur3_LesSemiCroustillants-tou.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou.o `test -f 'tou.c' || echo '$(srcdir)/'`tou.c
+
+serveur3_LesSemiCroustillants-tou.obj: tou.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou.obj -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou.Tpo -c -o serveur3_LesSemiCroustillants-tou.obj `if test -f 'tou.c'; then $(CYGPATH_W) 'tou.c'; else $(CYGPATH_W) '$(srcdir)/tou.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou.c' object='serveur3_LesSemiCroustillants-tou.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou.obj `if test -f 'tou.c'; then $(CYGPATH_W) 'tou.c'; else $(CYGPATH_W) '$(srcdir)/tou.c'; fi`
+
+serveur3_LesSemiCroustillants-tou_handshake.o: tou_handshake.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_handshake.o -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_handshake.Tpo -c -o serveur3_LesSemiCroustillants-tou_handshake.o `test -f 'tou_handshake.c' || echo '$(srcdir)/'`tou_handshake.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_handshake.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_handshake.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_handshake.c' object='serveur3_LesSemiCroustillants-tou_handshake.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_handshake.o `test -f 'tou_handshake.c' || echo '$(srcdir)/'`tou_handshake.c
+
+serveur3_LesSemiCroustillants-tou_handshake.obj: tou_handshake.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_handshake.obj -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_handshake.Tpo -c -o serveur3_LesSemiCroustillants-tou_handshake.obj `if test -f 'tou_handshake.c'; then $(CYGPATH_W) 'tou_handshake.c'; else $(CYGPATH_W) '$(srcdir)/tou_handshake.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_handshake.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_handshake.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_handshake.c' object='serveur3_LesSemiCroustillants-tou_handshake.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_handshake.obj `if test -f 'tou_handshake.c'; then $(CYGPATH_W) 'tou_handshake.c'; else $(CYGPATH_W) '$(srcdir)/tou_handshake.c'; fi`
+
+serveur3_LesSemiCroustillants-tou_io.o: tou_io.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_io.o -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_io.Tpo -c -o serveur3_LesSemiCroustillants-tou_io.o `test -f 'tou_io.c' || echo '$(srcdir)/'`tou_io.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_io.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_io.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_io.c' object='serveur3_LesSemiCroustillants-tou_io.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_io.o `test -f 'tou_io.c' || echo '$(srcdir)/'`tou_io.c
+
+serveur3_LesSemiCroustillants-tou_io.obj: tou_io.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_io.obj -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_io.Tpo -c -o serveur3_LesSemiCroustillants-tou_io.obj `if test -f 'tou_io.c'; then $(CYGPATH_W) 'tou_io.c'; else $(CYGPATH_W) '$(srcdir)/tou_io.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_io.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_io.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_io.c' object='serveur3_LesSemiCroustillants-tou_io.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_io.obj `if test -f 'tou_io.c'; then $(CYGPATH_W) 'tou_io.c'; else $(CYGPATH_W) '$(srcdir)/tou_io.c'; fi`
+
+serveur3_LesSemiCroustillants-tou_rel.o: tou_rel.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_rel.o -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_rel.Tpo -c -o serveur3_LesSemiCroustillants-tou_rel.o `test -f 'tou_rel.c' || echo '$(srcdir)/'`tou_rel.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_rel.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_rel.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_rel.c' object='serveur3_LesSemiCroustillants-tou_rel.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_rel.o `test -f 'tou_rel.c' || echo '$(srcdir)/'`tou_rel.c
+
+serveur3_LesSemiCroustillants-tou_rel.obj: tou_rel.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_rel.obj -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_rel.Tpo -c -o serveur3_LesSemiCroustillants-tou_rel.obj `if test -f 'tou_rel.c'; then $(CYGPATH_W) 'tou_rel.c'; else $(CYGPATH_W) '$(srcdir)/tou_rel.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_rel.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_rel.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_rel.c' object='serveur3_LesSemiCroustillants-tou_rel.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_rel.obj `if test -f 'tou_rel.c'; then $(CYGPATH_W) 'tou_rel.c'; else $(CYGPATH_W) '$(srcdir)/tou_rel.c'; fi`
+
+serveur3_LesSemiCroustillants-tou_utils.o: tou_utils.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_utils.o -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_utils.Tpo -c -o serveur3_LesSemiCroustillants-tou_utils.o `test -f 'tou_utils.c' || echo '$(srcdir)/'`tou_utils.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_utils.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_utils.c' object='serveur3_LesSemiCroustillants-tou_utils.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_utils.o `test -f 'tou_utils.c' || echo '$(srcdir)/'`tou_utils.c
+
+serveur3_LesSemiCroustillants-tou_utils.obj: tou_utils.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_utils.obj -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_utils.Tpo -c -o serveur3_LesSemiCroustillants-tou_utils.obj `if test -f 'tou_utils.c'; then $(CYGPATH_W) 'tou_utils.c'; else $(CYGPATH_W) '$(srcdir)/tou_utils.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_utils.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_utils.c' object='serveur3_LesSemiCroustillants-tou_utils.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_utils.obj `if test -f 'tou_utils.c'; then $(CYGPATH_W) 'tou_utils.c'; else $(CYGPATH_W) '$(srcdir)/tou_utils.c'; fi`
+
+serveur3_LesSemiCroustillants-tou_window.o: tou_window.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_window.o -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_window.Tpo -c -o serveur3_LesSemiCroustillants-tou_window.o `test -f 'tou_window.c' || echo '$(srcdir)/'`tou_window.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_window.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_window.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_window.c' object='serveur3_LesSemiCroustillants-tou_window.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_window.o `test -f 'tou_window.c' || echo '$(srcdir)/'`tou_window.c
+
+serveur3_LesSemiCroustillants-tou_window.obj: tou_window.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_window.obj -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_window.Tpo -c -o serveur3_LesSemiCroustillants-tou_window.obj `if test -f 'tou_window.c'; then $(CYGPATH_W) 'tou_window.c'; else $(CYGPATH_W) '$(srcdir)/tou_window.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_window.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_window.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_window.c' object='serveur3_LesSemiCroustillants-tou_window.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_window.obj `if test -f 'tou_window.c'; then $(CYGPATH_W) 'tou_window.c'; else $(CYGPATH_W) '$(srcdir)/tou_window.c'; fi`
+
+serveur3_LesSemiCroustillants-tou_datastructs.o: tou_datastructs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_datastructs.o -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_datastructs.Tpo -c -o serveur3_LesSemiCroustillants-tou_datastructs.o `test -f 'tou_datastructs.c' || echo '$(srcdir)/'`tou_datastructs.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_datastructs.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_datastructs.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_datastructs.c' object='serveur3_LesSemiCroustillants-tou_datastructs.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_datastructs.o `test -f 'tou_datastructs.c' || echo '$(srcdir)/'`tou_datastructs.c
+
+serveur3_LesSemiCroustillants-tou_datastructs.obj: tou_datastructs.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_datastructs.obj -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_datastructs.Tpo -c -o serveur3_LesSemiCroustillants-tou_datastructs.obj `if test -f 'tou_datastructs.c'; then $(CYGPATH_W) 'tou_datastructs.c'; else $(CYGPATH_W) '$(srcdir)/tou_datastructs.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_datastructs.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_datastructs.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_datastructs.c' object='serveur3_LesSemiCroustillants-tou_datastructs.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_datastructs.obj `if test -f 'tou_datastructs.c'; then $(CYGPATH_W) 'tou_datastructs.c'; else $(CYGPATH_W) '$(srcdir)/tou_datastructs.c'; fi`
+
+serveur3_LesSemiCroustillants-tou_socket.o: tou_socket.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_socket.o -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_socket.Tpo -c -o serveur3_LesSemiCroustillants-tou_socket.o `test -f 'tou_socket.c' || echo '$(srcdir)/'`tou_socket.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_socket.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_socket.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_socket.c' object='serveur3_LesSemiCroustillants-tou_socket.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_socket.o `test -f 'tou_socket.c' || echo '$(srcdir)/'`tou_socket.c
+
+serveur3_LesSemiCroustillants-tou_socket.obj: tou_socket.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_socket.obj -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_socket.Tpo -c -o serveur3_LesSemiCroustillants-tou_socket.obj `if test -f 'tou_socket.c'; then $(CYGPATH_W) 'tou_socket.c'; else $(CYGPATH_W) '$(srcdir)/tou_socket.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_socket.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_socket.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_socket.c' object='serveur3_LesSemiCroustillants-tou_socket.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_socket.obj `if test -f 'tou_socket.c'; then $(CYGPATH_W) 'tou_socket.c'; else $(CYGPATH_W) '$(srcdir)/tou_socket.c'; fi`
+
+serveur3_LesSemiCroustillants-tou_packet.o: tou_packet.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_packet.o -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_packet.Tpo -c -o serveur3_LesSemiCroustillants-tou_packet.o `test -f 'tou_packet.c' || echo '$(srcdir)/'`tou_packet.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_packet.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_packet.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_packet.c' object='serveur3_LesSemiCroustillants-tou_packet.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_packet.o `test -f 'tou_packet.c' || echo '$(srcdir)/'`tou_packet.c
+
+serveur3_LesSemiCroustillants-tou_packet.obj: tou_packet.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_packet.obj -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_packet.Tpo -c -o serveur3_LesSemiCroustillants-tou_packet.obj `if test -f 'tou_packet.c'; then $(CYGPATH_W) 'tou_packet.c'; else $(CYGPATH_W) '$(srcdir)/tou_packet.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_packet.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_packet.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_packet.c' object='serveur3_LesSemiCroustillants-tou_packet.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_packet.obj `if test -f 'tou_packet.c'; then $(CYGPATH_W) 'tou_packet.c'; else $(CYGPATH_W) '$(srcdir)/tou_packet.c'; fi`
+
+serveur3_LesSemiCroustillants-tou_conn.o: tou_conn.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_conn.o -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_conn.Tpo -c -o serveur3_LesSemiCroustillants-tou_conn.o `test -f 'tou_conn.c' || echo '$(srcdir)/'`tou_conn.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_conn.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_conn.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_conn.c' object='serveur3_LesSemiCroustillants-tou_conn.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_conn.o `test -f 'tou_conn.c' || echo '$(srcdir)/'`tou_conn.c
+
+serveur3_LesSemiCroustillants-tou_conn.obj: tou_conn.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-tou_conn.obj -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-tou_conn.Tpo -c -o serveur3_LesSemiCroustillants-tou_conn.obj `if test -f 'tou_conn.c'; then $(CYGPATH_W) 'tou_conn.c'; else $(CYGPATH_W) '$(srcdir)/tou_conn.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-tou_conn.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-tou_conn.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='tou_conn.c' object='serveur3_LesSemiCroustillants-tou_conn.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-tou_conn.obj `if test -f 'tou_conn.c'; then $(CYGPATH_W) 'tou_conn.c'; else $(CYGPATH_W) '$(srcdir)/tou_conn.c'; fi`
+
+serveur3_LesSemiCroustillants-xmserver.o: xmserver.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-xmserver.o -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-xmserver.Tpo -c -o serveur3_LesSemiCroustillants-xmserver.o `test -f 'xmserver.c' || echo '$(srcdir)/'`xmserver.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-xmserver.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-xmserver.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='xmserver.c' object='serveur3_LesSemiCroustillants-xmserver.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-xmserver.o `test -f 'xmserver.c' || echo '$(srcdir)/'`xmserver.c
+
+serveur3_LesSemiCroustillants-xmserver.obj: xmserver.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -MT serveur3_LesSemiCroustillants-xmserver.obj -MD -MP -MF $(DEPDIR)/serveur3_LesSemiCroustillants-xmserver.Tpo -c -o serveur3_LesSemiCroustillants-xmserver.obj `if test -f 'xmserver.c'; then $(CYGPATH_W) 'xmserver.c'; else $(CYGPATH_W) '$(srcdir)/xmserver.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/serveur3_LesSemiCroustillants-xmserver.Tpo $(DEPDIR)/serveur3_LesSemiCroustillants-xmserver.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='xmserver.c' object='serveur3_LesSemiCroustillants-xmserver.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(serveur3_LesSemiCroustillants_CFLAGS) $(CFLAGS) -c -o serveur3_LesSemiCroustillants-xmserver.obj `if test -f 'xmserver.c'; then $(CYGPATH_W) 'xmserver.c'; else $(CYGPATH_W) '$(srcdir)/xmserver.c'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -711,19 +1262,39 @@ clean-am: clean-generic clean-noinstPROGRAMS mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-		-rm -f ./$(DEPDIR)/tou.Po
-	-rm -f ./$(DEPDIR)/tou_conn.Po
-	-rm -f ./$(DEPDIR)/tou_datastructs.Po
-	-rm -f ./$(DEPDIR)/tou_handshake.Po
-	-rm -f ./$(DEPDIR)/tou_io.Po
-	-rm -f ./$(DEPDIR)/tou_packet.Po
-	-rm -f ./$(DEPDIR)/tou_rel.Po
-	-rm -f ./$(DEPDIR)/tou_socket.Po
-	-rm -f ./$(DEPDIR)/tou_utils.Po
-	-rm -f ./$(DEPDIR)/tou_window.Po
-	-rm -f ./$(DEPDIR)/xmserver.Po
-	-rm -f ./$(DEPDIR)/xserver.Po
-	-rm -f ./$(DEPDIR)/xserver_2.Po
+		-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_conn.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_datastructs.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_handshake.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_io.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_packet.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_rel.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_socket.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_utils.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_window.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-xserver.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_conn.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_datastructs.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_handshake.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_io.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_packet.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_rel.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_socket.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_utils.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_window.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-xserver_2.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_conn.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_datastructs.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_handshake.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_io.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_packet.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_rel.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_socket.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_utils.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_window.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-xmserver.Po
 	-rm -f Makefile.1
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-tags
@@ -771,19 +1342,39 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-		-rm -f ./$(DEPDIR)/tou.Po
-	-rm -f ./$(DEPDIR)/tou_conn.Po
-	-rm -f ./$(DEPDIR)/tou_datastructs.Po
-	-rm -f ./$(DEPDIR)/tou_handshake.Po
-	-rm -f ./$(DEPDIR)/tou_io.Po
-	-rm -f ./$(DEPDIR)/tou_packet.Po
-	-rm -f ./$(DEPDIR)/tou_rel.Po
-	-rm -f ./$(DEPDIR)/tou_socket.Po
-	-rm -f ./$(DEPDIR)/tou_utils.Po
-	-rm -f ./$(DEPDIR)/tou_window.Po
-	-rm -f ./$(DEPDIR)/xmserver.Po
-	-rm -f ./$(DEPDIR)/xserver.Po
-	-rm -f ./$(DEPDIR)/xserver_2.Po
+		-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_conn.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_datastructs.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_handshake.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_io.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_packet.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_rel.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_socket.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_utils.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-tou_window.Po
+	-rm -f ./$(DEPDIR)/serveur1_LesSemiCroustillants-xserver.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_conn.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_datastructs.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_handshake.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_io.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_packet.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_rel.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_socket.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_utils.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-tou_window.Po
+	-rm -f ./$(DEPDIR)/serveur2_LesSemiCroustillants-xserver_2.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_conn.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_datastructs.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_handshake.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_io.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_packet.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_rel.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_socket.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_utils.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-tou_window.Po
+	-rm -f ./$(DEPDIR)/serveur3_LesSemiCroustillants-xmserver.Po
 	-rm -f Makefile.1
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

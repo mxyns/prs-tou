@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "tou.h"
 #include "tou_utils.h"
 
@@ -128,11 +129,41 @@ void bounds_test() {
 
 }
 
+void fread_test() {
+
+    int n = 1024;
+    char buffer[n];
+    memset(buffer, 0, n);
+    for (int i = 0; i < n; i++) buffer[i] = i;
+
+    tou_cbuffer cb = {0};
+    cb.buffer = buffer;
+    cb.cap = n;
+    cb.cnt = 0;
+
+    char sink[1024];
+
+    tou_cbuffer_dump(&cb);
+
+    FILE* f = fopen("lorem_2M", "rb");
+    fseek(f, 0, SEEK_END);
+    long fsize = ftell(f);
+    fseek(f, 0, SEEK_SET);  /* same as rewind(f); */
+
+    do {
+        int read = fread(sink, 1024, 1, f);
+        printf("read %d\n", read);
+    } while (!feof(f));
+    // tou_cbuffer_fread(f, &cb, );
+}
+
 int main() {
 
     // insert_test();
     // pop_test();
     //string_test();
 
-    bounds_test();
+    // bounds_test();
+
+    fread_test();
 }

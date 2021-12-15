@@ -3,6 +3,7 @@
 #include "tou_datastructs.h"
 #include "tou_utils.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 // reads at max 'count' bytes from sock into cbuff
 // count limited by available buffer space
@@ -23,6 +24,38 @@ int tou_cbuffer_read(
 
     int recv;
     if ((recv = recvfrom(sock->fd, buffer, count, 0, sock->peer_addr, &sock->peer_addr_len)) < 0) {
+        TOU_DEBUG(printf("ERR = %d\n", recv));
+        return -1;
+    }
+    TOU_DEBUG(printf("[tou][tou_cbuffer_read] received %d bytes\n", recv));
+
+    int inserted = tou_cbuffer_insert(cbuff, buffer, recv);
+    TOU_DEBUG(printf("[tou][tou_cbuffer_read] inserted %d bytes\n", inserted));
+    if (inserted != recv) {
+        TOU_DEBUG(printf("[tou][tou_cbuffer_read] %d bytes lost\n", recv - inserted));
+        return inserted - recv;
+    }
+
+    return inserted;
+}
+
+// reads at max 'count' bytes from file into cbuff
+// count limited by available buffer space
+int tou_cbuffer_fread(
+        FILE* file,
+        tou_cbuffer* cbuff,
+        int count
+) {
+
+    // limit to available size
+    count = MIN(count, cbuff->cap - cbuff->cnt);
+    TOU_DEBUG(printf("[tou][tou_cbuffer_read] really gonna read %d\n", count));
+
+    // TODO prealloc work buffer ?
+    char buffer[count];
+
+    int recv;
+    if ((recv = fread(buffer, 1, count, file)) < 0) {
         TOU_DEBUG(printf("ERR = %d\n", recv));
         return -1;
     }
@@ -222,21 +255,17 @@ tou_sll* tou_sll_new(
 
 
 // private function used in tou_free_sll that finds node with smallest val ptr value
-static inline tou_sll_node
-*
-tou_sll_find_first(
-        tou_sll
-* list
+static inline tou_sll_node* tou_sll_find_first(
+    tou_sll* list
 ) {
-tou_sll_node* curr = list->head;
-tou_sll_node* min = list->head;
-while (curr != NULL) {
-min = curr->val < min->val ? curr : min;
-curr = curr->next;
-}
+    tou_sll_node* curr = list->head;
+    tou_sll_node* min = list->head;
+    while (curr != NULL) {
+    min = curr->val < min->val ? curr : min;
+    curr = curr->next;
+    }
 
-return
-min;
+    return min;
 }
 
 void tou_free_sll(
@@ -259,6 +288,7 @@ void tou_free_sll(
     free(list); // frees all nodes and list struct at once
 }
 
+// insert in list and overwrite value of node
 int tou_sll_insert_overwrite(
         tou_sll* list,
         uint32_t key,
@@ -405,6 +435,8 @@ void* tou_sll_pop(
     return popped_head->val;
 }
 
+// pop all nodes with key value under 'key' and fills array 'removed_nodes' with removed nodes
+// return removed nodes count
 int tou_sll_remove_under(
         tou_sll* list,
         int key,
@@ -435,6 +467,7 @@ int tou_sll_remove_under(
     return n;
 }
 
+// rmeove all nodes with keys specified in 'vals'
 int tou_sll_remove_keys(
         tou_sll* list,
         uint32_t* keys,

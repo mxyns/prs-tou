@@ -236,7 +236,6 @@ int main(int argc, char* argv[]) {
                         printf("[xserver] some packet dropped, resend when ?\n");
                         printf("[xserver] packed dropped seq : %d\n", dropped);
                     );
-
                     
                     // tou_retransmit_all(conn);
                     int retransmit = TOU_DEFAULT_RETRANSMIT_METHOD(conn, pkt, dropped, last_acked_n);
@@ -271,6 +270,7 @@ int main(int argc, char* argv[]) {
             );
             usleep(2 * timeout);
         }
+
 
         TOU_DEBUG(
                 printf("I'm done with this\n");

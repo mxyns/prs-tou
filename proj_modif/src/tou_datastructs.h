@@ -2,6 +2,7 @@
 #define TOU_DATASTRUCTS_H
 
 #include <stdint.h>
+#include <stdio.h>
 #include "tou_socket.h"
 
 // circular buffer
@@ -56,6 +57,12 @@ typedef struct {
 
 int tou_cbuffer_read(
         tou_socket* sock,
+        tou_cbuffer* cbuff,
+        int count
+);
+
+int tou_cbuffer_fread(
+        FILE* file,
         tou_cbuffer* cbuff,
         int count
 );

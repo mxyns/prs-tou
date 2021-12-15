@@ -86,12 +86,14 @@ void dump_stats(tou_stats* stats) {
 
 int main(int argc, char* argv[]) {
 
+
     tou_stats stats;
 
     tou_socket* listen_sock = tou_open_socket("0.0.0.0", atoi(argv[1]));
 
     while(1) {
 
+        printf("server 1 config : %s\n", TOU_CONFIG_NAME);
         memset(&stats, 0, sizeof(tou_stats));
 
         tou_conn* conn = tou_accept_conn(listen_sock);
@@ -230,7 +232,7 @@ int main(int argc, char* argv[]) {
                 if (last_acked_n >= TOU_DEFAULT_FAST_RETRANSMIT_ACK_COUNT) {
                     stats.detected_drops++;
 
-                    int dropped = conn->send_window->expected;
+                    // int dropped = conn->send_window->expected;
 
                     TOU_DEBUG(
                         printf("[xserver] some packet dropped, resend when ?\n");
@@ -245,13 +247,12 @@ int main(int argc, char* argv[]) {
                 }
             }
             
-            LoopEnd :
-                stats.total_loop++;
-                stats.total_time = tou_time_ms() - start;
-                stats.last_seq = conn->send_window->expected - 1;
-                stats.last_sent_id = conn->last_packet_id;
-                stats.estimated_rtt = conn->rtt;
-                stats.estimated_throughput = stats.total_sent * 1.0e-6 / (stats.total_time * 1.0e-3);
+            stats.total_loop++;
+            stats.total_time = tou_time_ms() - start;
+            stats.last_seq = conn->send_window->expected - 1;
+            stats.last_sent_id = conn->last_packet_id;
+            stats.estimated_rtt = conn->rtt;
+            stats.estimated_throughput = stats.total_sent * 1.0e-6 / (stats.total_time * 1.0e-3);
         }
 
         for (int i = 0; i < 1 + TOU_DEFAULT_SENDWINDOW_SIZE; i++) {

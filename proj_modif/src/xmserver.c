@@ -84,16 +84,19 @@ void dump_stats(tou_stats* stats) {
         );
 }
 
-int main() {
+int main(int argc, char* argv[]) {
 
+    int port = atoi(argv[1]);
     tou_stats stats;
     memset(&stats, 0, sizeof(tou_stats));
 
-    tou_socket* listen_sock = tou_open_socket("0.0.0.0", 2000);
+    tou_socket* listen_sock = tou_open_socket("0.0.0.0", port);
     tou_conn* conn;
 
     accept :
-    listen_sock->id %= 65535 - 1;
+    if (port + listen_sock->id >= 9999) {
+        listen_sock->id = 0;
+    }
     conn = tou_accept_conn(listen_sock);
     printf("new client on port %d\n", conn->socket->port);
 
